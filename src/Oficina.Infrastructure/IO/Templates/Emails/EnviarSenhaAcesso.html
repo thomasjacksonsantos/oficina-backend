@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bem-vindo à Carepath</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background-color: #f6f7fb;
+        margin: 0;
+        padding: 0;
+      }
+
+      .title {
+        font-family: Poppins, sans-serif;
+        font-size: 20px;
+        color: #3f3f40;
+      }
+
+      .body-title {
+        font-family: Roboto, sans-serif;
+        font-size: 18px;
+        color: #3f3f40;
+      }
+
+      .body-text {
+        font-family: Roboto, sans-serif;
+        font-size: 14px;
+        color: #555555;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        overflow: hidden;
+      }
+
+      .header {
+        display: flex;
+        gap: 12px;
+        background-color: #deebfc;
+        padding: 16px;
+      }
+
+      .content {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .credentials {
+        width: 355px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 16px;
+        border: 1px solid #deebfc;
+        padding: 16px;
+        border-radius: 4px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+      }
+
+      .credentials-title {
+        font-family: Roboto, sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        color: #3f3f40;
+      }
+
+      .credentials-text {
+        font-family: Roboto, sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: #3f3f40;
+      }
+
+      .button {
+        text-decoration: none;
+        border-radius: 8px;
+        background-color: #5c9df2;
+        padding-top: 14px;
+        padding-bottom: 14px;
+        padding-left: 32px;
+        padding-right: 32px;
+        font-family: Roboto, sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 20px;
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <div class="title">Carepath</div>
+      </div>
+      <div class="content">
+        <h2 class="body-title">Olá 👋</h2>
+        <h3 class="body-title">Seja bem-vindo(a) à Carepath!</h3>
+        <p class="body-text">
+          Seguem seus dados para primeiro acesso na plataforma:
+        </p>
+        <div class="credentials">
+          <div>
+            <span class="credentials-title">Usuário:</span>
+            <span class="credentials-text">{{ model.Email }}</span>
+          </div>
+          <div>
+            <span class="credentials-title">Senha de primeiro acesso:</span>
+            <span class="credentials-text">{{ model.Senha }}</span>
+          </div>
+        </div>
+        <a
+          href="https://portal-carepath-dev.azurewebsites.net/login"
+          class="button"
+          >Acessar conta</a
+        >
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,107 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Oficina.sln",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/Oficina.sln",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "--project",
+                "${workspaceFolder}/Oficina.sln"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "dotnet ef migrations",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "ef",
+                "migrations",
+                "add",
+                "${input:componentName}",
+                "--verbose",
+                "--project",
+                "src/Oficina.Infrastructure/Oficina.Infrastructure.csproj",
+                "--context",
+                "ApplicationDbContext",
+                "--startup-project",
+                "src/Oficina.Hosts.Http/Oficina.Hosts.Http.csproj"
+            ],
+            "group": "build",
+        },
+        {
+            "label": "dotnet ef update",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "ef",
+                "database",
+                "update",
+                "--project",
+                "src/Oficina.Infrastructure/Oficina.Infrastructure.csproj",
+                "--context",
+                "ApplicationDbContext",
+                "--startup-project",
+                "src/Oficina.Hosts.Http/Oficina.Hosts.Http.csproj"
+            ],
+            "group": "build",
+        },
+        {
+            "label": "dotnet ef script",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "ef",
+                "migrations",
+                "script",
+                "-o",
+                "${input:scriptName}",
+                "--project",
+                "src/Oficina.Infrastructure/Oficina.Infrastructure.csproj",
+                "--context",
+                "ApplicationDbContext",
+                "--startup-project",
+                "src/Oficina.Hosts.Http/Oficina.Hosts.Http.csproj"
+            ],
+        },
+    ],
+    "inputs": [
+        {
+            "id": "componentName",
+            "type": "promptString",
+            "description": "Informe o nome do migration:"
+        },
+        {
+            "id": "scriptName",
+            "type": "promptString",
+            "description": "Informe o nome do script:"
+        }
+    ]
+}
