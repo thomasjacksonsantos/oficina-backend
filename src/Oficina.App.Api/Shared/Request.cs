@@ -5,7 +5,7 @@ namespace Oficina.App.Api.Shared;
 public record AuthRequest
 {
     [JsonIgnore]
-    public int UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
     [JsonIgnore]
     public string? UserName { get; set; }
     [JsonIgnore]

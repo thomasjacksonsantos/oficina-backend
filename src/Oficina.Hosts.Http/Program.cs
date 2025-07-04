@@ -3,40 +3,42 @@ using Oficina.Infrastructure;
 using FastEndpoints;
 using NSwag;
 using NSwag.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Oficina.App.Api.Shared;
 using NSwag.Generation.Processors.Security;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
+using Doss.Hosts.Http.Firebase;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
+
+services.AddSingleton(
+    FirebaseApp.Create(new AppOptions
+    {
+        Credential = GoogleCredential.FromFile(
+            Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "Firebase",
+                "firebase-config.json"
+            )
+        ),
+    })
+);
+
+services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddScheme<AuthenticationSchemeOptions, FirebaseAuthenticationHandler>(
+        JwtBearerDefaults.AuthenticationScheme,
+        (o) => { }
+    );
 
 services
     .AddApiModule()
     .AddInfrastructureModule(
         builder.Configuration
     );
-
-services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        var apiConfig = builder.Configuration.GetSection("AppSettings");
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration.GetSection("AppSettings:AuthenticationToken:Issuer").Value,
-            ValidAudience = builder.Configuration.GetSection("AppSettings:AuthenticationToken:Aud").Value,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:AuthenticationToken:SecretKey").Value!))
-        };
-    });
 
 services
     .AddAuthorization()
@@ -52,7 +54,6 @@ services.ConfigureHttpJsonOptions(c =>
     c.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
 });
 
-services.AddOpenApi();
 services.AddOpenApiDocument(document =>
 {
     document.PostProcess = doc =>
@@ -79,7 +80,7 @@ services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:5174", "https://portal-Oficina-dev.azurewebsites.net")
+        policy.WithOrigins("http://localhost:5174", "https://portal-oficina-dev.azurewebsites.net")
              .AllowAnyMethod()
              .AllowAnyHeader()
              .AllowCredentials();
@@ -103,6 +104,7 @@ if (app.Environment.IsDevelopment())
 app
     .UseAuthentication()
     .UseAuthorization()
+    .UseOpenApi()
     .UseFastEndpoints(o =>
     {
         o.Endpoints.RoutePrefix = "api";
@@ -112,19 +114,29 @@ app
             ep.PostProcessor<GlobalResultResponseSender>(Order.Before);
         };
     })
-    .UseCors("AllowAll");
-
-    if (app.Environment.IsDevelopment() || 
-        app.Environment.EnvironmentName == "Local")
+    .UseCors("AllowAll")
+    .UseSwaggerUi(settings =>
+    {        
+        settings.SwaggerRoutes.Add(new SwaggerUiRoute("Doss Api V1", "/swagger/v1/swagger.json"));
+        settings.OperationsSorter = "method";
+        settings.TagsSorter = "alpha";
+    })
+    .UseReDoc(options =>
     {
-        app.MapOpenApi();
-        app.UseSwaggerUi(settings =>
-        {
-            settings.SwaggerRoutes.Add(new SwaggerUiRoute("Oficina Api V1", "/openapi/v1.json"));
-            settings.OperationsSorter = "method";
-            settings.TagsSorter = "alpha";
-        });    
-    }
+        options.Path = "/redoc";
+    });
+
+if (app.Environment.IsDevelopment() ||
+    app.Environment.EnvironmentName == "Local")
+{
+
+    app.UseSwaggerUi(settings =>
+    {
+        settings.SwaggerRoutes.Add(new SwaggerUiRoute("Oficina Api V1", "/openapi/v1.json"));
+        settings.OperationsSorter = "method";
+        settings.TagsSorter = "alpha";
+    });
+}
 
 
 app.Run();

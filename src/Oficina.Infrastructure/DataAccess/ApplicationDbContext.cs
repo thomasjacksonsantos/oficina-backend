@@ -1,29 +1,23 @@
-using System.Linq.Expressions;
+
 using System.Reflection;
-using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
 using Dapper;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Oficina.Infrastructure.DataAccess;
 
-public sealed class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int,
-    ApplicationUserClaim, ApplicationUserRole, IdentityUserLogin<int>,
-    IdentityRoleClaim<int>, IdentityUserToken<int>>
+public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public ApplicationDbContext(
-        DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-    {
- 
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Owned<Cep>();
+        modelBuilder.Owned<Endereco>();
+        modelBuilder.Owned<Contato>();
+        modelBuilder.Owned<DataNascimento>();
+        modelBuilder.Owned<DataHora>();
+        modelBuilder.Owned<Documento>();
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
