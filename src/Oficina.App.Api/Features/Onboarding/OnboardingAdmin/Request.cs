@@ -1,6 +1,5 @@
 
 using Oficina.App.Api.Shared;
-using Oficina.Domain.ValueObjects;
 
 namespace Oficina.App.Api.Features.Onboarding.OnboardingAdmin;
 
@@ -9,10 +8,13 @@ public sealed record OnboardingAdminRequest(
     string TipoDocumento,
     string Documento,
     string Sexo,
+    string Email,
+    string Senha,
+    string ConfirmarSenha,
     DateTime DataNascimento,
     ICollection<OnboardingAdminContato> Contatos,
     OnboardingAdminEndereco Endereco
-) : AuthRequest;
+);
 
 
 public record OnboardingAdminContato(

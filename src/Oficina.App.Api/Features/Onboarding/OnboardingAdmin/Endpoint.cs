@@ -12,7 +12,6 @@ public class Endpoint(
     public override void Configure()
     {
         Post("v1/onboarding/admin");
-        PreProcessor<AuthInterceptor<OnboardingAdminRequest>>();
         Description(c => c.Accepts<OnboardingAdminRequest>()
                 .Produces<OnboardingAdminResponse>()
                 .ProducesProblem(400)

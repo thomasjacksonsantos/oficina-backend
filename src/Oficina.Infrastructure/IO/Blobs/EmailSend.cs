@@ -38,7 +38,6 @@ public sealed class EmailSend(IOptions<ApiConfig> config) : IEmailSend
         }
         catch (Exception ex)
         {
-
             return ValueTask.FromResult((false, ex.Message));
         }
 

@@ -53,3 +53,12 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Arquivos do Azure DevOps
+.azuredevops/
+
+# Azurite
+__blob*
+__azur*
+__que*.env
+__queu*

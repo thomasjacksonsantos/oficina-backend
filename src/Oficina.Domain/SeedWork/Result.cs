@@ -26,6 +26,7 @@ public sealed record Result : ResultBase
     
     public static Result Success() => new();
     public static Result<T> Success<T>(T value) => Result<T>.Success(value);
+    public static Result Fail(string message) => new(Erro.Error(string.Empty, message));
     public static Result Fail(IList<Erro> error) => new(error.ToList());
     
     public static implicit operator Result(Erro error) => Fail([error]);

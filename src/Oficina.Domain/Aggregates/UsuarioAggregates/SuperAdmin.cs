@@ -1,7 +1,6 @@
 
 
 
-using Oficina.Domain.Aggregates.ContaAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
 

@@ -6,7 +6,6 @@
   <ItemGroup>
     <PackageReference Include="FastEndpoints" />
     <PackageReference Include="FastEndpoints.Security"  />
-    <PackageReference Include="FirebaseAdmin" />
     <PackageReference Include="NSwag.AspNetCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <PrivateAssets>all</PrivateAssets>
