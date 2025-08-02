@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 using Oficina.Domain.Aggregates.UsuarioAggregates;
 using Oficina.Domain.SeedWork;
@@ -9,6 +10,7 @@ public sealed class Documento
     private static readonly int[] Multiplicador1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
     private static readonly int[] Multiplicador2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
     public string Numero { get; private set; }
+    [NotMapped]
     public TipoDocumento TipoDocumento { get; private set; }
 #pragma warning disable CS8618
     private Documento() { }

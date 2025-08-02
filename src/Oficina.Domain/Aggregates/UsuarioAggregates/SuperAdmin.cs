@@ -16,6 +16,7 @@ public sealed class SuperAdmin : Usuario
     public SuperAdmin(
         string userId,
         string nome,
+        TipoDocumento tipoDocumento,
         Documento documento,
         Sexo sexo,
         ICollection<Contato> contatos,
@@ -24,6 +25,7 @@ public sealed class SuperAdmin : Usuario
     ) : base(
         userId,
         nome,
+        tipoDocumento,
         documento,
         TipoUsuario.SuperAdmin,
         sexo,
@@ -36,6 +38,7 @@ public sealed class SuperAdmin : Usuario
     public static Result<SuperAdmin> Criar(
         string userId,
         string nome,
+        string tipoDocumento,
         string documento,
         string sexo,
         DateTime dataNascimento,    
@@ -46,7 +49,8 @@ public sealed class SuperAdmin : Usuario
         var resultUsuario = Usuario.Criar(
             userId,
             nome,
-            TipoUsuario.SuperAdmin.ToString(),
+            TipoUsuario.SuperAdmin.Key,
+            tipoDocumento,
             documento,
             sexo,
             dataNascimento,
@@ -57,7 +61,17 @@ public sealed class SuperAdmin : Usuario
         if (resultUsuario.IsFailed)
             return Result.Fail(resultUsuario.Errors!);
 
-        var superAdmin = resultUsuario.Value as SuperAdmin;
+        
+        var superAdmin = new SuperAdmin(
+            userId,
+            nome,
+            resultUsuario.Value!.TipoDocumento,
+            resultUsuario.Value!.Documento,
+            resultUsuario.Value.Sexo,
+            contatos,
+            resultUsuario.Value.DataNascimento,
+            endereco
+        );
 
         return Result.Success(superAdmin!);
     }

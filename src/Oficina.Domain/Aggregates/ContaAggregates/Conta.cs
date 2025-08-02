@@ -9,7 +9,7 @@ namespace Oficina.Domain.Aggregates.ContaAggregates;
 public sealed class Conta
 {
     private List<Loja>? _lojas;
-    private List<Usuario> _usuarios = new List<Usuario>();
+    private List<Usuario> _usuarios = new List<Usuario>(    );
 
 #pragma warning disable CS8618
     private Conta() { }

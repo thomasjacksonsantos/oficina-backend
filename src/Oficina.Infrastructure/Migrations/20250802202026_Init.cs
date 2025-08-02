@@ -84,31 +84,34 @@ namespace Oficina.Infrastructure.Migrations
                 name: "Usuario",
                 columns: table => new
                 {
-                    Usuario_Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UsuarioId = table.Column<int>(type: "int", nullable: false),
-                    Usuario_Nome = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
+                    TipoDocumentoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TipoUsuarioId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SexoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UsuarioPadrao = table.Column<bool>(type: "bit", nullable: false),
                     Contatos = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Enderecos = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Endereco = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TipoClass = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     Atualizado = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Criado = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Valor = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Numero = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
-                    Documento_TipoDocumento_Dominio = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Documento_TipoDocumento_Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false)
+                    Numero = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuario", x => x.Usuario_Id);
+                    table.PrimaryKey("PK_Usuario", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Usuario_DadoDominio_SexoId",
                         column: x => x.SexoId,
+                        principalTable: "DadoDominio",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Usuario_DadoDominio_TipoDocumentoId",
+                        column: x => x.TipoDocumentoId,
                         principalTable: "DadoDominio",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
@@ -169,7 +172,7 @@ namespace Oficina.Infrastructure.Migrations
                         name: "FK_ContaUsuario_Usuario_UsuariosId",
                         column: x => x.UsuariosId,
                         principalTable: "Usuario",
-                        principalColumn: "Usuario_Id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -224,6 +227,11 @@ namespace Oficina.Infrastructure.Migrations
                 name: "IX_Usuario_SexoId",
                 table: "Usuario",
                 column: "SexoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuario_TipoDocumentoId",
+                table: "Usuario",
+                column: "TipoDocumentoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Usuario_TipoUsuarioId",

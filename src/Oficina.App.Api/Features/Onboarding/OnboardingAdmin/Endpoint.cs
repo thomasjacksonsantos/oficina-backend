@@ -12,6 +12,7 @@ public class Endpoint(
     public override void Configure()
     {
         Post("v1/onboarding/admin");
+        AllowAnonymous();
         Description(c => c.Accepts<OnboardingAdminRequest>()
                 .Produces<OnboardingAdminResponse>()
                 .ProducesProblem(400)

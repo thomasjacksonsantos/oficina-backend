@@ -23,12 +23,19 @@ public sealed class UseCase(
         CancellationToken ct = default
     )
     {
+        UserRecord? userRecordArgs = null;
+
         try
         {
             if (input.Senha != input.ConfirmarSenha)
                 return Result.Fail("As senhas não conferem");
 
-            var userRecordArgs = await FirebaseAuth.DefaultInstance.CreateUserAsync(new UserRecordArgs
+            var user = await TryGetUserByEmailAsync(input.Email);
+
+            if (user != null)
+                return Result.Fail("Usuário já cadastrado");
+
+            userRecordArgs = await FirebaseAuth.DefaultInstance.CreateUserAsync(new UserRecordArgs
             {
                 Email = input.Email.ToLower(),
                 Password = input.Senha.ToLower(),
@@ -38,6 +45,7 @@ public sealed class UseCase(
             var superAdmin = SuperAdmin.Criar(
                 userRecordArgs.Uid,
                 input.Nome,
+                input.TipoDocumento,
                 input.Documento,
                 input.Sexo,
                 input.DataNascimento,
@@ -74,12 +82,26 @@ public sealed class UseCase(
             await contaRepository.AddAsync(conta);
             await unitOfWork.SaveChangesAsync(ct);
 
-            return Result.Success();
+            return new OnboardingAdminResponse();
         }
         catch (Exception ex)
         {
-            FirebaseAuth.DefaultInstance.DeleteUserAsync(input.Email.ToLower()).Wait();
+            if (userRecordArgs != null)
+                FirebaseAuth.DefaultInstance.DeleteUserAsync(userRecordArgs.Uid).Wait();
+
             return Result.Fail($"Erro ao criar o usuário: {ex.Message}");
+        }
+    }
+
+    async Task<UserRecord?> TryGetUserByEmailAsync(string email)
+    {
+        try
+        {
+            return await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(email);
+        }
+        catch (FirebaseAuthException ex) when (ex.AuthErrorCode == AuthErrorCode.UserNotFound)
+        {
+            return null;
         }
     }
 }

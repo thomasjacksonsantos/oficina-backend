@@ -13,8 +13,8 @@ using Oficina.Infrastructure.DataAccess;
 namespace Oficina.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250704192747_Init")]
-    partial class Init
+    [Migration("20250802131323_DadosDominio-Script")]
+    partial class DadosDominioScript
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -320,7 +320,7 @@ namespace Oficina.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Enderecos")
+                    b.Property<string>("Endereco")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -340,8 +340,9 @@ namespace Oficina.Infrastructure.Migrations
                     b.Property<Guid>("TipoUsuarioId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("UsuarioPadrao")
                         .HasColumnType("bit");

@@ -11,6 +11,7 @@ public class Usuario
     public int Id { get; private set; }
     public string UserId { get; private set; }
     public string Nome { get; private set; }
+    public TipoDocumento TipoDocumento { get; private set; }
     public Documento Documento { get; private set; }
     public TipoUsuario TipoUsuario { get; private set; }
     public Sexo Sexo { get; private set; }
@@ -30,6 +31,7 @@ public class Usuario
     public Usuario(
         string userId,
         string nome,
+        TipoDocumento tipoDocumento,
         Documento documento,
         TipoUsuario tipoUsuario,
         Sexo sexo,
@@ -43,6 +45,7 @@ public class Usuario
         Sexo = sexo;
         UserId = userId;
         Nome = nome;
+        TipoDocumento = tipoDocumento;
         Documento = documento;
         TipoUsuario = tipoUsuario;
         Criado = DateTime.Now;
@@ -73,6 +76,7 @@ public class Usuario
         string userId,
         string nome,
         string tipoUsuario,
+        string tipoDocumento,
         string documento,
         string sexo,
         DateTime dataNascimento,
@@ -85,6 +89,9 @@ public class Usuario
         // Validate value objects
         if (string.IsNullOrWhiteSpace(nome))
             result.WithError(Erro.ValorNaoInformado(nameof(nome)));
+        var tipoDocumentoObj = TipoDocumento.Get(tipoDocumento);
+        if (tipoDocumentoObj is null)
+            result.WithError(Erro.NaoEncontrado(tipoDocumento));
 
         var documentoObj = Documento.Criar(documento);
         if (documentoObj.IsFailed) result.WithErrors(documentoObj.Errors!);
@@ -104,6 +111,7 @@ public class Usuario
         return new Usuario(
             userId,
             nome,
+            tipoDocumentoObj!,
             documentoObj.Value!,
             tipoUsuarioObj!,
             tipoSexo!,

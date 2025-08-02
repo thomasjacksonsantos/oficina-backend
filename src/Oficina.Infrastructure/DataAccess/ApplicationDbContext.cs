@@ -4,6 +4,7 @@ using Oficina.Domain.ValueObjects;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Oficina.Infrastructure.DataAccess.Interceptors;
 
 namespace Oficina.Infrastructure.DataAccess;
 
@@ -22,7 +23,8 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
+    {    
+        optionsBuilder.AddInterceptors(new IgnorarMudancasDadosDominioInterceptor());
         base.OnConfiguring(optionsBuilder);
     }
 

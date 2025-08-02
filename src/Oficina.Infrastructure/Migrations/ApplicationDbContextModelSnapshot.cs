@@ -334,6 +334,9 @@ namespace Oficina.Infrastructure.Migrations
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
 
+                    b.Property<Guid>("TipoDocumentoId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("TipoUsuarioId")
                         .HasColumnType("uniqueidentifier");
 
@@ -380,45 +383,17 @@ namespace Oficina.Infrastructure.Migrations
                                 .HasMaxLength(16)
                                 .HasColumnType("nvarchar(16)")
                                 .HasColumnName("Numero");
-
-                            b1.ComplexProperty<Dictionary<string, object>>("TipoDocumento", "Oficina.Domain.Aggregates.UsuarioAggregates.Usuario.Documento#Documento.TipoDocumento#TipoDocumento", b2 =>
-                                {
-                                    b2.IsRequired();
-
-                                    b2.Property<string>("Dominio")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
-                                    b2.Property<Guid>("Id")
-                                        .HasColumnType("uniqueidentifier")
-                                        .HasColumnName("Id");
-
-                                    b2.Property<string>("Key")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
-                                    b2.Property<string>("Nome")
-                                        .IsRequired()
-                                        .HasMaxLength(600)
-                                        .HasColumnType("nvarchar(600)")
-                                        .HasColumnName("Nome");
-                                });
                         });
 
                     b.HasKey("Id");
 
                     b.HasIndex("SexoId");
 
+                    b.HasIndex("TipoDocumentoId");
+
                     b.HasIndex("TipoUsuarioId");
 
-                    b.ToTable("Usuario", t =>
-                        {
-                            t.Property("Id")
-                                .HasColumnName("Usuario_Id");
-
-                            t.Property("Nome")
-                                .HasColumnName("Usuario_Nome");
-                        });
+                    b.ToTable("Usuario");
 
                     b.HasDiscriminator<string>("TipoClass").HasValue("Usuario");
 
@@ -461,30 +436,12 @@ namespace Oficina.Infrastructure.Migrations
                 {
                     b.HasBaseType("Oficina.Domain.Aggregates.UsuarioAggregates.Usuario");
 
-                    b.ToTable("Usuario", t =>
-                        {
-                            t.Property("Id")
-                                .HasColumnName("Usuario_Id");
-
-                            t.Property("Nome")
-                                .HasColumnName("Usuario_Nome");
-                        });
-
                     b.HasDiscriminator().HasValue("Funcionario");
                 });
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.UsuarioAggregates.SuperAdmin", b =>
                 {
                     b.HasBaseType("Oficina.Domain.Aggregates.UsuarioAggregates.Usuario");
-
-                    b.ToTable("Usuario", t =>
-                        {
-                            t.Property("Id")
-                                .HasColumnName("Usuario_Id");
-
-                            t.Property("Nome")
-                                .HasColumnName("Usuario_Nome");
-                        });
 
                     b.HasDiscriminator().HasValue("SuperAdmin");
                 });
@@ -501,6 +458,13 @@ namespace Oficina.Infrastructure.Migrations
                     b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
 
                     b.HasDiscriminator().HasValue("Sexo");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.UsuarioAggregates.TipoDocumento", b =>
+                {
+                    b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
+
+                    b.HasDiscriminator().HasValue("TipoDocumento");
                 });
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.UsuarioAggregates.TipoUsuario", b =>
@@ -611,6 +575,12 @@ namespace Oficina.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.TipoDocumento", "TipoDocumento")
+                        .WithMany()
+                        .HasForeignKey("TipoDocumentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.TipoUsuario", "TipoUsuario")
                         .WithMany()
                         .HasForeignKey("TipoUsuarioId")
@@ -618,6 +588,8 @@ namespace Oficina.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Sexo");
+
+                    b.Navigation("TipoDocumento");
 
                     b.Navigation("TipoUsuario");
                 });

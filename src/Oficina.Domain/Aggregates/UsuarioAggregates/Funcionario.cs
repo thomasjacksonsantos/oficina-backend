@@ -16,6 +16,7 @@ public sealed class Funcionario : Usuario
     public Funcionario(
         string userId,
         string nome,
+        TipoDocumento tipoDocumento,
         Documento documento,
         Sexo sexo,
         Endereco endereco,
@@ -24,6 +25,7 @@ public sealed class Funcionario : Usuario
     ) : base(
         userId,
         nome,
+        tipoDocumento,
         documento,
         TipoUsuario.SuperAdmin,
         sexo,
@@ -36,6 +38,7 @@ public sealed class Funcionario : Usuario
     public static Result<SuperAdmin> Criar(
         string userId,
         string nome,
+        string tipoDocumento,
         string documento,
         string sexo,
         DateTime dataNascimento,
@@ -47,6 +50,7 @@ public sealed class Funcionario : Usuario
             userId,
             nome,
             TipoUsuario.SuperAdmin.ToString(),
+            tipoDocumento,
             documento,
             sexo,
             dataNascimento,
