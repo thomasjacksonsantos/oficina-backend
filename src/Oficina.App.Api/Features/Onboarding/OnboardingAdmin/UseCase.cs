@@ -82,7 +82,9 @@ public sealed class UseCase(
             await contaRepository.AddAsync(conta);
             await unitOfWork.SaveChangesAsync(ct);
 
-            return new OnboardingAdminResponse();
+            var token = await FirebaseAuth.DefaultInstance.CreateCustomTokenAsync(userRecordArgs.Uid);
+
+            return Result.Success(new OnboardingAdminResponse(token));
         }
         catch (Exception ex)
         {

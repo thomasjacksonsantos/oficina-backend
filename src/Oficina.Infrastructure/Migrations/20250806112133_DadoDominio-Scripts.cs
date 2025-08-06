@@ -5,7 +5,7 @@
 namespace Oficina.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class DadosDominioScript : Migration
+    public partial class DadoDominioScripts : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

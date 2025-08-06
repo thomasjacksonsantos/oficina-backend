@@ -3,12 +3,22 @@ version: '3.8'
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
+    container_name: oficina-sqlserver
     ports:
       - "1433:1433"
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "YourStrong@Passw0rd"
+      SA_PASSWORD: "admin@123"
+    networks:
+      - backend-network
+
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: api-oficina-backend
+    ports:
+      - "5001:5001"
     networks:
       - backend-network
 
