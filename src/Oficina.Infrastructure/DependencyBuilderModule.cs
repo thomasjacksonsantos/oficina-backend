@@ -44,8 +44,15 @@ public static class DependencyBuilderModule
 
     private static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddHttpClient(configuration.GetSection("AppSettings:Cep:ServiceName").Value!, c => c.BaseAddress = new Uri(
-            configuration.GetSection("AppSettings:Cep:Url").Value!
+        var apiConfig = new ApiConfig();
+        configuration.GetSection("AppSettings").Bind(apiConfig);
+
+        services.AddHttpClient(apiConfig.Cep.ServiceName, c => c.BaseAddress = new Uri(
+            apiConfig.Cep.Url
+        ));
+
+        services.AddHttpClient(apiConfig.Authentication.ServiceName, c => c.BaseAddress = new Uri(
+            apiConfig.Authentication.TokenUri
         ));
 
         return services;

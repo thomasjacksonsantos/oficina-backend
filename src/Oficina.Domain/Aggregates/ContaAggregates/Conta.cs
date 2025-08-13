@@ -44,13 +44,13 @@ public sealed class Conta
         _usuarios ??= new List<Usuario>();
         _usuarios.Add(usuario);
     }
-    public void AddLocalAtendimento(Loja loja)
+    public void AddLoja(Loja loja)
     {
         _lojas ??= new List<Loja>();
         _lojas.Add(loja);
     }
 
-    public void AddLocaisAtendimento(List<Loja> lojas)
+    public void AddLoja(List<Loja> lojas)
     {
         _lojas ??= new List<Loja>();
         _lojas.AddRange(lojas);

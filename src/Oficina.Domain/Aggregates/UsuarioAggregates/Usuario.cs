@@ -20,7 +20,6 @@ public class Usuario
     public ICollection<Conta> Contas { get; private set; } = new List<Conta>();
     public Conta ContaPrincipal => Contas.FirstOrDefault(c => c.Principal) ?? Contas.FirstOrDefault()!;
     public ICollection<Contato> Contatos { get; private set; }
-    public Endereco Endereco { get; private set; }
     public DataHora Criado { get; private set; }
     public DataHora Atualizado { get; private set; }
 
@@ -36,8 +35,7 @@ public class Usuario
         TipoUsuario tipoUsuario,
         Sexo sexo,
         DataNascimento dataNascimento,        
-        ICollection<Contato> contatos,
-        Endereco endereco
+        ICollection<Contato> contatos
     )
     {
         if (string.IsNullOrEmpty(userId))
@@ -52,7 +50,6 @@ public class Usuario
         Atualizado = DateTime.Now;
         DataNascimento = dataNascimento;
         Contatos = contatos ?? new List<Contato>();
-        Endereco = endereco;
     }
 
     public void AddConta(Conta conta)
@@ -80,8 +77,7 @@ public class Usuario
         string documento,
         string sexo,
         DateTime dataNascimento,
-        ICollection<Contato> contatos,
-        Endereco endereco
+        ICollection<Contato> contatos
     )
     {
         var result = new Result<Usuario>();
@@ -116,8 +112,7 @@ public class Usuario
             tipoUsuarioObj!,
             tipoSexo!,
             dataNascimentoObj.Value!,
-            contatos,
-            endereco
+            contatos
         );
     }
 }

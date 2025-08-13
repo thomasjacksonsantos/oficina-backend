@@ -1,7 +1,9 @@
 
 
 using FirebaseAdmin.Auth;
+using Microsoft.Identity.Client;
 using Oficina.Domain.Aggregates.ContaAggregates;
+using Oficina.Domain.Aggregates.LojaAggregates;
 using Oficina.Domain.Aggregates.UsuarioAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
@@ -37,9 +39,9 @@ public sealed class UseCase(
 
             userRecordArgs = await FirebaseAuth.DefaultInstance.CreateUserAsync(new UserRecordArgs
             {
-                Email = input.Email.ToLower(),
-                Password = input.Senha.ToLower(),
-                DisplayName = input.Nome.ToLower()
+                Email = input.Email,
+                Password = input.Senha,
+                DisplayName = input.Nome
             });
 
             var superAdmin = SuperAdmin.Criar(
@@ -49,16 +51,7 @@ public sealed class UseCase(
                 input.Documento,
                 input.Sexo,
                 input.DataNascimento,
-                input.Contatos.Select(c => Contato.Criar(c.DDD, c.Numero, c.TipoTelefone).Value).ToList()!,
-                Endereco.Criar(
-                    input.Endereco.Pais,
-                    input.Endereco.Estado,
-                    input.Endereco.Cidade,
-                    input.Endereco.Bairro,
-                    input.Endereco.Complemento,
-                    Cep.Criar(input.Endereco.Cep).Value!,
-                    input.Endereco.Numero
-                ).Value!
+                input.Contatos.Select(c => Contato.Criar(c.DDD, c.Numero, c.TipoTelefone).Value).ToList()!
             );
 
             if (superAdmin.IsFailed)
@@ -66,6 +59,49 @@ public sealed class UseCase(
 
             var conta = Conta.Criar("Default", true);
             conta.AddUsuario(superAdmin.Value!);
+
+            var enderecoLoja = Endereco.Criar(
+                input.Loja.Endereco.Estado,
+                input.Loja.Endereco.Cidade,
+                input.Loja.Endereco.Logradouro,
+                input.Loja.Endereco.Bairro,
+                input.Loja.Endereco.Complemento,
+                input.Loja.Endereco.Cep,
+                input.Loja.Endereco.Numero
+            );
+
+            if (enderecoLoja.IsFailed)
+                throw new Exception(string.Join("-", enderecoLoja.Errors!.Select(e => $"{e.Descricao}")));
+
+            var contatos = new List<Contato>();
+
+            foreach (var item in input.Loja.Contatos)
+            {
+                var contato = Contato.Criar(
+                    item.DDD,
+                    item.Numero,
+                    item.TipoTelefone
+                );
+
+                if (contato.IsFailed)
+                    throw new Exception(string.Join("-", contato.Errors!.Select(e => $"{e.Descricao}")));
+
+                contatos.Add(contato.Value!);
+            }
+
+            var loja = Loja.Criar(
+                input.Loja.NomeFantasia,
+                input.Loja.RazaoSocial,
+                input.Loja.InscricaoEstadual,
+                input.Loja.Site,
+                input.Loja.LogoTipo,
+                input.Loja.Cnpj,
+                conta,
+                enderecoLoja.Value!,
+                contatos
+            );
+
+            conta.AddLoja(loja.Value!);
 
             var emailResult = await emailSend.SendAsync(
                 new EmailParams(

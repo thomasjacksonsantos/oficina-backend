@@ -13,16 +13,15 @@ public class EfLojaConfiguration : IEntityTypeConfiguration<Loja>
 {
     public void Configure(EntityTypeBuilder<Loja> builder)
     {
-        builder.Property(c => c.Nome).HasMaxLength(600);
+        builder.Property(c => c.NomeFantasia).HasMaxLength(600);
+        builder.Property(c => c.RazaoSocial).HasMaxLength(600);
+        builder.Property(c => c.InscricaoEstadual).HasMaxLength(600);
+        builder.Property(c => c.Site).HasMaxLength(600);
+        builder.Property(c => c.LogoTipo).HasColumnType("text");
         
         builder.ComplexProperty(c => c.Documento, documento =>
         {
             documento.Property(c => c.Numero).HasColumnName(nameof(Documento.Numero)).HasMaxLength(16);
-            documento.ComplexProperty(c => c.TipoDocumento, tipoDocumento =>
-            {
-                tipoDocumento.Property(c => c.Id).HasColumnName(nameof(TipoDocumento.Id));
-                tipoDocumento.Property(c => c.Nome).HasColumnName(nameof(TipoDocumento.Nome)).HasMaxLength(600);
-            });
         });        
         builder
         .Property(e => e.Contatos)

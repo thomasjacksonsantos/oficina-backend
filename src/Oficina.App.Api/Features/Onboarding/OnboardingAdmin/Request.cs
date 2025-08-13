@@ -1,6 +1,4 @@
 
-using Oficina.App.Api.Shared;
-
 namespace Oficina.App.Api.Features.Onboarding.OnboardingAdmin;
 
 public sealed record OnboardingAdminRequest(
@@ -11,9 +9,9 @@ public sealed record OnboardingAdminRequest(
     string Email,
     string Senha,
     string ConfirmarSenha,
-    DateTime DataNascimento,
     ICollection<OnboardingAdminContato> Contatos,
-    OnboardingAdminEndereco Endereco
+    OnboardingLoja Loja,
+    DateTime DataNascimento
 );
 
 
@@ -32,4 +30,15 @@ public record OnboardingAdminEndereco(
     string Complemento,
     string Cep,
     string Numero
+);
+
+public record OnboardingLoja(
+    string NomeFantasia,
+    string RazaoSocial,
+    string Cnpj,
+    string InscricaoEstadual,
+    string Site,
+    string LogoTipo,
+    OnboardingAdminEndereco Endereco,
+    ICollection<OnboardingAdminContato> Contatos
 );

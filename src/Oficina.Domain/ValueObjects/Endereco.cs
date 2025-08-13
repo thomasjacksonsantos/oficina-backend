@@ -45,7 +45,7 @@ public sealed class Endereco
         string logradouro,
         string bairro,
         string complemento,
-        Cep cep,
+        string cep,
         string numero
     )
     {
@@ -54,7 +54,8 @@ public sealed class Endereco
             cidade,
             logradouro,
             bairro,
-            numero
+            numero,
+            cep
         );
 
         if (result.IsFailed)
@@ -67,10 +68,10 @@ public sealed class Endereco
             logradouro,
             bairro,
             complemento,
-            cep,
+            Cep.Criar(cep).Value!,
             numero);
     }
-    
+
     public static Result<Endereco> Criar(
         string pais,
         string estado,
@@ -78,7 +79,7 @@ public sealed class Endereco
         string logradouro,
         string bairro,
         string complemento,
-        Cep cep,
+        string cep,
         string numero
     )
     {
@@ -88,7 +89,8 @@ public sealed class Endereco
             cidade,
             logradouro,
             bairro,
-            numero
+            numero,
+            cep
         );
 
         if (result.IsFailed)
@@ -101,7 +103,7 @@ public sealed class Endereco
             logradouro,
             bairro,
             complemento,
-            cep,
+            Cep.Criar(cep).Value!,
             numero);
     }
 
@@ -111,23 +113,25 @@ public sealed class Endereco
         string cidade,
         string logradouro,
         string bairro,
-        string numero
+        string numero,
+        string cep
     )
     {
-        var result = Validar(estado, cidade, logradouro, bairro, numero);
+        var result = Validar(estado, cidade, logradouro, bairro, numero, cep);
 
         if (string.IsNullOrWhiteSpace(pais))
             result.WithError(Erro.ValorNaoInformado(nameof(Pais)));
 
         return result;
     }
-    
+
     private static Result Validar(
         string estado,
         string cidade,
         string logradouro,
         string bairro,
-        string numero
+        string numero,
+        string cep
     )
     {
         var result = new Result();

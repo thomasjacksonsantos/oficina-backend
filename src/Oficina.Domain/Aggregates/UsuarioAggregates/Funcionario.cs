@@ -30,8 +30,7 @@ public sealed class Funcionario : Usuario
         TipoUsuario.SuperAdmin,
         sexo,
         dataNascimento,
-        contatos,
-        endereco
+        contatos
     )
     { }
 
@@ -54,8 +53,7 @@ public sealed class Funcionario : Usuario
             documento,
             sexo,
             dataNascimento,
-            contatos,
-            endereco
+            contatos
         );
 
         if (resultUsuario.IsFailed)

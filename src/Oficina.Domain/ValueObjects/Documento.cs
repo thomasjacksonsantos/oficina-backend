@@ -45,7 +45,7 @@ public sealed class Documento
 
         var n = string.Join("", new Regex(@"\d+").Matches(numero));
 
-        if (n.Length != 11 && n.Length != 16)
+        if (n.Length != 11 && n.Length != 14)
             result.WithError(DocumentoErros.ValorInvalido(numero));
 
         if (result.IsFailed)

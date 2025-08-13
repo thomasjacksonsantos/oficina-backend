@@ -4,7 +4,7 @@ namespace Oficina.Infrastructure.Configuration;
 public class ApiConfig
 {
     public BlobStorageConfig BlobStorage { get; set; }
-    public AuthenticationToken AuthenticationToken { get; set; }
+    public  Authentication Authentication { get; set; }
     public Cep Cep { get; set; }
     public Email Email { get; set; }
     public ConviteConfig Convite { get; set; }
@@ -39,12 +39,10 @@ public class BlobStorageConfig
     public string ContainerName { get; set; }
 }
 
-public class AuthenticationToken
+public class Authentication
 {
-    public string SecretKey { get; set; }
-    public string Issuer { get; set; }
-    public string Aud { get; set; }
-    public int Expires { get; set; }
+    public string TokenUri { get; set; } = string.Empty;
+    public string ServiceName { get; set; } = string.Empty;
 }
 
 #pragma warning restore CS8618

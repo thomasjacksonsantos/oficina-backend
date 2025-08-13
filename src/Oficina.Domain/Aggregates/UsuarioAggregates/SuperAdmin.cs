@@ -20,8 +20,7 @@ public sealed class SuperAdmin : Usuario
         Documento documento,
         Sexo sexo,
         ICollection<Contato> contatos,
-        DataNascimento dataNascimento,
-        Endereco endereco
+        DataNascimento dataNascimento
     ) : base(
         userId,
         nome,
@@ -30,8 +29,7 @@ public sealed class SuperAdmin : Usuario
         TipoUsuario.SuperAdmin,
         sexo,
         dataNascimento,
-        contatos,
-        endereco
+        contatos
     )
     { }
 
@@ -42,8 +40,7 @@ public sealed class SuperAdmin : Usuario
         string documento,
         string sexo,
         DateTime dataNascimento,    
-        ICollection<Contato> contatos,
-        Endereco endereco
+        ICollection<Contato> contatos
     )
     {
         var resultUsuario = Usuario.Criar(
@@ -54,8 +51,7 @@ public sealed class SuperAdmin : Usuario
             documento,
             sexo,
             dataNascimento,
-            contatos,
-            endereco
+            contatos
         );
 
         if (resultUsuario.IsFailed)
@@ -69,8 +65,7 @@ public sealed class SuperAdmin : Usuario
             resultUsuario.Value!.Documento,
             resultUsuario.Value.Sexo,
             contatos,
-            resultUsuario.Value.DataNascimento,
-            endereco
+            resultUsuario.Value.DataNascimento
         );
 
         return Result.Success(superAdmin!);

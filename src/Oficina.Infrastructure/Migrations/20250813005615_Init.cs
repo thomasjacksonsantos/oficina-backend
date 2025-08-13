@@ -93,7 +93,6 @@ namespace Oficina.Infrastructure.Migrations
                     SexoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UsuarioPadrao = table.Column<bool>(type: "bit", nullable: false),
                     Contatos = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Endereco = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TipoClass = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     Atualizado = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Criado = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -127,29 +126,36 @@ namespace Oficina.Infrastructure.Migrations
                 name: "Loja",
                 columns: table => new
                 {
-                    Loja_Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Loja_Nome = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
+                    NomeFantasia = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
+                    RazaoSocial = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
+                    InscricaoEstadual = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
+                    Site = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
+                    LogoTipo = table.Column<string>(type: "text", nullable: false),
+                    TipoDocumentoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Endereco = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Contatos = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContaId = table.Column<int>(type: "int", nullable: false),
                     Atualizado = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Criado = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Numero = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
-                    Documento_TipoDocumento_Dominio = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Documento_TipoDocumento_Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false)
+                    Numero = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Loja", x => x.Loja_Id);
+                    table.PrimaryKey("PK_Loja", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Loja_Conta_ContaId",
                         column: x => x.ContaId,
                         principalTable: "Conta",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Loja_DadoDominio_TipoDocumentoId",
+                        column: x => x.TipoDocumentoId,
+                        principalTable: "DadoDominio",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -194,7 +200,7 @@ namespace Oficina.Infrastructure.Migrations
                         name: "FK_UsuarioLoja_Loja_LojaId",
                         column: x => x.LojaId,
                         principalTable: "Loja",
-                        principalColumn: "Loja_Id");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -222,6 +228,11 @@ namespace Oficina.Infrastructure.Migrations
                 name: "IX_Loja_ContaId",
                 table: "Loja",
                 column: "ContaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Loja_TipoDocumentoId",
+                table: "Loja",
+                column: "TipoDocumentoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Usuario_SexoId",

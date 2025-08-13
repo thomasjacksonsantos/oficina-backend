@@ -213,10 +213,32 @@ namespace Oficina.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nome")
+                    b.Property<string>("InscricaoEstadual")
                         .IsRequired()
                         .HasMaxLength(600)
                         .HasColumnType("nvarchar(600)");
+
+                    b.Property<string>("LogoTipo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NomeFantasia")
+                        .IsRequired()
+                        .HasMaxLength(600)
+                        .HasColumnType("nvarchar(600)");
+
+                    b.Property<string>("RazaoSocial")
+                        .IsRequired()
+                        .HasMaxLength(600)
+                        .HasColumnType("nvarchar(600)");
+
+                    b.Property<string>("Site")
+                        .IsRequired()
+                        .HasMaxLength(600)
+                        .HasColumnType("nvarchar(600)");
+
+                    b.Property<Guid>("TipoDocumentoId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.LojaAggregates.Loja.Atualizado#DataHora", b1 =>
                         {
@@ -245,43 +267,15 @@ namespace Oficina.Infrastructure.Migrations
                                 .HasMaxLength(16)
                                 .HasColumnType("nvarchar(16)")
                                 .HasColumnName("Numero");
-
-                            b1.ComplexProperty<Dictionary<string, object>>("TipoDocumento", "Oficina.Domain.Aggregates.LojaAggregates.Loja.Documento#Documento.TipoDocumento#TipoDocumento", b2 =>
-                                {
-                                    b2.IsRequired();
-
-                                    b2.Property<string>("Dominio")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
-                                    b2.Property<Guid>("Id")
-                                        .HasColumnType("uniqueidentifier")
-                                        .HasColumnName("Id");
-
-                                    b2.Property<string>("Key")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
-                                    b2.Property<string>("Nome")
-                                        .IsRequired()
-                                        .HasMaxLength(600)
-                                        .HasColumnType("nvarchar(600)")
-                                        .HasColumnName("Nome");
-                                });
                         });
 
                     b.HasKey("Id");
 
                     b.HasIndex("ContaId");
 
-                    b.ToTable("Loja", t =>
-                        {
-                            t.Property("Id")
-                                .HasColumnName("Loja_Id");
+                    b.HasIndex("TipoDocumentoId");
 
-                            t.Property("Nome")
-                                .HasColumnName("Loja_Nome");
-                        });
+                    b.ToTable("Loja");
                 });
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.LojaAggregates.UsuarioLoja", b =>
@@ -314,10 +308,6 @@ namespace Oficina.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Contatos")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Endereco")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -519,7 +509,15 @@ namespace Oficina.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.TipoDocumento", "TipoDocumento")
+                        .WithMany()
+                        .HasForeignKey("TipoDocumentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Conta");
+
+                    b.Navigation("TipoDocumento");
                 });
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.LojaAggregates.UsuarioLoja", b =>

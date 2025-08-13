@@ -1,6 +1,7 @@
 
 
 using Oficina.Domain.Aggregates.ContaAggregates;
+using Oficina.Domain.Aggregates.UsuarioAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
 
@@ -9,7 +10,12 @@ namespace Oficina.Domain.Aggregates.LojaAggregates;
 public sealed class Loja : IMultiConta
 {
     public int Id { get; private set; }
-    public string Nome { get; private set; }
+    public string NomeFantasia { get; private set; }
+    public string RazaoSocial { get; private set; }
+    public string InscricaoEstadual { get; private set; }
+    public string Site { get; private set; }
+    public string LogoTipo { get; private set; }
+    public TipoDocumento TipoDocumento { get; private set; }
     public Documento Documento { get; private set; }
     public Endereco Endereco { get; private set; }
     public ICollection<Contato>? Contatos { get; private set; }
@@ -24,14 +30,24 @@ public sealed class Loja : IMultiConta
 #pragma warning restore CS8618
 
     private Loja(
-        string nome,
+        string nomeFantasia,
+        string razaoSocial,
+        string inscricaoEstadual,
+        string site,
+        string logoTipo,
+        TipoDocumento tipoDocumento,
         Documento documento,
         Conta conta,
         Endereco endereco,
         ICollection<Contato> contatos
     )
     {
-        Nome = nome;
+        NomeFantasia = nomeFantasia;
+        RazaoSocial = razaoSocial;
+        InscricaoEstadual = inscricaoEstadual;
+        Site = site;
+        LogoTipo = logoTipo;
+        TipoDocumento = tipoDocumento;
         Documento = documento;
         Endereco = endereco;
         Conta = conta;
@@ -40,20 +56,31 @@ public sealed class Loja : IMultiConta
         Atualizado = DateTime.Now;
     }
 
-    public static Loja Criar(
-        string nome,
+    public static Result<Loja> Criar(
+        string nomeFantasia,
+        string razaoSocial,
+        string inscricaoEstadual,
+        string site,
+        string logoTipo,
         string documento,
         Conta conta,
         Endereco endereco,
         ICollection<Contato> contatos
     )
-        => new(
-            nome,
-            Documento.Criar(
-                documento
-            ).Value!,
+    {
+        var documentoResult = Documento.Criar(documento);
+
+        return new Loja(
+            nomeFantasia,
+            razaoSocial,
+            inscricaoEstadual,
+            site,
+            logoTipo,
+            documentoResult.Value!.TipoDocumento,
+            documentoResult.Value,
             conta,
             endereco,
             contatos
         );
+    }
 }

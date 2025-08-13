@@ -41,26 +41,26 @@ public class EfUsuarioConfiguration : IEntityTypeConfiguration<Usuario>
                     }
                 )!
         );
-        builder
-        .Property(e => e.Endereco)
-        .HasConversion(
-            convertToProviderExpression: c =>
-                JsonConvert.SerializeObject(
-                    c,
-                    new JsonSerializerSettings
-                    {
-                        NullValueHandling = NullValueHandling.Ignore
-                    }
-                ),
-            convertFromProviderExpression: c =>
-                JsonConvert.DeserializeObject<Endereco>(
-                    c,
-                    new JsonSerializerSettings
-                    {
-                        NullValueHandling = NullValueHandling.Ignore
-                    }
-                )!
-        );
+        // builder
+        // .Property(e => e.Endereco)
+        // .HasConversion(
+        //     convertToProviderExpression: c =>
+        //         JsonConvert.SerializeObject(
+        //             c,
+        //             new JsonSerializerSettings
+        //             {
+        //                 NullValueHandling = NullValueHandling.Ignore
+        //             }
+        //         ),
+        //     convertFromProviderExpression: c =>
+        //         JsonConvert.DeserializeObject<Endereco>(
+        //             c,
+        //             new JsonSerializerSettings
+        //             {
+        //                 NullValueHandling = NullValueHandling.Ignore
+        //             }
+        //         )!
+        // );
         builder.ComplexProperty(c => c.Criado, criado =>
         {
             criado.Property(c => c.Valor).HasColumnName(nameof(Usuario.Criado));
