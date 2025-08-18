@@ -62,6 +62,9 @@ namespace Oficina.Infrastructure.Migrations
                     b.Property<Guid>("SexoId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("TipoDocumentoId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.ClienteAggregates.Cliente.Atualizado#DataHora", b1 =>
                         {
                             b1.IsRequired();
@@ -98,29 +101,6 @@ namespace Oficina.Infrastructure.Migrations
                                 .HasMaxLength(16)
                                 .HasColumnType("nvarchar(16)")
                                 .HasColumnName("Numero");
-
-                            b1.ComplexProperty<Dictionary<string, object>>("TipoDocumento", "Oficina.Domain.Aggregates.ClienteAggregates.Cliente.Documento#Documento.TipoDocumento#TipoDocumento", b2 =>
-                                {
-                                    b2.IsRequired();
-
-                                    b2.Property<string>("Dominio")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
-                                    b2.Property<Guid>("Id")
-                                        .HasColumnType("uniqueidentifier")
-                                        .HasColumnName("Id");
-
-                                    b2.Property<string>("Key")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
-                                    b2.Property<string>("Nome")
-                                        .IsRequired()
-                                        .HasMaxLength(600)
-                                        .HasColumnType("nvarchar(600)")
-                                        .HasColumnName("Nome");
-                                });
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Email", "Oficina.Domain.Aggregates.ClienteAggregates.Cliente.Email#Email", b1 =>
@@ -141,14 +121,9 @@ namespace Oficina.Infrastructure.Migrations
 
                     b.HasIndex("SexoId");
 
-                    b.ToTable("Cliente", t =>
-                        {
-                            t.Property("Id")
-                                .HasColumnName("Cliente_Id");
+                    b.HasIndex("TipoDocumentoId");
 
-                            t.Property("Nome")
-                                .HasColumnName("Cliente_Nome");
-                        });
+                    b.ToTable("Cliente");
                 });
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.ContaAggregates.Conta", b =>
@@ -299,6 +274,290 @@ namespace Oficina.Infrastructure.Migrations
                     b.ToTable("UsuarioLoja");
                 });
 
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.FuncionarioExecutor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.OrdemServicoAggregates.FuncionarioExecutor.Atualizado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Atualizado");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.OrdemServicoAggregates.FuncionarioExecutor.Criado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Criado");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("FuncionarioExecutor");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServico", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DataFaturamentoFinal")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataFaturamentoInicial")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FuncionarioExecutorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Observacao")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<int?>("PagamentoId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("VeiculoClienteId")
+                        .HasColumnType("int");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServico.Atualizado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Atualizado");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServico.Criado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Criado");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FuncionarioExecutorId");
+
+                    b.HasIndex("PagamentoId");
+
+                    b.HasIndex("VeiculoClienteId");
+
+                    b.ToTable("OrdemServico");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoPagamento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("NumeroParcela")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TipoPagamentoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Vencimento")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TipoPagamentoId");
+
+                    b.ToTable("OrdemServicoPagamento");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.ProdutoServicoItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Desconto")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("OrdemServicoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ValorLiquido")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorUnitario")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.OrdemServicoAggregates.ProdutoServicoItem.Atualizado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Atualizado");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.OrdemServicoAggregates.ProdutoServicoItem.Criado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Criado");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrdemServicoId");
+
+                    b.ToTable("ProdutoServicoItem");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.ProdutoAggregates.Categoria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.ProdutoAggregates.Categoria.Atualizado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Atualizado");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.ProdutoAggregates.Categoria.Criado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Criado");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categoria");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.ProdutoAggregates.PrecoLoja", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.ProdutoAggregates.PrecoLoja.Atualizado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Atualizado");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.ProdutoAggregates.PrecoLoja.Criado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Criado");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProdutoId");
+
+                    b.ToTable("PrecoLoja");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.ProdutoAggregates.Produto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoriaId")
+                        .HasColumnType("int");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.ProdutoAggregates.Produto.Atualizado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Atualizado");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.ProdutoAggregates.Produto.Criado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Criado");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.ToTable("Produto");
+                });
+
             modelBuilder.Entity("Oficina.Domain.Aggregates.UsuarioAggregates.Usuario", b =>
                 {
                     b.Property<int>("Id")
@@ -390,6 +649,112 @@ namespace Oficina.Infrastructure.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("Oficina.Domain.Aggregates.VeiculoAggregates.Veiculo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Ano")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Chassi")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Cor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Hodrometro")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Modelo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Motorizacao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NumeroChassi")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NumeroSerie")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Placa")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.VeiculoAggregates.Veiculo.Atualizado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Atualizado");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.VeiculoAggregates.Veiculo.Criado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Criado");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Veiculo");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.VeiculoAggregates.VeiculoCliente", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VeiculoId")
+                        .HasColumnType("int");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.VeiculoAggregates.VeiculoCliente.Atualizado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Atualizado");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.VeiculoAggregates.VeiculoCliente.Criado#DataHora", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTime>("Valor")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("Criado");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("VeiculoId");
+
+                    b.ToTable("VeiculoCliente");
+                });
+
             modelBuilder.Entity("Oficina.Domain.Enumerations.DadoDominio", b =>
                 {
                     b.Property<Guid>("Id")
@@ -443,6 +808,13 @@ namespace Oficina.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("ContaStatus");
                 });
 
+            modelBuilder.Entity("Oficina.Domain.Aggregates.ContaAggregates.TipoPagamento", b =>
+                {
+                    b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
+
+                    b.HasDiscriminator().HasValue("TipoPagamento");
+                });
+
             modelBuilder.Entity("Oficina.Domain.Aggregates.UsuarioAggregates.Sexo", b =>
                 {
                     b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
@@ -487,7 +859,15 @@ namespace Oficina.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.TipoDocumento", "TipoDocumento")
+                        .WithMany()
+                        .HasForeignKey("TipoDocumentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Sexo");
+
+                    b.Navigation("TipoDocumento");
                 });
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.ContaAggregates.Conta", b =>
@@ -565,6 +945,82 @@ namespace Oficina.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.FuncionarioExecutor", b =>
+                {
+                    b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServico", b =>
+                {
+                    b.HasOne("Oficina.Domain.Aggregates.OrdemServicoAggregates.FuncionarioExecutor", "FuncionarioExecutor")
+                        .WithMany()
+                        .HasForeignKey("FuncionarioExecutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoPagamento", "Pagamento")
+                        .WithMany()
+                        .HasForeignKey("PagamentoId");
+
+                    b.HasOne("Oficina.Domain.Aggregates.VeiculoAggregates.VeiculoCliente", "VeiculoCliente")
+                        .WithMany()
+                        .HasForeignKey("VeiculoClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FuncionarioExecutor");
+
+                    b.Navigation("Pagamento");
+
+                    b.Navigation("VeiculoCliente");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoPagamento", b =>
+                {
+                    b.HasOne("Oficina.Domain.Aggregates.ContaAggregates.TipoPagamento", "TipoPagamento")
+                        .WithMany()
+                        .HasForeignKey("TipoPagamentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TipoPagamento");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.ProdutoServicoItem", b =>
+                {
+                    b.HasOne("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServico", null)
+                        .WithMany("Items")
+                        .HasForeignKey("OrdemServicoId");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.ProdutoAggregates.PrecoLoja", b =>
+                {
+                    b.HasOne("Oficina.Domain.Aggregates.ProdutoAggregates.Produto", "Produto")
+                        .WithMany("PrecoLojas")
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Produto");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.ProdutoAggregates.Produto", b =>
+                {
+                    b.HasOne("Oficina.Domain.Aggregates.ProdutoAggregates.Categoria", "Categoria")
+                        .WithMany()
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categoria");
+                });
+
             modelBuilder.Entity("Oficina.Domain.Aggregates.UsuarioAggregates.Usuario", b =>
                 {
                     b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.Sexo", "Sexo")
@@ -592,6 +1048,25 @@ namespace Oficina.Infrastructure.Migrations
                     b.Navigation("TipoUsuario");
                 });
 
+            modelBuilder.Entity("Oficina.Domain.Aggregates.VeiculoAggregates.VeiculoCliente", b =>
+                {
+                    b.HasOne("Oficina.Domain.Aggregates.ClienteAggregates.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Oficina.Domain.Aggregates.VeiculoAggregates.Veiculo", "Veiculo")
+                        .WithMany()
+                        .HasForeignKey("VeiculoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Veiculo");
+                });
+
             modelBuilder.Entity("Oficina.Domain.Aggregates.ContaAggregates.Conta", b =>
                 {
                     b.Navigation("Lojas");
@@ -600,6 +1075,16 @@ namespace Oficina.Infrastructure.Migrations
             modelBuilder.Entity("Oficina.Domain.Aggregates.LojaAggregates.Loja", b =>
                 {
                     b.Navigation("UsuariosLoja");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServico", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.ProdutoAggregates.Produto", b =>
+                {
+                    b.Navigation("PrecoLojas");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,16 +14,12 @@ public class EfClienteConfiguration : IEntityTypeConfiguration<Cliente>
     public void Configure(EntityTypeBuilder<Cliente> builder)
     {
         builder.Property(c => c.Nome).HasMaxLength(600);
-        
+
         builder.ComplexProperty(c => c.Documento, documento =>
         {
             documento.Property(c => c.Numero).HasColumnName(nameof(Documento.Numero)).HasMaxLength(16);
-            documento.ComplexProperty(c => c.TipoDocumento, tipoDocumento =>
-            {
-                tipoDocumento.Property(c => c.Id).HasColumnName(nameof(TipoDocumento.Id));
-                tipoDocumento.Property(c => c.Nome).HasColumnName(nameof(TipoDocumento.Nome)).HasMaxLength(600);
-            });
         });
+
         builder.ComplexProperty(c => c.Email, email =>
         {
             email.Property(c => c.Valor).HasColumnName(nameof(Email.Valor)).HasMaxLength(800);

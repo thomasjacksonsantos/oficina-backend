@@ -1,4 +1,5 @@
 using Oficina.Domain.Aggregates.UsuarioAggregates;
+using Oficina.Domain.Aggregates.VeiculoAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
 
@@ -9,10 +10,11 @@ public sealed class Cliente
     public int Id { get; private set; }
     public string Nome { get; private set; }
     public Sexo Sexo { get; private set; }
+    public TipoDocumento TipoDocumento { get; private set; }
     public Documento Documento { get; private set; }
     public Email Email { get; private set; }
     public DataNascimento DataNascimento { get; private set; }
-    public ICollection<Contato> Contatos { get; private set; }
+    public ICollection<Contato> Contatos { get; private set; } = [];
     public ICollection<Endereco> Enderecos { get; private set; }
     public DataHora Criado { get; private set; }
     public DataHora Atualizado { get; private set; }
@@ -24,6 +26,7 @@ public sealed class Cliente
     public Cliente(
         string nome,
         Sexo sexo,
+        TipoDocumento tipoDocumento,
         Documento documento,
         Email email,
         DataNascimento dataNascimento,
@@ -33,6 +36,7 @@ public sealed class Cliente
     {
         Nome = nome;
         Sexo = sexo;
+        TipoDocumento = tipoDocumento;
         Documento = documento;
         Email = email;
         DataNascimento = dataNascimento;
@@ -75,6 +79,7 @@ public sealed class Cliente
         var cliente = new Cliente(
             nome,
             sexoObj!,
+            documentoObj.Value!.TipoDocumento,
             documentoObj.Value!,
             emailObj.Value!,
             dataNascimentoObj.Value!,

@@ -89,8 +89,7 @@ public sealed class Endereco
             cidade,
             logradouro,
             bairro,
-            numero,
-            cep
+            numero
         );
 
         if (result.IsFailed)
@@ -113,11 +112,10 @@ public sealed class Endereco
         string cidade,
         string logradouro,
         string bairro,
-        string numero,
-        string cep
+        string numero
     )
     {
-        var result = Validar(estado, cidade, logradouro, bairro, numero, cep);
+        var result = Validar(estado, cidade, logradouro, bairro, numero);
 
         if (string.IsNullOrWhiteSpace(pais))
             result.WithError(Erro.ValorNaoInformado(nameof(Pais)));
@@ -130,8 +128,7 @@ public sealed class Endereco
         string cidade,
         string logradouro,
         string bairro,
-        string numero,
-        string cep
+        string numero
     )
     {
         var result = new Result();

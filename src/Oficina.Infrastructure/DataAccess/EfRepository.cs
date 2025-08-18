@@ -42,6 +42,12 @@ public interface IRepository<TEntity>
     Task<PagedResult<TEntity>> FindAllByQueryable(IQueryable<TEntity> queryable, Pagination pagination, CancellationToken ct = default);
     Task<PagedResult<TEntity>> FindAllByPredicate(Expression<Func<TEntity, bool>> predicate, Pagination pagination, CancellationToken ct = default);
     Task<PagedResult<TEntity>> FindAllByPredicate(Expression<Func<TEntity, bool>> predicate, Pagination pagination, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes, CancellationToken ct = default);
+    Task<PagedResult<TResponse>> FindAllByPredicate<TResponse>(
+        Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, TResponse>> projection,
+        Pagination pagination,
+        CancellationToken ct = default
+    );
 
     #endregion
 
@@ -192,6 +198,30 @@ public class EfRepository<TDbContext, TEntity>(EfUnitOfWork<TDbContext> unitOfWo
     {
         var queryable = Queryable().Where(predicate);
         return FindAllByQueryable(queryable, pagination, ct);
+    }
+
+    public async Task<PagedResult<TResponse>> FindAllByPredicate<TResponse>(
+        Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, TResponse>> projection,
+        Pagination pagination,
+        CancellationToken ct = default
+    )
+    {
+        var queryable = Queryable().Where(predicate).Select(projection);
+        var totalRecords = queryable.Count();
+
+        var pagedResult = await queryable
+            .Skip((pagination.CurrentPage - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
+            .ToListAsync();
+
+        return new PagedResult<TResponse>
+        {
+            TotalRecords = totalRecords,
+            CurrentPage = pagination.CurrentPage,
+            PageSize = pagination.PageSize,
+            Records = pagedResult
+        };
     }
 
     public Task<PagedResult<TEntity>> FindAllByPredicate(

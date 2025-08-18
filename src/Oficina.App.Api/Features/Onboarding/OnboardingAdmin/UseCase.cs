@@ -1,7 +1,6 @@
 
 
 using FirebaseAdmin.Auth;
-using Microsoft.Identity.Client;
 using Oficina.Domain.Aggregates.ContaAggregates;
 using Oficina.Domain.Aggregates.LojaAggregates;
 using Oficina.Domain.Aggregates.UsuarioAggregates;
