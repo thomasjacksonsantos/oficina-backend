@@ -16,7 +16,7 @@ public class Endpoint(
         Description(c => c.Accepts<LoginRequest>()
                 .Produces<LoginResponse>()
                 .ProducesProblem(400)
-                .WithTags("Autenticacao")
+                .WithTags("Autenticação")
             , clearDefaults: false);
     }
 }

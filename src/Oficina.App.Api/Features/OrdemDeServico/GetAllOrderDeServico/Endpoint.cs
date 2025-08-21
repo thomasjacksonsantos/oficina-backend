@@ -11,12 +11,12 @@ public class Endpoint(
 {
     public override void Configure()
     {
-        Post("v1/ordem-serivos");
+        Post("v1/ordem-servicos");
         PreProcessor<AuthInterceptor<GetAllOrdemDeServicoRequest>>();
         Description(c => c.Accepts<GetAllOrdemDeServicoRequest>()
                 .Produces<GetAllOrdemDeServicoResponse>()
                 .ProducesProblem(400)
-                .WithTags("Order de servicos")
+                .WithTags("Ordem de Serviços")
             , clearDefaults: false);
     }
 }

@@ -16,7 +16,7 @@ public class Endpoint(
         Description(c => c.Accepts<UpsertUsuarioRequest>()
                 .Produces<UpsertUsuarioResponse>()
                 .ProducesProblem(400)
-                .WithTags("Usuarios")
+                .WithTags("Usuários")
             , clearDefaults: false);
     }
 }

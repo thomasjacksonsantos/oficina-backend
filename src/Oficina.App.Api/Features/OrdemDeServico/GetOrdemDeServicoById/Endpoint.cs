@@ -16,7 +16,7 @@ public class Endpoint(
         Description(c => c.Accepts<GetOrdemDeServicoByIdRequest>()
                 .Produces<GetOrdemDeServicoByIdResponse>()
                 .ProducesProblem(400)
-                .WithTags("Ordem de Servico")
+                .WithTags("Ordem de Serviços")
             , clearDefaults: false);
     }
 }
