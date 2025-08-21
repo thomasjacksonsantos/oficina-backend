@@ -1,7 +1,7 @@
 
 
 
-using Oficina.Domain.Aggregates.ContaAggregates;
+using System.Collections.ObjectModel;
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
 
@@ -19,8 +19,7 @@ public sealed class Funcionario : Usuario
         TipoDocumento tipoDocumento,
         Documento documento,
         Sexo sexo,
-        Endereco endereco,
-        ICollection<Contato> contatos,
+        Collection<Contato> contatos,
         DataNascimento dataNascimento
     ) : base(
         userId,
@@ -41,8 +40,7 @@ public sealed class Funcionario : Usuario
         string documento,
         string sexo,
         DateTime dataNascimento,
-        ICollection<Contato> contatos,
-        Endereco endereco
+        Collection<Contato> contatos
     )
     {
         var resultUsuario = Usuario.Criar(

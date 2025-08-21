@@ -15,7 +15,7 @@ public sealed class Cliente
     public Email Email { get; private set; }
     public DataNascimento DataNascimento { get; private set; }
     public ICollection<Contato> Contatos { get; private set; } = [];
-    public ICollection<Endereco> Enderecos { get; private set; }
+    public Endereco Endereco { get; private set; }
     public DataHora Criado { get; private set; }
     public DataHora Atualizado { get; private set; }
 
@@ -31,7 +31,7 @@ public sealed class Cliente
         Email email,
         DataNascimento dataNascimento,
         ICollection<Contato> contatos,
-        ICollection<Endereco> enderecos
+        Endereco endereco
     )
     {
         Nome = nome;
@@ -41,9 +41,57 @@ public sealed class Cliente
         Email = email;
         DataNascimento = dataNascimento;
         Contatos = contatos ?? new List<Contato>();
-        Enderecos = enderecos ?? new List<Endereco>();
+        Endereco = endereco;
         Criado = DateTime.Now;
         Atualizado = DateTime.Now;
+    }
+
+    public Result<Cliente> Atualizar(
+        string nome,
+        string sexo,
+        string documento,
+        string email,
+        DateTime dataNascimento,
+        ICollection<Contato> contatos,
+        Endereco endereco
+    )
+    {
+        var result = new Result<Cliente>();
+
+        if (string.IsNullOrWhiteSpace(nome))
+            result.WithError(Erro.ValorNaoInformado(nameof(nome)));
+
+        var sexoObj = Sexo.Get(sexo);
+        if (sexoObj is null) result.WithError(Erro.NaoEncontrado(sexo));
+
+        var documentoObj = Documento.Criar(documento);
+        if (documentoObj.IsFailed) result.WithErrors(documentoObj.Errors!);
+
+        var emailObj = Email.Criar(email);
+        if (emailObj.IsFailed) result.WithErrors(emailObj.Errors!);
+
+        var dataNascimentoObj = DataNascimento.Criar(dataNascimento);
+        if (dataNascimentoObj.IsFailed) result.WithErrors(dataNascimentoObj.Errors!);
+
+        if (result.IsFailed)
+            return result;
+
+        Nome = nome;
+        
+        if (Sexo.Key != sexoObj!.Key)
+            Sexo = Sexo.Get(sexo)!;
+
+        if (TipoDocumento.Key != documentoObj.Value!.TipoDocumento.Key)
+            TipoDocumento = documentoObj.Value!.TipoDocumento;
+
+        Documento = documentoObj.Value!;
+        Email = emailObj.Value!;
+        DataNascimento = dataNascimentoObj.Value!;
+        Contatos = contatos ?? new List<Contato>();
+        Endereco = endereco;
+        Atualizado = DateTime.Now;
+
+        return result;
     }
 
     public static Result<Cliente> Criar(
@@ -53,7 +101,7 @@ public sealed class Cliente
         string email,
         DateTime dataNascimento,
         ICollection<Contato> contatos,
-        ICollection<Endereco> enderecos
+        Endereco endereco
     )
     {
         var result = new Result<Cliente>();
@@ -84,7 +132,7 @@ public sealed class Cliente
             emailObj.Value!,
             dataNascimentoObj.Value!,
             contatos,
-            enderecos
+            endereco
         );
 
         return Result.Success(cliente);

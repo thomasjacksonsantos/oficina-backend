@@ -50,7 +50,7 @@ public class EfClienteConfiguration : IEntityTypeConfiguration<Cliente>
                 )!
         );
         builder
-        .Property(e => e.Enderecos)
+        .Property(e => e.Endereco)
         .HasConversion(
             convertToProviderExpression: c =>
                 JsonConvert.SerializeObject(
@@ -61,7 +61,7 @@ public class EfClienteConfiguration : IEntityTypeConfiguration<Cliente>
                     }
                 ),
             convertFromProviderExpression: c =>
-                JsonConvert.DeserializeObject<ICollection<Endereco>>(
+                JsonConvert.DeserializeObject<Endereco>(
                     c,
                     new JsonSerializerSettings
                     {
@@ -69,6 +69,7 @@ public class EfClienteConfiguration : IEntityTypeConfiguration<Cliente>
                     }
                 )!
         );
+
         builder.ComplexProperty(c => c.Criado, criado =>
         {
             criado.Property(c => c.Valor).HasColumnName(nameof(Usuario.Criado));

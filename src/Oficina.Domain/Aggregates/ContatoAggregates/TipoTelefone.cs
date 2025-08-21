@@ -6,6 +6,7 @@ namespace Oficina.Domain.Aggregates.UsuarioAggregates;
 public record TipoTelefone : DadoDominio
 {
     private TipoTelefone(Guid id, string key) : base(id, key) { }
+    private TipoTelefone() { }
 
     public static TipoTelefone? Get(string key) =>
         key.ToLower() switch

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oficina.Infrastructure.DataAccess;
 
@@ -12,9 +13,11 @@ using Oficina.Infrastructure.DataAccess;
 namespace Oficina.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250821020519_AddSexoClienteJsonSerializer")]
+    partial class AddSexoClienteJsonSerializer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace Oficina.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Endereco")
+                    b.Property<string>("Enderecos")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -59,8 +62,9 @@ namespace Oficina.Infrastructure.Migrations
                         .HasMaxLength(600)
                         .HasColumnType("nvarchar(600)");
 
-                    b.Property<Guid>("SexoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Sexo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("TipoDocumentoId")
                         .HasColumnType("uniqueidentifier");
@@ -118,8 +122,6 @@ namespace Oficina.Infrastructure.Migrations
                         });
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SexoId");
 
                     b.HasIndex("TipoDocumentoId");
 
@@ -575,8 +577,9 @@ namespace Oficina.Infrastructure.Migrations
                         .HasMaxLength(600)
                         .HasColumnType("nvarchar(600)");
 
-                    b.Property<Guid>("SexoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Sexo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TipoClass")
                         .IsRequired()
@@ -635,8 +638,6 @@ namespace Oficina.Infrastructure.Migrations
                         });
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SexoId");
 
                     b.HasIndex("TipoDocumentoId");
 
@@ -815,13 +816,6 @@ namespace Oficina.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("TipoPagamento");
                 });
 
-            modelBuilder.Entity("Oficina.Domain.Aggregates.UsuarioAggregates.Sexo", b =>
-                {
-                    b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
-
-                    b.HasDiscriminator().HasValue("Sexo");
-                });
-
             modelBuilder.Entity("Oficina.Domain.Aggregates.UsuarioAggregates.TipoDocumento", b =>
                 {
                     b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
@@ -853,19 +847,11 @@ namespace Oficina.Infrastructure.Migrations
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.ClienteAggregates.Cliente", b =>
                 {
-                    b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.Sexo", "Sexo")
-                        .WithMany()
-                        .HasForeignKey("SexoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.TipoDocumento", "TipoDocumento")
                         .WithMany()
                         .HasForeignKey("TipoDocumentoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Sexo");
 
                     b.Navigation("TipoDocumento");
                 });
@@ -1023,12 +1009,6 @@ namespace Oficina.Infrastructure.Migrations
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.UsuarioAggregates.Usuario", b =>
                 {
-                    b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.Sexo", "Sexo")
-                        .WithMany()
-                        .HasForeignKey("SexoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.TipoDocumento", "TipoDocumento")
                         .WithMany()
                         .HasForeignKey("TipoDocumentoId")
@@ -1040,8 +1020,6 @@ namespace Oficina.Infrastructure.Migrations
                         .HasForeignKey("TipoUsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Sexo");
 
                     b.Navigation("TipoDocumento");
 

@@ -1,5 +1,6 @@
 
 
+using System.Collections.ObjectModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
@@ -33,7 +34,7 @@ public class EfUsuarioConfiguration : IEntityTypeConfiguration<Usuario>
                     }
                 ),
             convertFromProviderExpression: c =>
-                JsonConvert.DeserializeObject<ICollection<Contato>>(
+                JsonConvert.DeserializeObject<Collection<Contato>>(
                     c,
                     new JsonSerializerSettings
                     {
@@ -41,26 +42,7 @@ public class EfUsuarioConfiguration : IEntityTypeConfiguration<Usuario>
                     }
                 )!
         );
-        // builder
-        // .Property(e => e.Endereco)
-        // .HasConversion(
-        //     convertToProviderExpression: c =>
-        //         JsonConvert.SerializeObject(
-        //             c,
-        //             new JsonSerializerSettings
-        //             {
-        //                 NullValueHandling = NullValueHandling.Ignore
-        //             }
-        //         ),
-        //     convertFromProviderExpression: c =>
-        //         JsonConvert.DeserializeObject<Endereco>(
-        //             c,
-        //             new JsonSerializerSettings
-        //             {
-        //                 NullValueHandling = NullValueHandling.Ignore
-        //             }
-        //         )!
-        // );
+
         builder.ComplexProperty(c => c.Criado, criado =>
         {
             criado.Property(c => c.Valor).HasColumnName(nameof(Usuario.Criado));

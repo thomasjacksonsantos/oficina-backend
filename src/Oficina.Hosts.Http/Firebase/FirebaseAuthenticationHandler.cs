@@ -13,7 +13,7 @@ Exemplo da autenticacao do firebase
 https://www.youtube.com/watch?v=jkTaHb0M4nw
 ****************************************************
 */
-namespace Doss.Hosts.Http.Firebase;
+namespace Oficina.Hosts.Http.Firebase;
 
 public class FirebaseAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {

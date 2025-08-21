@@ -1,5 +1,6 @@
 
 
+using System.Collections.ObjectModel;
 using Oficina.Domain.Aggregates.ContaAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
@@ -17,9 +18,9 @@ public class Usuario
     public Sexo Sexo { get; private set; }
     public DataNascimento DataNascimento { get; private set; }
     public bool UsuarioPadrao { get; private set; }
-    public ICollection<Conta> Contas { get; private set; } = new List<Conta>();
+    public Collection<Conta> Contas { get; private set; } = [];
     public Conta ContaPrincipal => Contas.FirstOrDefault(c => c.Principal) ?? Contas.FirstOrDefault()!;
-    public ICollection<Contato> Contatos { get; private set; }
+    public Collection<Contato> Contatos { get; private set; }
     public DataHora Criado { get; private set; }
     public DataHora Atualizado { get; private set; }
 
@@ -35,7 +36,7 @@ public class Usuario
         TipoUsuario tipoUsuario,
         Sexo sexo,
         DataNascimento dataNascimento,        
-        ICollection<Contato> contatos
+        Collection<Contato> contatos
     )
     {
         if (string.IsNullOrEmpty(userId))
@@ -49,12 +50,12 @@ public class Usuario
         Criado = DateTime.Now;
         Atualizado = DateTime.Now;
         DataNascimento = dataNascimento;
-        Contatos = contatos ?? new List<Contato>();
+        Contatos = contatos ?? new Collection<Contato>();
     }
 
     public void AddConta(Conta conta)
     {
-        Contas ??= new List<Conta>();
+        Contas ??= new Collection<Conta>();
         Contas.Add(conta);
     }
 
@@ -77,7 +78,7 @@ public class Usuario
         string documento,
         string sexo,
         DateTime dataNascimento,
-        ICollection<Contato> contatos
+        Collection<Contato> contatos
     )
     {
         var result = new Result<Usuario>();

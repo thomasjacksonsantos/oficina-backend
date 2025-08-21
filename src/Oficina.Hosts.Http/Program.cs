@@ -9,7 +9,9 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
-using Doss.Hosts.Http.Firebase;
+using Oficina.Hosts.Http.Firebase;
+using Oficina.Infrastructure.DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
@@ -80,7 +82,7 @@ services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:5174", "https://portal-oficina-dev.azurewebsites.net")
+        policy.WithOrigins("http://localhost:3000")
              .AllowAnyMethod()
              .AllowAnyHeader()
              .AllowCredentials();
@@ -98,7 +100,9 @@ if (!app.Environment.IsProduction())
 
 if (app.Environment.IsDevelopment())
 {
-    app.ApplyMigrations();
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
 }
 
 app
@@ -116,8 +120,8 @@ app
     })
     .UseCors("AllowAll")
     .UseSwaggerUi(settings =>
-    {        
-        settings.SwaggerRoutes.Add(new SwaggerUiRoute("Doss Api V1", "/swagger/v1/swagger.json"));
+    {
+        settings.SwaggerRoutes.Add(new SwaggerUiRoute("Oficina Api V1", "/swagger/v1/swagger.json"));
         settings.OperationsSorter = "method";
         settings.TagsSorter = "alpha";
     })

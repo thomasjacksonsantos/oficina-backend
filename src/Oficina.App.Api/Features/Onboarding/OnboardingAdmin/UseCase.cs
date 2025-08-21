@@ -1,5 +1,6 @@
 
 
+using System.Collections.ObjectModel;
 using FirebaseAdmin.Auth;
 using Oficina.Domain.Aggregates.ContaAggregates;
 using Oficina.Domain.Aggregates.LojaAggregates;
@@ -50,7 +51,7 @@ public sealed class UseCase(
                 input.Documento,
                 input.Sexo,
                 input.DataNascimento,
-                input.Contatos.Select(c => Contato.Criar(c.DDD, c.Numero, c.TipoTelefone).Value).ToList()!
+                new Collection<Contato>(input.Contatos.Select(c => Contato.Criar(c.DDD, c.Numero, c.TipoTelefone).Value).ToList()!)
             );
 
             if (superAdmin.IsFailed)

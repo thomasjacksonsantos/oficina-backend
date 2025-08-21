@@ -1,9 +1,10 @@
 
 using Oficina.App.Api.Shared;
 
-namespace Oficina.App.Api.Features.Clientes.CadastrarCliente;
+namespace Oficina.App.Api.Features.Clientes.AtualizarCliente;
 
-public sealed record CadastrarClienteRequest(
+public sealed record AtualizarClienteRequest(
+    int Id,
     string Nome,
     string Sexo,
     string Documento,

@@ -5,7 +5,7 @@ namespace Oficina.Domain.Aggregates.UsuarioAggregates;
 public record Sexo : DadoDominio
 {
     private Sexo(Guid id, string key) : base(id, key) { }
-
+    private Sexo() { }
     public static Sexo Get(string key) =>
         key.ToLower() switch
         {

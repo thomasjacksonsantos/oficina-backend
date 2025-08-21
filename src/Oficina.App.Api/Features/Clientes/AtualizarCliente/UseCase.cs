@@ -1,25 +1,36 @@
 
 
 
+using Microsoft.EntityFrameworkCore;
 using Oficina.Domain.Aggregates.ClienteAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
 using Oficina.Infrastructure.Core;
 using Oficina.Infrastructure.DataAccess;
 
-namespace Oficina.App.Api.Features.Clientes.CadastrarCliente;
+namespace Oficina.App.Api.Features.Clientes.AtualizarCliente;
 
 public sealed class UseCase(
     IRepository<Cliente> clienteRepository,
     IUnitOfWork unitOfWork
 )
-    : IUseCase<CadastrarClienteRequest, CadastrarClienteResponse>
+    : IUseCase<AtualizarClienteRequest, AtualizarClienteResponse>
 {
-    public async Task<Result<CadastrarClienteResponse>> Execute(
-        CadastrarClienteRequest input,
+    public async Task<Result<AtualizarClienteResponse>> Execute(
+        AtualizarClienteRequest input,
         CancellationToken ct = default
     )
     {
+        var cliente = await clienteRepository.FindFirstByPredicate(
+            predicate: c => c.Id == input.Id,
+            includes: c => c.Include(c => c.Sexo).Include(c => c.TipoDocumento),
+            asNoTracking: false,
+            ct
+        ) ?? null!;
+
+        if (cliente == null)
+            return Result.Fail("Cliente não encontrado.");
+
         var contatos = input.Contatos.Select(c => Contato.Criar(c.DDD, c.Numero, c.TipoTelefone));
         if (contatos.Any(c => c.IsFailed))
             return Result.Fail(contatos.SelectMany(c => c.Errors!).ToList());
@@ -38,7 +49,7 @@ public sealed class UseCase(
         if (endereco.IsFailed)
             return Result.Fail(endereco.Errors!);
 
-        var clienteResult = Cliente.Criar(
+        var clienteResult = cliente.Atualizar(
             input.Nome,
             input.Sexo,
             input.Documento,
@@ -51,9 +62,8 @@ public sealed class UseCase(
         if (clienteResult.IsFailed)
             return Result.Fail(clienteResult.Errors!);
 
-        await clienteRepository.AddAsync(clienteResult.Value!);
         await unitOfWork.SaveChangesAsync(ct);
 
-        return new CadastrarClienteResponse(clienteResult.Value!.Id);
+        return new AtualizarClienteResponse();
     }
 }
