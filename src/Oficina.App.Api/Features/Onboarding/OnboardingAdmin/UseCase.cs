@@ -101,6 +101,9 @@ public sealed class UseCase(
                 contatos
             );
 
+            if (loja.IsFailed)
+                throw new Exception(string.Join("-", loja.Errors!.Select(e => $"{e.Descricao}")));
+
             conta.AddLoja(loja.Value!);
 
             var emailResult = await emailSend.SendAsync(

@@ -68,7 +68,12 @@ public sealed class Loja : IMultiConta
         ICollection<Contato> contatos
     )
     {
-        var documentoResult = Documento.Criar(documento);
+        var result = new Result<Loja>();
+
+        var documentoObj = Documento.Criar(documento);
+        if (documentoObj.IsFailed) result.WithErrors(documentoObj.Errors!);
+
+        if(result.IsFailed) return result;
 
         return new Loja(
             nomeFantasia,
@@ -76,8 +81,8 @@ public sealed class Loja : IMultiConta
             inscricaoEstadual,
             site,
             logoTipo,
-            documentoResult.Value!.TipoDocumento,
-            documentoResult.Value,
+            documentoObj.Value!.TipoDocumento,
+            documentoObj.Value,
             conta,
             endereco,
             contatos
