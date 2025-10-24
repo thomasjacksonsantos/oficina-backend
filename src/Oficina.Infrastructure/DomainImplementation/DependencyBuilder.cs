@@ -16,7 +16,7 @@ public static class DependencyBuilder
     {
         services.AddScoped<EfUnitOfWork<ApplicationDbContext>>();
         services.AddScoped(typeof(IRepository<>), typeof(EfApplicationDbRepository<>));
-        services.AddScoped<IEntityQueryBuilder, EntityQueryBuilder>();
+        services.AddScoped<IFluentQuery, FluentQuery>();
         services.AddScoped<IUnitOfWork>(factory => factory.GetService<EfUnitOfWork<ApplicationDbContext>>()!);
         services.AddScoped<IClienteRepository, EfClienteRepository>();
         services.AddScoped<ISuperAdminRepository, EfSuperAdminRepository>();

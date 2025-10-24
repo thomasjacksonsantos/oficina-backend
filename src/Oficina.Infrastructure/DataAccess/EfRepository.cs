@@ -175,19 +175,19 @@ public class EfRepository<TDbContext, TEntity>(EfUnitOfWork<TDbContext> unitOfWo
         Pagination pagination,
         CancellationToken ct = default)
     {
-        var totalRecords = await queryable.CountAsync(ct);
+        var totalRegistros = await queryable.CountAsync(ct);
 
         var pagedResult = await queryable
-            .Skip((pagination.CurrentPage - 1) * pagination.PageSize)
-            .Take(pagination.PageSize)
+            .Skip((pagination.PaginaAtual - 1) * pagination.Limite)
+            .Take(pagination.Limite)
             .ToListAsync(ct);
 
         return new PagedResult<TEntity>
         {
-            TotalRecords = totalRecords,
-            CurrentPage = pagination.CurrentPage,
-            PageSize = pagination.PageSize,
-            Records = pagedResult.AsEnumerable()
+            TotalRegistros = totalRegistros,
+            PaginaAtual = pagination.PaginaAtual,
+            Limite = pagination.Limite,
+            Dados = pagedResult.AsEnumerable()
         };
     }
 
@@ -208,19 +208,19 @@ public class EfRepository<TDbContext, TEntity>(EfUnitOfWork<TDbContext> unitOfWo
     )
     {
         var queryable = Queryable().Where(predicate).Select(projection);
-        var totalRecords = queryable.Count();
+        var totalRegistros = queryable.Count();
 
-        var pagedResult = await queryable
-            .Skip((pagination.CurrentPage - 1) * pagination.PageSize)
-            .Take(pagination.PageSize)
+        var dados = await queryable
+            .Skip((pagination.PaginaAtual - 1) * pagination.Limite)
+            .Take(pagination.Limite)
             .ToListAsync();
 
         return new PagedResult<TResponse>
         {
-            TotalRecords = totalRecords,
-            CurrentPage = pagination.CurrentPage,
-            PageSize = pagination.PageSize,
-            Records = pagedResult
+            TotalRegistros = totalRegistros,
+            PaginaAtual = pagination.PaginaAtual,
+            Limite = pagination.Limite,
+            Dados = dados
         };
     }
 

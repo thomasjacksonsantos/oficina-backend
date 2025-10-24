@@ -10,10 +10,8 @@ using Oficina.Infrastructure.DataAccess;
 namespace Oficina.App.Api.Features.OrdemDeServico.CadastrarOrdemDeServico;
 
 public sealed class UseCase(
-    IRepository<Cliente> clienteRepository,
-    IRepository<Veiculo> veiculoRepository,
-    IRepository<Usuario> usuarioRepository,
     IRepository<OrdemServico> ordemServicoRepository,
+    IFluentQuery fluentQuery,
     IUnitOfWork unitOfWork
 )
     : IUseCase<CadastrarOrdemDeServicoRequest, CadastrarOrdemDeServicoResponse>
@@ -23,30 +21,41 @@ public sealed class UseCase(
         CancellationToken ct = default
     )
     {
-        var cliente = await clienteRepository.FindAsync(input.ClienteId);
-        var veiculo = await veiculoRepository.FindAsync(input.VeiculoId);
-        var usuario = await usuarioRepository.FindAsync(input.FuncionarioExecutorId);
 
-        var veiculoCliente = VeiculoCliente.Criar(
-            veiculo,
-            cliente
-        );
+        var cliente = await fluentQuery.For<Cliente>()
+            .WithPredicate(x => x.Id == input.ClienteId)
+            .FindFirstAsync();
 
-        if (veiculoCliente.IsFailed)
-            return Result.Fail(veiculoCliente.Errors!);
+        var veiculo = await fluentQuery.For<Veiculo>()
+            .WithPredicate(x => x.Id == input.VeiculoId)
+            .FindFirstAsync();
 
-        var funcionarioExecutor = FuncionarioExecutor.Criar(
-            usuario
-        );
+        var funcionario = await fluentQuery.For<Funcionario>()
+            .WithPredicate(x => x.Id == input.FuncionarioExecutorId)
+            .FindFirstAsync();
 
-        if (funcionarioExecutor.IsFailed)
-            return Result.Fail(funcionarioExecutor.Errors!);
+        var veiculoCliente = await fluentQuery.For<VeiculoCliente>()
+            .WithPredicate(x => x.Cliente.Id == cliente!.Id && x.Veiculo.Id == veiculo!.Id)
+            .FindFirstAsync();
+
+        if (veiculoCliente == null)
+        {
+            var veiculoClienteResult = VeiculoCliente.Criar(
+                veiculo!,
+                cliente!
+            );
+
+            if (veiculoClienteResult.IsFailed)
+                return Result.Fail(veiculoClienteResult.Errors!);
+
+            veiculoCliente = veiculoClienteResult.Value!;        
+        }
 
         var ordemServico = OrdemServico.Criar(
             input.DataFaturamentoInicial,
             input.Observacao,
-            funcionarioExecutor.Value!,
-            veiculoCliente.Value!
+            funcionario!.Id,
+            veiculoCliente
         );
 
         if (ordemServico.IsFailed)

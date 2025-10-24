@@ -1,3 +1,4 @@
+using Oficina.Domain.Aggregates.UsuarioAggregates;
 using Oficina.Domain.Aggregates.VeiculoAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
@@ -11,11 +12,11 @@ public class OrdemServico
     public DateTime DataFaturamentoInicial { get; private set; }
     public DateTime DataFaturamentoFinal { get; private set; }
     public string Observacao { get; private set; }
-    public int FuncionarioExecutorId { get; private set; }
-    public FuncionarioExecutor FuncionarioExecutor { get; private set; }
+    public int FuncionarioId { get; private set; }
+    public Funcionario? Funcionario { get; private set; }
     public int VeiculoClienteId { get; private set; }
     public VeiculoCliente VeiculoCliente { get; private set; }
-    public ICollection<ProdutoServicoItem>? Items { get; private set; }
+    public ICollection<OrdemServicoItem>? Itens { get; private set; }
     public OrdemServicoPagamento? Pagamento { get; private set; }
     public DataHora Criado { get; private set; }
     public DataHora Atualizado { get; private set; }
@@ -29,14 +30,13 @@ public class OrdemServico
     public OrdemServico(
         DateTime dataFaturamentoInicial,
         string observacao,
-        FuncionarioExecutor funcionarioExecutor,
+        int funcionarioId,
         VeiculoCliente veiculoCliente
     )
     {
         DataFaturamentoInicial = dataFaturamentoInicial;
         Observacao = observacao;
-        FuncionarioExecutorId = funcionarioExecutor.Id;
-        FuncionarioExecutor = funcionarioExecutor;
+        FuncionarioId = funcionarioId;
         VeiculoClienteId = veiculoCliente.Id;
         VeiculoCliente = veiculoCliente;
         Criado = DataHora.Criar().Value!;
@@ -47,16 +47,33 @@ public class OrdemServico
     public static Result<OrdemServico> Criar(
         DateTime dataFaturamentoInicial,
         string observacao,
-        FuncionarioExecutor funcionarioExecutor,
+        int funcionarioId,
         VeiculoCliente veiculoCliente
     )
     {
+        var result = new Result<OrdemServico>();
+
+        if (veiculoCliente == null)
+            result.WithError(Erro.ValorInvalido("OrdemServico.VeiculoCliente"));
+
+        if (string.IsNullOrWhiteSpace(observacao))
+            result.WithError(Erro.ValorInvalido("OrdemServico.Observacao"));
+
+        if (dataFaturamentoInicial.Date.ToUniversalTime() < DateTime.UtcNow.Date)
+            result.WithError(Erro.ValorInvalido("OrdemServico.DataFaturamentoInicial"));
+
+        if (funcionarioId <= 0)
+            result.WithError(Erro.ValorInvalido("OrdemServico.FuncionarioId"));
+
+        if (result.IsFailed)
+            return Result.Fail(result.Errors!);
+
         // Aqui você pode adicionar validações conforme necessário
         var ordemServico = new OrdemServico(
             dataFaturamentoInicial,
             observacao,
-            funcionarioExecutor,
-            veiculoCliente
+            funcionarioId,
+            veiculoCliente!
         );
 
         return Result.Success(ordemServico);

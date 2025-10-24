@@ -1,5 +1,4 @@
 using Oficina.Domain.Aggregates.UsuarioAggregates;
-using Oficina.Domain.Aggregates.VeiculoAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
 

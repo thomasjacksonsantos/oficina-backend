@@ -6,7 +6,7 @@ using Oficina.Domain.ValueObjects;
 
 namespace Oficina.Domain.Aggregates.OrdemServicoAggregates;
 
-public class ProdutoServicoItem
+public class OrdemServicoItem
 {
     public int Id { get; private set; }
     public int ProdutoId { get; private set; }
@@ -19,10 +19,10 @@ public class ProdutoServicoItem
 
 
 #pragma warning disable CS8618 // Para uso do EF/serialização
-    private ProdutoServicoItem() { }
+    private OrdemServicoItem() { }
 #pragma warning restore CS8618
 
-    private ProdutoServicoItem(
+    private OrdemServicoItem(
         int produtoId,
         int quantidade,
         decimal valorUnitario,
@@ -38,7 +38,7 @@ public class ProdutoServicoItem
         Atualizado = DataHora.Criar().Value!;
     }
 
-    public static Result<ProdutoServicoItem> Criar(
+    public static Result<OrdemServicoItem> Criar(
         int produtoId,
         int quantidade,
         decimal valorUnitario,
@@ -52,7 +52,7 @@ public class ProdutoServicoItem
         if (valorUnitario < 0)
             return Result.Fail("O valor unitário não pode ser negativo.");
 
-        var item = new ProdutoServicoItem(
+        var item = new OrdemServicoItem(
             produtoId,
             quantidade,
             valorUnitario,

@@ -8,7 +8,7 @@ public class OrdemServicoPagamento
     public int Id { get; private set; }
     public int NumeroParcela { get; private set; }
     public DateTime Vencimento { get; private set; }
-    public TipoPagamento TipoPagamento { get; private set; }
+    public Guid OrdemServicoTipoPagamentoId { get; private set; }
     public decimal ValorTotal { get; private set; }
 
 
@@ -19,41 +19,42 @@ public class OrdemServicoPagamento
     public OrdemServicoPagamento(
         int numeroParcela,
         DateTime vencimento,
-        TipoPagamento tipoPagamento,
+        Guid ordemServicoTipoPagamentoId,
         decimal valorTotal
     )
     {
         NumeroParcela = numeroParcela;
         Vencimento = vencimento;
-        TipoPagamento = tipoPagamento;
+        OrdemServicoTipoPagamentoId = ordemServicoTipoPagamentoId;
         ValorTotal = valorTotal;
     }
 
     public static Result<OrdemServicoPagamento> Criar(
         int numeroParcela,
         DateTime vencimento,
-        TipoPagamento tipoPagamento,
+        string tipoPagamento,
         decimal valorTotal
     )
     {
-        var erros = new List<string>();
+        var result = new Result();
 
         if (numeroParcela <= 0)
-            erros.Add("Número da parcela deve ser maior que zero.");
+            result.WithError(Erro.ValorInvalido("OrdemServicoPagamento.numeroParcela"));
 
         if (vencimento.Date < DateTime.UtcNow.Date)
-            erros.Add("Vencimento não pode ser em data passada.");
+            result.WithError(Erro.ValorInvalido("OrdemServicoPagamento.vencimento"));
 
-        if (!Enum.IsDefined(typeof(TipoPagamento), tipoPagamento))
-            erros.Add("Tipo de pagamento inválido.");
+        var ordemServicoTipoPagamento = OrdemServicoTipoPagamento.Get(tipoPagamento);
+        if (ordemServicoTipoPagamento == null)
+            result.WithError(Erro.ValorInvalido("OrdemServicoPagamento.tipoPagamento"));
 
         if (valorTotal <= 0)
-            erros.Add("Valor total deve ser maior que zero.");
+            result.WithError(Erro.ValorInvalido("OrdemServicoPagamento.valorTotal"));
 
-        if (erros.Any())
-            return Result.Fail(string.Join(" ", erros));
+        if (result.IsFailed)
+            return Result.Fail(result.Errors!);
 
-        var pagamento = new OrdemServicoPagamento(numeroParcela, vencimento, tipoPagamento, valorTotal);
+        var pagamento = new OrdemServicoPagamento(numeroParcela, vencimento, ordemServicoTipoPagamento!.Id, valorTotal);
         return Result.Success(pagamento);
     }
 }

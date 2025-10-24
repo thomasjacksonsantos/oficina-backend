@@ -46,7 +46,7 @@ public sealed record Result<T> : ResultBase
     
 
     public static implicit operator Result<T>(Erro error) => Fail([error]);
-
+    
     public static implicit operator Result<T>(Result result)
     {
         if (result.IsSuccess)

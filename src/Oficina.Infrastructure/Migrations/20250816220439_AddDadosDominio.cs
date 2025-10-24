@@ -82,6 +82,21 @@ namespace Oficina.Infrastructure.Migrations
                     values('019606aa-cb80-7529-8187-089720b6c556', 'Funcionario', 'Funcionario', 'TipoUsuario')
                 end
 
+                -- OrdemServicoTipoPagamento
+                -- Credito
+                if (not exists(select top 1 1 from DadoDominio where Id = '5635808c-642c-4163-a14c-73b3938d7188'))
+                begin
+                    insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    values('5635808c-642c-4163-a14c-73b3938d7188', 'Credito', 'Credito', 'OrdemServicoTipoPagamento')
+                end
+
+                -- Debito
+                if (not exists(select top 1 1 from DadoDominio where Id = '39839079-5dd7-4009-86ba-980001b45627'))
+                begin
+                    insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    values('39839079-5dd7-4009-86ba-980001b45627', 'Debito', 'Debito', 'OrdemServicoTipoPagamento')
+                end
+
             ");
         }
 

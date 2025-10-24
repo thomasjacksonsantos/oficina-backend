@@ -21,13 +21,12 @@ public sealed class UseCase(
             predicate: c => c.Id == input.Id,
             projection: c => new GetOrdemDeServicoByIdResponse(),
             includes: c =>
-                c.Include(c => c.FuncionarioExecutor)
-                .Include(c => c.Pagamento)
+                c.Include(c => c.Pagamento)
                 .Include(c => c.VeiculoCliente)
                     .ThenInclude(c => c.Veiculo)
                 .Include(c => c.VeiculoCliente)
                     .ThenInclude(c => c.Cliente)
-                .Include(c => c.Items)
+                .Include(c => c.Itens)
         );
 
         return ordemServico ?? null!;

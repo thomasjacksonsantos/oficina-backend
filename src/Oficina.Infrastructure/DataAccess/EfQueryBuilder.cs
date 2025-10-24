@@ -1,91 +1,153 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Oficina.Domain.ValueObjects;
 
 namespace Oficina.Infrastructure.DataAccess;
-
-public interface IEntityQueryBuilder
+public interface IFluentQuery
 {
-    FluentQuery<TEntity> For<TEntity>() where TEntity : class;
+    EfFluentEntityQuery<TEntity> For<TEntity>() where TEntity : class;
 }
 
-public class EntityQueryBuilder(ApplicationDbContext context)
-    : IEntityQueryBuilder 
+public class FluentQuery(ApplicationDbContext context)
+    : IFluentQuery
 {
-    public FluentQuery<TEntity> For<TEntity>() 
-        where TEntity : class => 
-        new FluentQuery<TEntity>(context);
+    public EfFluentEntityQuery<TEntity> For<TEntity>()
+        where TEntity : class =>
+        new(context);
 }
 
-public class FluentQuery<TEntity>
+public class EfFluentEntityQuery<TEntity>
     where TEntity : class
 {
-    private readonly ApplicationDbContext context;
-    private IQueryable<TEntity> query;
-    private bool asNoTracking = true;
+    private readonly ApplicationDbContext _context;
+    private IQueryable<TEntity> _query;
+    private bool _asNoTracking = true;
+    private bool _ignoreQueryFilters;
 
-    public FluentQuery(ApplicationDbContext context)
+    public EfFluentEntityQuery(ApplicationDbContext context)
     {
-        this.context = context;
-        query = this.context
+        _context = context;
+        _query = _context
             .Set<TEntity>()
             .AsQueryable();
     }
-    
-    private FluentQuery(
+
+    private EfFluentEntityQuery(
         ApplicationDbContext context,
         IQueryable<TEntity> query) =>
-        (this.context, this.query) = (context, query);
+        (_context, _query) = (context, query);
 
-    public FluentQuery<TEntity> WithPredicate(
+    public EfFluentEntityQuery<TEntity> WithPredicate(
         Expression<Func<TEntity, bool>> predicate)
     {
-        query = query.Where(predicate);
+        _query = _query.Where(predicate);
         return this;
     }
 
-    public FluentQuery<TEntity> WithIncludes(
+    public EfFluentEntityQuery<TEntity> WithIncludes(
         Func<IQueryable<TEntity>, IQueryable<TEntity>> includes)
     {
-        query = includes(query);
+        _query = includes(_query);
         return this;
     }
-    
-    public FluentQuery<TResponse> WithProjection<TResponse>(
+
+    public EfFluentEntityQuery<TResponse> WithProjection<TResponse>(
         Expression<Func<TEntity, TResponse>> projection) where TResponse : class
     {
-        var projectionQuery = query.Select(projection);
-        return new FluentQuery<TResponse>(context, projectionQuery);
+        var projectionQuery = _query.Select(projection);
+        return new EfFluentEntityQuery<TResponse>(_context, projectionQuery);
     }
 
-    public FluentQuery<TEntity> WithTracking()
+    public EfFluentEntityQuery<TEntity> WithOrdering(
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy)
     {
-        asNoTracking = false;
+        _query = orderBy(_query);
+        return this;
+    }
+
+    public EfFluentEntityQuery<TEntity> WithTracking()
+    {
+        _asNoTracking = false;
+        return this;
+    }
+
+    public EfFluentEntityQuery<TEntity> IgnoreQueryFilters()
+    {
+        _ignoreQueryFilters = true;
         return this;
     }
 
     public Task<TEntity?> FindFirstAsync(
         CancellationToken ct = default)
     {
-        if (asNoTracking)
-            query = query.AsNoTracking();
-        
-        return query.FirstOrDefaultAsync(ct);
+        if (_asNoTracking)
+            _query = _query.AsNoTracking();
+
+        if (_ignoreQueryFilters)
+            _query = _query.IgnoreQueryFilters();
+
+        return _query.FirstOrDefaultAsync(ct);
     }
-    
+
     public Task<List<TEntity>> FindAllAsync(
         CancellationToken ct = default)
     {
-        if (asNoTracking)
-            query = query.AsNoTracking();
-        
-        return query.ToListAsync(ct);
+        if (_asNoTracking)
+            _query = _query.AsNoTracking();
+
+        if (_ignoreQueryFilters)
+            _query = _query.IgnoreQueryFilters();
+
+        return _query.ToListAsync(ct);
     }
-    
+
+    public async Task<PagedResult<TEntity>> FindAllPagedAsync(
+        int? pagina,
+        int? total = null,
+        CancellationToken ct = default)
+    {
+        if (_asNoTracking)
+            _query = _query.AsNoTracking();
+
+        if (_ignoreQueryFilters)
+            _query = _query.IgnoreQueryFilters();
+
+        var skip = 0;
+        var take = 20;
+
+        if (total is > 0)
+            take = total.Value;
+
+        if (pagina is > 0)
+            skip = (pagina.Value - 1) * take;
+
+        var totalTask = await _query.CountAsync(ct);
+
+        var dadosTask = await _query
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync(ct);
+
+        return new PagedResult<TEntity>
+        {
+            PaginaAtual = skip == 0 ? 1 : skip,
+            Limite = take,
+            TotalRegistros = totalTask,
+            Dados = dadosTask
+        };
+
+    }
+
     public Task<int> CountAsync(
         CancellationToken ct = default) =>
-        query.CountAsync(ct);
-    
+        _query.CountAsync(ct);
+
     public Task<bool> AnyAsync(
-        CancellationToken ct = default) =>
-        query.AnyAsync(ct);
+        CancellationToken ct = default)
+    {
+        if (_ignoreQueryFilters)
+            _query = _query.IgnoreQueryFilters();
+
+        return _query.AnyAsync(ct);
+    }
 }
