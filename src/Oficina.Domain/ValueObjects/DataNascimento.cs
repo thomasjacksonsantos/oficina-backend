@@ -20,14 +20,14 @@ public sealed class DataNascimento
 
         return new DataNascimento(valor);
     }
-    
+
     public static implicit operator DataNascimento(DateTime datetime)
     {
         var result = Criar(datetime);
-        
+
         if (result.IsSuccess is false)
             throw new ArgumentException("Data inválida.");
-        
+
         return result.Value!;
     }
 
@@ -36,7 +36,7 @@ public sealed class DataNascimento
     {
         var result = new Result();
 
-        if (dataNascimento <= DateTime.MinValue || dataNascimento >= DateTime.MaxValue)
+        if (dataNascimento.Date <= new DateTime(1900, 1, 1) || dataNascimento >= DateTime.Now)
             result.WithError(Erro.ValorNaoInformado(nameof(DataNascimento)));
 
         return result;

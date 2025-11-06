@@ -69,7 +69,10 @@
                 "--context",
                 "ApplicationDbContext",
                 "--startup-project",
-                "src/Oficina.Hosts.Http/Oficina.Hosts.Http.csproj"
+                "src/Oficina.Hosts.Http/Oficina.Hosts.Http.csproj",
+                "--verbose",
+                "--connection",
+                "Server=localhost,1433;Database=db-oficina;User Id=sa;Password=admin@123;TrustServerCertificate=True;"
             ],
             "group": "build",
         },
@@ -88,7 +91,8 @@
                 "--context",
                 "ApplicationDbContext",
                 "--startup-project",
-                "src/Oficina.Hosts.Http/Oficina.Hosts.Http.csproj"
+                "src/Oficina.Hosts.Http/Oficina.Hosts.Http.csproj",
+                "--idempotent"
             ],
         },
     ],

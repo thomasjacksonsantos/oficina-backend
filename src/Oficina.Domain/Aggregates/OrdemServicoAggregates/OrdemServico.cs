@@ -27,7 +27,7 @@ public class OrdemServico
 #pragma warning restore CS8618
 
     // Construtor com parâmetros
-    public OrdemServico(
+    private OrdemServico(
         DateTime dataFaturamentoInicial,
         string observacao,
         int funcionarioId,
@@ -42,6 +42,15 @@ public class OrdemServico
         Criado = DataHora.Criar().Value!;
         Atualizado = DataHora.Criar().Value!;
     }
+
+    public void AddItem(OrdemServicoItem item)
+    {
+        Itens ??= new List<OrdemServicoItem>();
+        Itens.Add(item);
+        ValorTotal += item.ValorUnitario * item.Quantidade;
+        Atualizado = DataHora.Criar().Value!;
+    }
+
 
     // Método estático Criar
     public static Result<OrdemServico> Criar(
@@ -59,7 +68,8 @@ public class OrdemServico
         if (string.IsNullOrWhiteSpace(observacao))
             result.WithError(Erro.ValorInvalido("OrdemServico.Observacao"));
 
-        if (dataFaturamentoInicial.Date.ToUniversalTime() < DateTime.UtcNow.Date)
+        if (dataFaturamentoInicial.Date.ToUniversalTime() < DateTime.MinValue.ToUniversalTime() ||
+            dataFaturamentoInicial.Date.ToUniversalTime() > DateTime.MaxValue.ToUniversalTime())
             result.WithError(Erro.ValorInvalido("OrdemServico.DataFaturamentoInicial"));
 
         if (funcionarioId <= 0)

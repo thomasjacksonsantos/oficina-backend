@@ -14,13 +14,15 @@ public class Usuario
     public string Nome { get; private set; }
     public TipoDocumento TipoDocumento { get; private set; }
     public Documento Documento { get; private set; }
+    public Guid TipoUsuarioId { get; private set; }
     public TipoUsuario TipoUsuario { get; private set; }
+    public Guid SexoId { get; private set; }
     public Sexo Sexo { get; private set; }
     public DataNascimento DataNascimento { get; private set; }
     public bool UsuarioPadrao { get; private set; }
     public Collection<Conta> Contas { get; private set; } = [];
     public Conta ContaPrincipal => Contas.FirstOrDefault(c => c.Principal) ?? Contas.FirstOrDefault()!;
-    public Collection<Contato> Contatos { get; private set; }
+    public IEnumerable<Contato> Contatos { get; private set; }
     public DataHora Criado { get; private set; }
     public DataHora Atualizado { get; private set; }
 
@@ -35,8 +37,8 @@ public class Usuario
         Documento documento,
         TipoUsuario tipoUsuario,
         Sexo sexo,
-        DataNascimento dataNascimento,        
-        Collection<Contato> contatos
+        DataNascimento dataNascimento,
+        IEnumerable<Contato> contatos
     )
     {
         if (string.IsNullOrEmpty(userId))
@@ -78,7 +80,7 @@ public class Usuario
         string documento,
         string sexo,
         DateTime dataNascimento,
-        Collection<Contato> contatos
+        IEnumerable<Contato> contatos
     )
     {
         var result = new Result<Usuario>();
@@ -101,7 +103,7 @@ public class Usuario
 
         var dataNascimentoObj = DataNascimento.Criar(dataNascimento);
         if (dataNascimentoObj.IsFailed) result.WithErrors(dataNascimentoObj.Errors!);
-        
+
         if (result.IsFailed)
             return result;
 

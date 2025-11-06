@@ -15,6 +15,7 @@ public sealed class Loja : IMultiConta
     public string InscricaoEstadual { get; private set; }
     public string Site { get; private set; }
     public string LogoTipo { get; private set; }
+    public Guid TipoDocumentoId { get; private set; }
     public TipoDocumento TipoDocumento { get; private set; }
     public Documento Documento { get; private set; }
     public Endereco Endereco { get; private set; }
@@ -73,7 +74,7 @@ public sealed class Loja : IMultiConta
         var documentoObj = Documento.Criar(documento);
         if (documentoObj.IsFailed) result.WithErrors(documentoObj.Errors!);
 
-        if(result.IsFailed) return result;
+        if (result.IsFailed) return result;
 
         return new Loja(
             nomeFantasia,

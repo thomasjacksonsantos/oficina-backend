@@ -11,7 +11,7 @@ public record Sexo : DadoDominio
         {
             "masculino" => Masculino,
             "feminino" => Feminino,
-            _ => throw new NotImplementedException("Sexo não encontrado.")
+            _ => null!
         };
 
     public static readonly Sexo Masculino = ("01963629-5d16-75e4-a596-295d8ccd46fa", "Masculino");

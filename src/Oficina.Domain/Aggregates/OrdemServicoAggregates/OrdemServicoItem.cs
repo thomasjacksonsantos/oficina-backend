@@ -9,7 +9,7 @@ namespace Oficina.Domain.Aggregates.OrdemServicoAggregates;
 public class OrdemServicoItem
 {
     public int Id { get; private set; }
-    public int ProdutoId { get; private set; }
+    public Guid ProdutoId { get; private set; }
     public int Quantidade { get; private set; }
     public decimal ValorUnitario { get; private set; }
     public decimal Desconto { get; private set; }
@@ -23,7 +23,7 @@ public class OrdemServicoItem
 #pragma warning restore CS8618
 
     private OrdemServicoItem(
-        int produtoId,
+        Guid produtoId,
         int quantidade,
         decimal valorUnitario,
         decimal desconto,
@@ -39,7 +39,7 @@ public class OrdemServicoItem
     }
 
     public static Result<OrdemServicoItem> Criar(
-        int produtoId,
+        Guid produtoId,
         int quantidade,
         decimal valorUnitario,
         decimal desconto,

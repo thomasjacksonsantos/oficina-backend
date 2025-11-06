@@ -5,10 +5,11 @@ namespace Oficina.Domain.Aggregates.ProdutoAggregates;
 
 public class Produto
 {
-    public int Id { get; private set; }
-    public int CategoriaId { get; private set; }
-    public Categoria Categoria { get; private set; }
-    public ICollection<PrecoLoja> PrecoLojas { get; set; }
+    public Guid Id { get; private set; }
+    public Guid CategoriaId { get; private set; }
+    public Categoria? Categoria { get; private set; }
+    public string Descricao { get; private set; }
+    public ICollection<PrecoLoja>? PrecoLojas { get; set; }
     public DataHora Criado { get; private set; }
     public DataHora Atualizado { get; private set; }
 
@@ -16,21 +17,40 @@ public class Produto
     private Produto() { }
 #pragma warning restore CS8618
 
-    public Produto(int categoriaId, Categoria categoria, ICollection<PrecoLoja> precoLojas)
+    public Produto(
+        Guid categoriaId,
+        string descricao
+    )
     {
         CategoriaId = categoriaId;
-        Categoria = categoria ?? throw new ArgumentNullException(nameof(categoria));
-        PrecoLojas = precoLojas ?? new List<PrecoLoja>();
+        Descricao = descricao;
         Criado = DataHora.Criar().Value!;
         Atualizado = DataHora.Criar().Value!;
     }
 
-    public static Result<Produto> Criar(int categoriaId, Categoria categoria, ICollection<PrecoLoja> precoLojas)
+    public void AddPrecoLoja(PrecoLoja precoLoja)
     {
-        if (categoria == null)
-            return Result.Fail("Categoria não pode ser nula.");
+        PrecoLojas ??= new List<PrecoLoja>();
+        PrecoLojas.Add(precoLoja);
+        Atualizado = DataHora.Criar().Value!;
+    }
 
-        var produto = new Produto(categoriaId, categoria, precoLojas);
-        return Result.Success(produto);
+    public static Result<Produto> Criar(
+        string descricao,
+        Guid categoriaId)
+    {
+        var result = new Result<Produto>();
+
+        if (categoriaId == Guid.Empty)
+            result.WithError(Erro.ValorInvalido("Produto.CategoriaId"));
+
+
+        if (string.IsNullOrWhiteSpace(descricao))
+            result.WithError(Erro.ValorInvalido("Produto.Descricao"));
+
+        if (result.IsFailed)
+            return result;
+
+        return new Produto(categoriaId, descricao);
     }
 }

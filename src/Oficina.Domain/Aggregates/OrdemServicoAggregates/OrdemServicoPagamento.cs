@@ -1,4 +1,4 @@
-using Oficina.Domain.Aggregates.ContaAggregates;
+
 using Oficina.Domain.SeedWork;
 
 namespace Oficina.Domain.Aggregates.OrdemServicoAggregates;
@@ -9,6 +9,7 @@ public class OrdemServicoPagamento
     public int NumeroParcela { get; private set; }
     public DateTime Vencimento { get; private set; }
     public Guid OrdemServicoTipoPagamentoId { get; private set; }
+    public OrdemServicoTipoPagamento? OrdemServicoTipoPagamento { get; private set; }
     public decimal ValorTotal { get; private set; }
 
 

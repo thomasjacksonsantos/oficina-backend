@@ -71,5 +71,10 @@ public class EfLojaConfiguration : IEntityTypeConfiguration<Loja>
         {
             atualizado.Property(c => c.Valor).HasColumnName(nameof(Usuario.Atualizado));
         });
+
+        builder.HasOne(c => c.TipoDocumento)
+            .WithMany()
+            .HasForeignKey(c => c.TipoDocumentoId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

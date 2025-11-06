@@ -8,7 +8,9 @@ public sealed class Cliente
 {
     public int Id { get; private set; }
     public string Nome { get; private set; }
+    public Guid SexoId { get; private set; }
     public Sexo Sexo { get; private set; }
+    public Guid TipoDocumentoId { get; private set; }
     public TipoDocumento TipoDocumento { get; private set; }
     public Documento Documento { get; private set; }
     public Email Email { get; private set; }
@@ -19,10 +21,10 @@ public sealed class Cliente
     public DataHora Atualizado { get; private set; }
 
 #pragma warning disable CS8618
-    public Cliente() : base() { }
+    private Cliente() : base() { }
 #pragma warning restore CS8618
 
-    public Cliente(
+    private Cliente(
         string nome,
         Sexo sexo,
         TipoDocumento tipoDocumento,
@@ -34,7 +36,9 @@ public sealed class Cliente
     )
     {
         Nome = nome;
+        SexoId = sexo.Id;
         Sexo = sexo;
+        TipoDocumentoId = tipoDocumento.Id;
         TipoDocumento = tipoDocumento;
         Documento = documento;
         Email = email;
@@ -58,25 +62,29 @@ public sealed class Cliente
         var result = new Result<Cliente>();
 
         if (string.IsNullOrWhiteSpace(nome))
-            result.WithError(Erro.ValorNaoInformado(nameof(nome)));
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Nome)}"));
 
         var sexoObj = Sexo.Get(sexo);
-        if (sexoObj is null) result.WithError(Erro.NaoEncontrado(sexo));
+        if (sexoObj is null)
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Sexo)}"));
 
         var documentoObj = Documento.Criar(documento);
-        if (documentoObj.IsFailed) result.WithErrors(documentoObj.Errors!);
+        if (documentoObj.IsFailed)
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Documento)}"));
 
         var emailObj = Email.Criar(email);
-        if (emailObj.IsFailed) result.WithErrors(emailObj.Errors!);
+        if (emailObj.IsFailed)
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Email)}"));
 
         var dataNascimentoObj = DataNascimento.Criar(dataNascimento);
-        if (dataNascimentoObj.IsFailed) result.WithErrors(dataNascimentoObj.Errors!);
+        if (dataNascimentoObj.IsFailed)
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(DataNascimento)}"));
 
         if (result.IsFailed)
             return result;
 
         Nome = nome;
-        
+
         if (Sexo.Key != sexoObj!.Key)
             Sexo = Sexo.Get(sexo)!;
 
@@ -86,7 +94,7 @@ public sealed class Cliente
         Documento = documentoObj.Value!;
         Email = emailObj.Value!;
         DataNascimento = dataNascimentoObj.Value!;
-        Contatos = contatos ?? new List<Contato>();
+        Contatos = contatos;
         Endereco = endereco;
         Atualizado = DateTime.Now;
 
@@ -106,19 +114,23 @@ public sealed class Cliente
         var result = new Result<Cliente>();
 
         if (string.IsNullOrWhiteSpace(nome))
-            result.WithError(Erro.ValorNaoInformado(nameof(nome)));
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Nome)}"));
 
         var sexoObj = Sexo.Get(sexo);
-        if (sexoObj is null) result.WithError(Erro.NaoEncontrado(sexo));
+        if (sexoObj is null)
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Sexo)}"));
 
         var documentoObj = Documento.Criar(documento);
-        if (documentoObj.IsFailed) result.WithErrors(documentoObj.Errors!);
+        if (documentoObj.IsFailed)
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Documento)}"));
 
         var emailObj = Email.Criar(email);
-        if (emailObj.IsFailed) result.WithErrors(emailObj.Errors!);
+        if (emailObj.IsFailed)
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Email)}"));
 
         var dataNascimentoObj = DataNascimento.Criar(dataNascimento);
-        if (dataNascimentoObj.IsFailed) result.WithErrors(dataNascimentoObj.Errors!);
+        if (dataNascimentoObj.IsFailed)
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(DataNascimento)}"));
 
         if (result.IsFailed)
             return result;

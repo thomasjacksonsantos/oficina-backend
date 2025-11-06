@@ -5,7 +5,7 @@ namespace Oficina.Domain.Aggregates.ProdutoAggregates;
 
 public class Categoria
 {
-    public int Id { get; private set; }
+    public Guid Id { get; private set; }
     public string Nome { get; private set; }
     public DataHora Criado { get; private set; }
     public DataHora Atualizado { get; private set; }
@@ -27,7 +27,13 @@ public class Categoria
         string nome
     )
     {
-        // Validações de negócio podem ser aplicadas aqui
+        var result = new Result<Categoria>();
+
+        if (string.IsNullOrWhiteSpace(nome))
+            result.WithError(Erro.ValorInvalido("Categoria.Nome"));
+
+        if (result.IsFailed)
+            return result;
 
         var categoria = new Categoria(
             nome

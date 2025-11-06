@@ -15,8 +15,7 @@ namespace Oficina.Infrastructure.Migrations
                 name: "Categoria",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Atualizado = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Criado = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -33,7 +32,7 @@ namespace Oficina.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Key = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Dominio = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false)
+                    Dominio = table.Column<string>(type: "nvarchar(34)", maxLength: 34, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,9 +66,9 @@ namespace Oficina.Infrastructure.Migrations
                 name: "Produto",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoriaId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoriaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Atualizado = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Criado = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -81,7 +80,7 @@ namespace Oficina.Infrastructure.Migrations
                         column: x => x.CategoriaId,
                         principalTable: "Categoria",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,7 +93,7 @@ namespace Oficina.Infrastructure.Migrations
                     SexoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TipoDocumentoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Contatos = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Enderecos = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Endereco = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Atualizado = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Criado = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Valor = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -109,14 +108,12 @@ namespace Oficina.Infrastructure.Migrations
                         name: "FK_Cliente_DadoDominio_SexoId",
                         column: x => x.SexoId,
                         principalTable: "DadoDominio",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Cliente_DadoDominio_TipoDocumentoId",
                         column: x => x.TipoDocumentoId,
                         principalTable: "DadoDominio",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -128,6 +125,7 @@ namespace Oficina.Infrastructure.Migrations
                     Nome = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
                     StatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Principal = table.Column<bool>(type: "bit", nullable: false),
+                    ContaStatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Atualizado = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Criado = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -135,11 +133,10 @@ namespace Oficina.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Conta", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Conta_DadoDominio_StatusId",
-                        column: x => x.StatusId,
+                        name: "FK_Conta_DadoDominio_ContaStatusId",
+                        column: x => x.ContaStatusId,
                         principalTable: "DadoDominio",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -150,18 +147,17 @@ namespace Oficina.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NumeroParcela = table.Column<int>(type: "int", nullable: false),
                     Vencimento = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TipoPagamentoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrdemServicoTipoPagamentoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ValorTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrdemServicoPagamento", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrdemServicoPagamento_DadoDominio_TipoPagamentoId",
-                        column: x => x.TipoPagamentoId,
+                        name: "FK_OrdemServicoPagamento_DadoDominio_OrdemServicoTipoPagamentoId",
+                        column: x => x.OrdemServicoTipoPagamentoId,
                         principalTable: "DadoDominio",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -190,42 +186,18 @@ namespace Oficina.Infrastructure.Migrations
                         name: "FK_Usuario_DadoDominio_SexoId",
                         column: x => x.SexoId,
                         principalTable: "DadoDominio",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Usuario_DadoDominio_TipoDocumentoId",
                         column: x => x.TipoDocumentoId,
                         principalTable: "DadoDominio",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Usuario_DadoDominio_TipoUsuarioId",
                         column: x => x.TipoUsuarioId,
                         principalTable: "DadoDominio",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PrecoLoja",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ProdutoId = table.Column<int>(type: "int", nullable: false),
-                    Atualizado = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Criado = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PrecoLoja", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PrecoLoja_Produto_ProdutoId",
-                        column: x => x.ProdutoId,
-                        principalTable: "Produto",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -288,8 +260,7 @@ namespace Oficina.Infrastructure.Migrations
                         name: "FK_Loja_DadoDominio_TipoDocumentoId",
                         column: x => x.TipoDocumentoId,
                         principalTable: "DadoDominio",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -317,22 +288,68 @@ namespace Oficina.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FuncionarioExecutor",
+                name: "OrdemServico",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UsuarioId = table.Column<int>(type: "int", nullable: false),
+                    ValorTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DataFaturamentoInicial = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataFaturamentoFinal = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Observacao = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    FuncionarioId = table.Column<int>(type: "int", nullable: false),
+                    VeiculoClienteId = table.Column<int>(type: "int", nullable: false),
+                    PagamentoId = table.Column<int>(type: "int", nullable: true),
                     Atualizado = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Criado = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FuncionarioExecutor", x => x.Id);
+                    table.PrimaryKey("PK_OrdemServico", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FuncionarioExecutor_Usuario_UsuarioId",
-                        column: x => x.UsuarioId,
+                        name: "FK_OrdemServico_OrdemServicoPagamento_PagamentoId",
+                        column: x => x.PagamentoId,
+                        principalTable: "OrdemServicoPagamento",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_OrdemServico_Usuario_FuncionarioId",
+                        column: x => x.FuncionarioId,
                         principalTable: "Usuario",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrdemServico_VeiculoCliente_VeiculoClienteId",
+                        column: x => x.VeiculoClienteId,
+                        principalTable: "VeiculoCliente",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PrecoLoja",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    LojaId = table.Column<int>(type: "int", nullable: false),
+                    ProdutoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Atualizado = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Criado = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PrecoLoja", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PrecoLoja_Loja_LojaId",
+                        column: x => x.LojaId,
+                        principalTable: "Loja",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PrecoLoja_Produto_ProdutoId",
+                        column: x => x.ProdutoId,
+                        principalTable: "Produto",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -359,50 +376,12 @@ namespace Oficina.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrdemServico",
+                name: "OrdemServicoItem",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ValorTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    DataFaturamentoInicial = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataFaturamentoFinal = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Observacao = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
-                    FuncionarioExecutorId = table.Column<int>(type: "int", nullable: false),
-                    VeiculoClienteId = table.Column<int>(type: "int", nullable: false),
-                    PagamentoId = table.Column<int>(type: "int", nullable: true),
-                    Atualizado = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Criado = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrdemServico", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrdemServico_FuncionarioExecutor_FuncionarioExecutorId",
-                        column: x => x.FuncionarioExecutorId,
-                        principalTable: "FuncionarioExecutor",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrdemServico_OrdemServicoPagamento_PagamentoId",
-                        column: x => x.PagamentoId,
-                        principalTable: "OrdemServicoPagamento",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_OrdemServico_VeiculoCliente_VeiculoClienteId",
-                        column: x => x.VeiculoClienteId,
-                        principalTable: "VeiculoCliente",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProdutoServicoItem",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProdutoId = table.Column<int>(type: "int", nullable: false),
+                    ProdutoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Quantidade = table.Column<int>(type: "int", nullable: false),
                     ValorUnitario = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Desconto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -413,9 +392,9 @@ namespace Oficina.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProdutoServicoItem", x => x.Id);
+                    table.PrimaryKey("PK_OrdemServicoItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProdutoServicoItem_OrdemServico_OrdemServicoId",
+                        name: "FK_OrdemServicoItem_OrdemServico_OrdemServicoId",
                         column: x => x.OrdemServicoId,
                         principalTable: "OrdemServico",
                         principalColumn: "Id");
@@ -424,17 +403,19 @@ namespace Oficina.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Cliente_SexoId",
                 table: "Cliente",
-                column: "SexoId");
+                column: "SexoId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cliente_TipoDocumentoId",
                 table: "Cliente",
-                column: "TipoDocumentoId");
+                column: "TipoDocumentoId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Conta_StatusId",
+                name: "IX_Conta_ContaStatusId",
                 table: "Conta",
-                column: "StatusId");
+                column: "ContaStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ContaUsuario_UsuariosId",
@@ -448,11 +429,6 @@ namespace Oficina.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_FuncionarioExecutor_UsuarioId",
-                table: "FuncionarioExecutor",
-                column: "UsuarioId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Loja_ContaId",
                 table: "Loja",
                 column: "ContaId");
@@ -463,9 +439,9 @@ namespace Oficina.Infrastructure.Migrations
                 column: "TipoDocumentoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrdemServico_FuncionarioExecutorId",
+                name: "IX_OrdemServico_FuncionarioId",
                 table: "OrdemServico",
-                column: "FuncionarioExecutorId");
+                column: "FuncionarioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrdemServico_PagamentoId",
@@ -478,9 +454,19 @@ namespace Oficina.Infrastructure.Migrations
                 column: "VeiculoClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrdemServicoPagamento_TipoPagamentoId",
+                name: "IX_OrdemServicoItem_OrdemServicoId",
+                table: "OrdemServicoItem",
+                column: "OrdemServicoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrdemServicoPagamento_OrdemServicoTipoPagamentoId",
                 table: "OrdemServicoPagamento",
-                column: "TipoPagamentoId");
+                column: "OrdemServicoTipoPagamentoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PrecoLoja_LojaId",
+                table: "PrecoLoja",
+                column: "LojaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PrecoLoja_ProdutoId",
@@ -491,11 +477,6 @@ namespace Oficina.Infrastructure.Migrations
                 name: "IX_Produto_CategoriaId",
                 table: "Produto",
                 column: "CategoriaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProdutoServicoItem_OrdemServicoId",
-                table: "ProdutoServicoItem",
-                column: "OrdemServicoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Usuario_SexoId",
@@ -535,40 +516,37 @@ namespace Oficina.Infrastructure.Migrations
                 name: "ContaUsuario");
 
             migrationBuilder.DropTable(
-                name: "PrecoLoja");
+                name: "OrdemServicoItem");
 
             migrationBuilder.DropTable(
-                name: "ProdutoServicoItem");
+                name: "PrecoLoja");
 
             migrationBuilder.DropTable(
                 name: "UsuarioLoja");
 
             migrationBuilder.DropTable(
-                name: "Produto");
+                name: "OrdemServico");
 
             migrationBuilder.DropTable(
-                name: "OrdemServico");
+                name: "Produto");
 
             migrationBuilder.DropTable(
                 name: "Loja");
 
             migrationBuilder.DropTable(
-                name: "Categoria");
-
-            migrationBuilder.DropTable(
-                name: "FuncionarioExecutor");
-
-            migrationBuilder.DropTable(
                 name: "OrdemServicoPagamento");
+
+            migrationBuilder.DropTable(
+                name: "Usuario");
 
             migrationBuilder.DropTable(
                 name: "VeiculoCliente");
 
             migrationBuilder.DropTable(
-                name: "Conta");
+                name: "Categoria");
 
             migrationBuilder.DropTable(
-                name: "Usuario");
+                name: "Conta");
 
             migrationBuilder.DropTable(
                 name: "Cliente");

@@ -3,6 +3,7 @@ using Oficina.Domain.Aggregates.VeiculoAggregates;
 using Oficina.Domain.Aggregates.ClienteAggregates;
 using Oficina.Domain.ValueObjects;
 using Oficina.Domain.SeedWork;
+using Oficina.Domain.Aggregates.UsuarioAggregates;
 
 namespace Oficina.Test.Unit.OrdemServicos;
 
@@ -41,12 +42,29 @@ public class OrdemServicoTest
             cliente
         ).Value!;
 
-        var result = OrdemServico.Criar(DateTime.Now, "Observação", 1, clienteVeiculo);
+        var dataFaturamentoInicial = DateTime.Now;
+
+        var result = OrdemServico.Criar(
+            dataFaturamentoInicial,
+            "Observação",
+            1,
+            clienteVeiculo
+        );
 
         Assert.True(result.IsSuccess);
         Assert.NotEmpty(result.Value!.Observacao);
         Assert.Equal(1, result.Value!.FuncionarioId);
-        Assert.Equal(clienteVeiculo.Id, result.Value!.VeiculoClienteId);        
+        Assert.Equal(clienteVeiculo.Id, result.Value!.VeiculoClienteId);
+        Assert.Equal(0, result.Value!.Id);
+        Assert.Equal(0, result.Value!.ValorTotal);
+        Assert.Equal(dataFaturamentoInicial, result.Value!.DataFaturamentoInicial);
+        Assert.Equal(DateTime.MinValue, result.Value!.DataFaturamentoFinal);
+        Assert.Null(result.Value!.Funcionario);
+        Assert.NotNull(result.Value!.VeiculoCliente);
+        Assert.Null(result.Value!.Itens);
+        Assert.Null(result.Value!.Pagamento);
+        Assert.NotNull(result.Value!.Criado);
+        Assert.NotNull(result.Value!.Atualizado);
     }
 
     [Fact]

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 using Oficina.Domain.Aggregates.ClienteAggregates;
 using Oficina.Domain.Aggregates.UsuarioAggregates;
+using Oficina.Domain.Enumerations;
 using Oficina.Domain.ValueObjects;
 
 namespace Oficina.Infrastructure.DataAccess.Mappings;
@@ -78,5 +79,15 @@ public class EfClienteConfiguration : IEntityTypeConfiguration<Cliente>
         {
             atualizado.Property(c => c.Valor).HasColumnName(nameof(Usuario.Atualizado));
         });
+
+        builder.HasOne(c => c.Sexo)
+            .WithOne()
+            .HasForeignKey<Cliente>(c => c.SexoId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(c => c.TipoDocumento)
+            .WithOne()
+            .HasForeignKey<Cliente>(c => c.TipoDocumentoId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

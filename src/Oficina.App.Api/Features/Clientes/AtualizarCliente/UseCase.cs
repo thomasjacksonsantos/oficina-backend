@@ -11,7 +11,7 @@ using Oficina.Infrastructure.DataAccess;
 namespace Oficina.App.Api.Features.Clientes.AtualizarCliente;
 
 public sealed class UseCase(
-    IRepository<Cliente> clienteRepository,
+    IFluentQuery fluentQuery,
     IUnitOfWork unitOfWork
 )
     : IUseCase<AtualizarClienteRequest, AtualizarClienteResponse>
@@ -21,12 +21,13 @@ public sealed class UseCase(
         CancellationToken ct = default
     )
     {
-        var cliente = await clienteRepository.FindFirstByPredicate(
-            predicate: c => c.Id == input.Id,
-            includes: c => c.Include(c => c.Sexo).Include(c => c.TipoDocumento),
-            asNoTracking: false,
-            ct
-        ) ?? null!;
+        var cliente = await fluentQuery
+            .For<Cliente>()
+            .WithPredicate(x => x.Id == input.Id)
+            .WithIncludes(x => x.Include(c => c.Sexo))
+            .WithIncludes(x => x.Include(c => c.TipoDocumento))
+            .WithTracking()
+            .FindFirstAsync(ct);
 
         if (cliente == null)
             return Result.Fail("Cliente não encontrado.");

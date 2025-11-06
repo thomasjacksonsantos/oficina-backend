@@ -13,8 +13,8 @@ using Oficina.Infrastructure.DataAccess;
 namespace Oficina.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250816220439_AddDadosDominio")]
-    partial class AddDadosDominio
+    [Migration("20251028012227_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,7 +53,7 @@ namespace Oficina.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Enderecos")
+                    b.Property<string>("Endereco")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -122,9 +122,11 @@ namespace Oficina.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SexoId");
+                    b.HasIndex("SexoId")
+                        .IsUnique();
 
-                    b.HasIndex("TipoDocumentoId");
+                    b.HasIndex("TipoDocumentoId")
+                        .IsUnique();
 
                     b.ToTable("Cliente");
                 });
@@ -136,6 +138,9 @@ namespace Oficina.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("ContaStatusId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -168,7 +173,7 @@ namespace Oficina.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("ContaStatusId");
 
                     b.ToTable("Conta");
                 });
@@ -277,42 +282,6 @@ namespace Oficina.Infrastructure.Migrations
                     b.ToTable("UsuarioLoja");
                 });
 
-            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.FuncionarioExecutor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.OrdemServicoAggregates.FuncionarioExecutor.Atualizado#DataHora", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<DateTime>("Valor")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("Atualizado");
-                        });
-
-                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.OrdemServicoAggregates.FuncionarioExecutor.Criado#DataHora", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<DateTime>("Valor")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("Criado");
-                        });
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("FuncionarioExecutor");
-                });
-
             modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServico", b =>
                 {
                     b.Property<int>("Id")
@@ -327,7 +296,7 @@ namespace Oficina.Infrastructure.Migrations
                     b.Property<DateTime>("DataFaturamentoInicial")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FuncionarioExecutorId")
+                    b.Property<int>("FuncionarioId")
                         .HasColumnType("int");
 
                     b.Property<string>("Observacao")
@@ -364,7 +333,7 @@ namespace Oficina.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FuncionarioExecutorId");
+                    b.HasIndex("FuncionarioId");
 
                     b.HasIndex("PagamentoId");
 
@@ -373,34 +342,7 @@ namespace Oficina.Infrastructure.Migrations
                     b.ToTable("OrdemServico");
                 });
 
-            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoPagamento", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("NumeroParcela")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("TipoPagamentoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("ValorTotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("Vencimento")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TipoPagamentoId");
-
-                    b.ToTable("OrdemServicoPagamento");
-                });
-
-            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.ProdutoServicoItem", b =>
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -414,8 +356,8 @@ namespace Oficina.Infrastructure.Migrations
                     b.Property<int?>("OrdemServicoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ProdutoId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantidade")
                         .HasColumnType("int");
@@ -426,7 +368,7 @@ namespace Oficina.Infrastructure.Migrations
                     b.Property<decimal>("ValorUnitario")
                         .HasColumnType("decimal(18,2)");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.OrdemServicoAggregates.ProdutoServicoItem.Atualizado#DataHora", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoItem.Atualizado#DataHora", b1 =>
                         {
                             b1.IsRequired();
 
@@ -435,7 +377,7 @@ namespace Oficina.Infrastructure.Migrations
                                 .HasColumnName("Atualizado");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.OrdemServicoAggregates.ProdutoServicoItem.Criado#DataHora", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoItem.Criado#DataHora", b1 =>
                         {
                             b1.IsRequired();
 
@@ -448,16 +390,41 @@ namespace Oficina.Infrastructure.Migrations
 
                     b.HasIndex("OrdemServicoId");
 
-                    b.ToTable("ProdutoServicoItem");
+                    b.ToTable("OrdemServicoItem");
                 });
 
-            modelBuilder.Entity("Oficina.Domain.Aggregates.ProdutoAggregates.Categoria", b =>
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoPagamento", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("NumeroParcela")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("OrdemServicoTipoPagamentoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Vencimento")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrdemServicoTipoPagamentoId");
+
+                    b.ToTable("OrdemServicoPagamento");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.ProdutoAggregates.Categoria", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -494,8 +461,11 @@ namespace Oficina.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ProdutoId")
+                    b.Property<int>("LojaId")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("ProdutoId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(18,2)");
@@ -520,6 +490,8 @@ namespace Oficina.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LojaId");
+
                     b.HasIndex("ProdutoId");
 
                     b.ToTable("PrecoLoja");
@@ -527,14 +499,16 @@ namespace Oficina.Infrastructure.Migrations
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.ProdutoAggregates.Produto", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("CategoriaId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CategoriaId")
-                        .HasColumnType("int");
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.ProdutoAggregates.Produto.Atualizado#DataHora", b1 =>
                         {
@@ -765,8 +739,8 @@ namespace Oficina.Infrastructure.Migrations
 
                     b.Property<string>("Dominio")
                         .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
+                        .HasMaxLength(34)
+                        .HasColumnType("nvarchar(34)");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -811,11 +785,11 @@ namespace Oficina.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("ContaStatus");
                 });
 
-            modelBuilder.Entity("Oficina.Domain.Aggregates.ContaAggregates.TipoPagamento", b =>
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoTipoPagamento", b =>
                 {
                     b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
 
-                    b.HasDiscriminator().HasValue("TipoPagamento");
+                    b.HasDiscriminator().HasValue("OrdemServicoTipoPagamento");
                 });
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.UsuarioAggregates.Sexo", b =>
@@ -857,15 +831,15 @@ namespace Oficina.Infrastructure.Migrations
             modelBuilder.Entity("Oficina.Domain.Aggregates.ClienteAggregates.Cliente", b =>
                 {
                     b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.Sexo", "Sexo")
-                        .WithMany()
-                        .HasForeignKey("SexoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("Oficina.Domain.Aggregates.ClienteAggregates.Cliente", "SexoId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.TipoDocumento", "TipoDocumento")
-                        .WithMany()
-                        .HasForeignKey("TipoDocumentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("Oficina.Domain.Aggregates.ClienteAggregates.Cliente", "TipoDocumentoId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Sexo");
@@ -877,8 +851,8 @@ namespace Oficina.Infrastructure.Migrations
                 {
                     b.HasOne("Oficina.Domain.Aggregates.ContaAggregates.ContaStatus", "Status")
                         .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ContaStatusId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Status");
@@ -895,7 +869,7 @@ namespace Oficina.Infrastructure.Migrations
                     b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.TipoDocumento", "TipoDocumento")
                         .WithMany()
                         .HasForeignKey("TipoDocumentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Conta");
@@ -948,22 +922,11 @@ namespace Oficina.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.FuncionarioExecutor", b =>
-                {
-                    b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
             modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServico", b =>
                 {
-                    b.HasOne("Oficina.Domain.Aggregates.OrdemServicoAggregates.FuncionarioExecutor", "FuncionarioExecutor")
+                    b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.Funcionario", "Funcionario")
                         .WithMany()
-                        .HasForeignKey("FuncionarioExecutorId")
+                        .HasForeignKey("FuncionarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -977,38 +940,46 @@ namespace Oficina.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("FuncionarioExecutor");
+                    b.Navigation("Funcionario");
 
                     b.Navigation("Pagamento");
 
                     b.Navigation("VeiculoCliente");
                 });
 
-            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoPagamento", b =>
-                {
-                    b.HasOne("Oficina.Domain.Aggregates.ContaAggregates.TipoPagamento", "TipoPagamento")
-                        .WithMany()
-                        .HasForeignKey("TipoPagamentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TipoPagamento");
-                });
-
-            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.ProdutoServicoItem", b =>
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoItem", b =>
                 {
                     b.HasOne("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServico", null)
-                        .WithMany("Items")
+                        .WithMany("Itens")
                         .HasForeignKey("OrdemServicoId");
+                });
+
+            modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoPagamento", b =>
+                {
+                    b.HasOne("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoTipoPagamento", "OrdemServicoTipoPagamento")
+                        .WithMany()
+                        .HasForeignKey("OrdemServicoTipoPagamentoId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("OrdemServicoTipoPagamento");
                 });
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.ProdutoAggregates.PrecoLoja", b =>
                 {
+                    b.HasOne("Oficina.Domain.Aggregates.LojaAggregates.Loja", "Loja")
+                        .WithMany()
+                        .HasForeignKey("LojaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Oficina.Domain.Aggregates.ProdutoAggregates.Produto", "Produto")
                         .WithMany("PrecoLojas")
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Loja");
 
                     b.Navigation("Produto");
                 });
@@ -1029,7 +1000,7 @@ namespace Oficina.Infrastructure.Migrations
                     b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.Sexo", "Sexo")
                         .WithMany()
                         .HasForeignKey("SexoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.TipoDocumento", "TipoDocumento")
@@ -1041,7 +1012,7 @@ namespace Oficina.Infrastructure.Migrations
                     b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.TipoUsuario", "TipoUsuario")
                         .WithMany()
                         .HasForeignKey("TipoUsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Sexo");
@@ -1082,7 +1053,7 @@ namespace Oficina.Infrastructure.Migrations
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServico", b =>
                 {
-                    b.Navigation("Items");
+                    b.Navigation("Itens");
                 });
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.ProdutoAggregates.Produto", b =>

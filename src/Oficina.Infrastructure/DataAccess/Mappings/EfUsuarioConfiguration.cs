@@ -51,6 +51,17 @@ public class EfUsuarioConfiguration : IEntityTypeConfiguration<Usuario>
         {
             atualizado.Property(c => c.Valor).HasColumnName(nameof(Usuario.Atualizado));
         });
+
+        builder.HasOne(c => c.Sexo)
+            .WithMany()
+            .HasForeignKey(c => c.SexoId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(c => c.TipoUsuario)
+            .WithMany()
+            .HasForeignKey(c => c.TipoUsuarioId)
+            .OnDelete(DeleteBehavior.NoAction);
+
         builder.HasDiscriminator<string>("TipoClass")
             .HasValue<SuperAdmin>("SuperAdmin")
             .HasValue<Funcionario>("Funcionario");

@@ -31,6 +31,7 @@ public sealed class Conta
     public string Nome { get; private set; }
     public Guid StatusId { get; private set; }
     public bool Principal { get; private set; }
+    public Guid ContaStatusId { get; private set; }
     public ContaStatus Status { get; private set; }
     public IReadOnlyCollection<Usuario> Usuarios =>
         _usuarios.AsReadOnly();

@@ -20,5 +20,10 @@ public sealed class EfContaConfiguration : IEntityTypeConfiguration<Conta>
         {
             atualizado.Property(c => c.Valor).HasColumnName(nameof(Conta.Atualizado));
         });
+
+        builder.HasOne(c => c.Status)
+            .WithMany()
+            .HasForeignKey(c => c.ContaStatusId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }
