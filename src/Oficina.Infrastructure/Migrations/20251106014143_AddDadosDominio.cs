@@ -36,6 +36,18 @@ namespace Oficina.Infrastructure.Migrations
                     insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
                     values('c99a5988-b022-4b68-b640-af5021dc7c8f', 'Celular', 'Celular', 'TipoTelefone')
                 end
+                
+                if (not exists(select top 1 1 from DadoDominio where Id = 'E2D1A590-5C7C-4F1D-8F1D-3C4F0E5B5E6A'))
+                begin
+                    insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    values('E2D1A590-5C7C-4F1D-8F1D-3C4F0E5B5E6A', 'Comercial', 'Comercial', 'TipoTelefone')
+                end
+
+                if (not exists(select top 1 1 from DadoDominio where Id = 'A1F5D6E7-3B2C-4D8E-9F0A-1B2C34D5E6F7'))
+                begin
+                    insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    values('A1F5D6E7-3B2C-4D8E-9F0A-1B2C34D5E6F7', 'Residencial', 'Residencial', 'TipoTelefone')
+                end
 
                 -- TipoDocumento
                 if (not exists(select top 1 1 from DadoDominio where Id = '10132080-452d-4d7d-861e-0c5801c94d57'))

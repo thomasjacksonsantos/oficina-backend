@@ -123,7 +123,10 @@ public sealed class UseCase(
 
             var token = await FirebaseAuth.DefaultInstance.CreateCustomTokenAsync(userRecordArgs.Uid);
 
-            return Result.Success(new OnboardingAdminResponse(token));
+            return Result.Success(new OnboardingAdminResponse(
+                Sucesso: true,
+                Mensagem: "Usuário criado com sucesso"
+            ));
         }
         catch (Exception ex)
         {

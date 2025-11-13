@@ -3,5 +3,6 @@
 namespace Oficina.App.Api.Features.Onboarding.OnboardingAdmin;
 
 public sealed record OnboardingAdminResponse(
-    string Token
+    bool Sucesso,
+    string Mensagem
 );
