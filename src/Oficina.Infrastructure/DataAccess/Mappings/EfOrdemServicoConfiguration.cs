@@ -20,5 +20,10 @@ public sealed class EfOrdemServicoConfiguration : IEntityTypeConfiguration<Ordem
         {
             atualizado.Property(c => c.Valor).HasColumnName(nameof(OrdemServico.Atualizado));
         });
+
+        builder.HasOne(c => c.OrdemServicoStatus)
+            .WithOne()
+            .HasForeignKey<OrdemServico>(c => c.OrdemServicoStatusId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

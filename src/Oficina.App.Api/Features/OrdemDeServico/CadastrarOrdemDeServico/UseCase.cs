@@ -53,6 +53,7 @@ public sealed class UseCase(
 
         var ordemServico = OrdemServico.Criar(
             input.DataFaturamentoInicial,
+            input.DataPrevisao,
             input.Observacao,
             funcionario!.Id,
             veiculoCliente

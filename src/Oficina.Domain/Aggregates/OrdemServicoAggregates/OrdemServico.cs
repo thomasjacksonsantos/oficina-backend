@@ -11,11 +11,14 @@ public class OrdemServico
     public decimal ValorTotal { get; private set; }
     public DateTime DataFaturamentoInicial { get; private set; }
     public DateTime DataFaturamentoFinal { get; private set; }
+    public DateTime? DataPrevisao { get; private set; }
     public string Observacao { get; private set; }
     public int FuncionarioId { get; private set; }
     public Funcionario? Funcionario { get; private set; }
     public int VeiculoClienteId { get; private set; }
     public VeiculoCliente VeiculoCliente { get; private set; }
+    public Guid OrdemServicoStatusId { get; private set; }
+    public OrdemServicoStatus OrdemServicoStatus { get; private set; }
     public ICollection<OrdemServicoItem>? Itens { get; private set; }
     public OrdemServicoPagamento? Pagamento { get; private set; }
     public DataHora Criado { get; private set; }
@@ -29,16 +32,20 @@ public class OrdemServico
     // Construtor com parâmetros
     private OrdemServico(
         DateTime dataFaturamentoInicial,
+        DateTime? dataPrevisao,
         string observacao,
         int funcionarioId,
         VeiculoCliente veiculoCliente
     )
     {
         DataFaturamentoInicial = dataFaturamentoInicial;
+        DataPrevisao = dataPrevisao;
         Observacao = observacao;
         FuncionarioId = funcionarioId;
         VeiculoClienteId = veiculoCliente.Id;
         VeiculoCliente = veiculoCliente;
+        OrdemServicoStatusId = OrdemServicoStatus.Aberto.Id;
+        OrdemServicoStatus = OrdemServicoStatus.Aberto;
         Criado = DataHora.Criar().Value!;
         Atualizado = DataHora.Criar().Value!;
     }
@@ -55,6 +62,7 @@ public class OrdemServico
     // Método estático Criar
     public static Result<OrdemServico> Criar(
         DateTime dataFaturamentoInicial,
+        DateTime? dataPrevisao,
         string observacao,
         int funcionarioId,
         VeiculoCliente veiculoCliente
@@ -69,8 +77,13 @@ public class OrdemServico
             result.WithError(Erro.ValorInvalido("OrdemServico.Observacao"));
 
         if (dataFaturamentoInicial.Date.ToUniversalTime() < DateTime.MinValue.ToUniversalTime() ||
-            dataFaturamentoInicial.Date.ToUniversalTime() > DateTime.MaxValue.ToUniversalTime())
+            dataFaturamentoInicial.Date.ToUniversalTime() > DateTime.MaxValue.ToUniversalTime() ||
+            dataFaturamentoInicial.Date.ToUniversalTime() < DateTime.Now.Date.ToUniversalTime())
             result.WithError(Erro.ValorInvalido("OrdemServico.DataFaturamentoInicial"));
+
+        if (dataPrevisao.HasValue && dataPrevisao.Value .Date.ToUniversalTime() < DateTime.MinValue.ToUniversalTime() ||
+            dataPrevisao.HasValue && dataPrevisao.Value.Date.ToUniversalTime() > DateTime.MaxValue.ToUniversalTime())
+            result.WithError(Erro.ValorInvalido("OrdemServico.DataPrevisao"));
 
         if (funcionarioId <= 0)
             result.WithError(Erro.ValorInvalido("OrdemServico.FuncionarioId"));
@@ -81,6 +94,7 @@ public class OrdemServico
         // Aqui você pode adicionar validações conforme necessário
         var ordemServico = new OrdemServico(
             dataFaturamentoInicial,
+            dataPrevisao,
             observacao,
             funcionarioId,
             veiculoCliente!

@@ -11,7 +11,7 @@ public class Endpoint(
 {
     public override void Configure()
     {
-        Get("v1/cliente/{id}");
+        Get("v1/clientes/id/{id}");
         PreProcessor<AuthInterceptor<GetClienteByIdRequest>>();
         Description(c => c.Accepts<GetClienteByIdRequest>()
                 .Produces<GetClienteByIdResponse>()

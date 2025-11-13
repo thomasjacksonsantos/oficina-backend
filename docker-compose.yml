@@ -13,9 +13,8 @@ services:
       - backend-network
 
   api:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: jacksonthomas/oficina-backend:latest
+    pull_policy: always
     container_name: api-oficina-backend
     ports:
       - "5001:5001"

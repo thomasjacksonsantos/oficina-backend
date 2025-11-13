@@ -11,7 +11,7 @@ public class Endpoint(
 {
     public override void Configure()
     {
-        Post("v1/usuario");
+        Post("v1/usuarios");
         PreProcessor<AuthInterceptor<UpsertUsuarioRequest>>();
         Description(c => c.Accepts<UpsertUsuarioRequest>()
                 .Produces<UpsertUsuarioResponse>()

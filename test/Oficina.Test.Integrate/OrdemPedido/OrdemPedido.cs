@@ -107,6 +107,7 @@ public class OrdemServicoTest
 
         var ordemServicoResult = OrdemServico.Criar(
             dataFaturamentoInicial,
+            dataFaturamentoInicial.AddDays(7),
             "Observação",
             1,
             clienteVeiculo

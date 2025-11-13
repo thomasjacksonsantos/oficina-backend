@@ -7,9 +7,11 @@ public sealed record GetAllOrdemDeServicoResponse(
     int Id,
     DateTime DataInicio,
     DateTime DataFim,
+    DateTime? DataPrevisao,
     string Veiculo,
     string Placa,
-    string Documento,
     string Cliente,
-    string Responsalve
+    string Documento,
+    string Responsavel,
+    string Status
 );

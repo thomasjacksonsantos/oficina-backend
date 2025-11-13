@@ -46,6 +46,7 @@ public class OrdemServicoTest
 
         var result = OrdemServico.Criar(
             dataFaturamentoInicial,
+            dataFaturamentoInicial.AddDays(7),
             "Observação",
             1,
             clienteVeiculo
@@ -70,7 +71,7 @@ public class OrdemServicoTest
     [Fact]
     public void Criar_DeveRetornarErro_QuandoVeiculoClienteForNulo()
     {
-        var result = OrdemServico.Criar(DateTime.Now, "Observação", 1, null!);
+        var result = OrdemServico.Criar(DateTime.Now, null, "Observação", 1, null!);
 
         Assert.False(result.IsSuccess);
         Assert.Contains(result.Errors!, c => c.Descricao == "Valor informado para o OrdemServico.VeiculoCliente está inválido");
@@ -111,7 +112,13 @@ public class OrdemServicoTest
             cliente
         ).Value!;
 
-        var result = OrdemServico.Criar(DateTime.Now, "Observação", funcionarioIdInvalido, clienteVeiculo);
+        var result = OrdemServico.Criar(
+            DateTime.Now,
+            null,
+            "Observação",
+            funcionarioIdInvalido,
+            clienteVeiculo
+        );
 
         Assert.False(result.IsSuccess);
         Assert.Contains(result.Errors!, c => c.Descricao == "Valor informado para o OrdemServico.FuncionarioId está inválido");
@@ -149,7 +156,7 @@ public class OrdemServicoTest
             cliente
         ).Value!;
 
-        var result = OrdemServico.Criar(DateTime.MinValue, "Observação", 1, clienteVeiculo);
+        var result = OrdemServico.Criar(DateTime.MinValue, null, "Observação", 1, clienteVeiculo);
 
         Assert.False(result.IsSuccess);
         Assert.Contains(result.Errors!, c => c.Descricao == "Valor informado para o OrdemServico.DataFaturamentoInicial está inválido");
@@ -186,7 +193,7 @@ public class OrdemServicoTest
             veiculo,
             cliente
         ).Value!;
-        var result = OrdemServico.Criar(DateTime.Now, "", 1, clienteVeiculo);
+        var result = OrdemServico.Criar(DateTime.Now, null, "", 1, clienteVeiculo);
 
         Assert.False(result.IsSuccess);
         Assert.Contains(result.Errors!, c => c.Descricao == "Valor informado para o OrdemServico.Observacao está inválido");
@@ -226,6 +233,7 @@ public class OrdemServicoTest
 
         var result = OrdemServico.Criar(
             DateTime.UtcNow.AddDays(-1),
+            null,
             "Observação",
             1,
             clienteVeiculo

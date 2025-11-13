@@ -15,7 +15,7 @@ public class Endpoint(
         Get("v1/clientes");
         PreProcessor<AuthInterceptor<GetClientesRequest>>();
         Description(c => c.Accepts<GetClientesRequest>()
-                .Produces<GetClientesResponse>()
+                .Produces<PagedResult<GetClientesResponse>>()
                 .ProducesProblem(400)
                 .WithTags("Clientes")
             , clearDefaults: false);

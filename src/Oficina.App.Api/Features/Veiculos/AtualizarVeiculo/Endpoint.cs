@@ -11,7 +11,7 @@ public class Endpoint(
 {
     public override void Configure()
     {
-        Put("v1/veiculo");
+        Put("v1/veiculos");
         PreProcessor<AuthInterceptor<AtualizarVeiculoRequest>>();
         Description(c => c.Accepts<AtualizarVeiculoRequest>()
                 .Produces<AtualizarVeiculoResponse>()

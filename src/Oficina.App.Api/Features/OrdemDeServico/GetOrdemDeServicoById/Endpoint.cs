@@ -11,7 +11,7 @@ public class Endpoint(
 {
     public override void Configure()
     {
-        Get("v1/order-servico/{id}");
+        Get("v1/ordem-servicos/id/{id}");
         PreProcessor<AuthInterceptor<GetOrdemDeServicoByIdRequest>>();
         Description(c => c.Accepts<GetOrdemDeServicoByIdRequest>()
                 .Produces<GetOrdemDeServicoByIdResponse>()

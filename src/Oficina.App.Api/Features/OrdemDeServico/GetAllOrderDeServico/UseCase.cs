@@ -1,7 +1,6 @@
 
 
-using Microsoft.EntityFrameworkCore;
-using Oficina.Domain.Aggregates.ClienteAggregates;
+using Oficina.Domain.Aggregates.OrdemServicoAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
 using Oficina.Infrastructure.Core;
@@ -10,23 +9,28 @@ using Oficina.Infrastructure.DataAccess;
 namespace Oficina.App.Api.Features.OrdemDeServico.GetAllOrdemDeServico;
 
 public sealed class UseCase(
-    // IRepository<Cliente> clienteRepository
+    IFluentQuery fluentQuery
 )
-    : IUseCase<GetAllOrdemDeServicoRequest, GetAllOrdemDeServicoResponse>
+    : IUseCase<GetAllOrdemDeServicoRequest, PagedResult<GetAllOrdemDeServicoResponse>>
 {
-    public Task<Result<GetAllOrdemDeServicoResponse>> Execute(
+    public async Task<Result<PagedResult<GetAllOrdemDeServicoResponse>>> Execute(
         GetAllOrdemDeServicoRequest input,
         CancellationToken ct = default
-    )
-    {
-        throw new NotImplementedException();
-        
-        // var clientes = await clienteRepository.FindAllByPredicate(
-        //     predicate: p => p.Documento.Numero.Contains(input.Documento),
-        //     projection: p => new GetClienteResponse()
-        //     pagination: new Pagination(input.Pagina <= 0 ? 1 : input.Pagina, input.TotalPagina <= 0 ? 20 : input.TotalPagina),
-        //     includes: p => p.Include(c => c.VeiculoClientes).ThenInclude(c => c.Veiculo).Include(c => c.VeiculoClientes).ThenInclude(c => c.Cliente),
-        //     ct: ct
-        // );
-    }
+    ) =>
+        await fluentQuery
+            .For<OrdemServico>()
+            .WithPredicate(p => p.VeiculoCliente.Cliente.Documento.Numero.Contains(input.Documento))
+            .WithProjection(p => new GetAllOrdemDeServicoResponse(
+                p.Id,
+                p.DataFaturamentoInicial,
+                p.DataFaturamentoFinal,
+                p.DataPrevisao,
+                p.VeiculoCliente.Veiculo.Modelo,
+                p.VeiculoCliente.Veiculo.Placa,
+                p.VeiculoCliente.Cliente.Nome,
+                p.VeiculoCliente.Cliente.Documento.Numero,
+                p.Funcionario!.Nome,
+                p.OrdemServicoStatus.Key
+            ))
+            .FindAllPagedAsync(input.Pagina, input.TotalPagina, ct);
 }

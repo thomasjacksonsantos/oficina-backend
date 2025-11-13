@@ -11,7 +11,7 @@ public class Endpoint(
 {
     public override void Configure()
     {
-        Post("v1/order-servico");
+        Post("v1/ordem-servicos");
         PreProcessor<AuthInterceptor<CadastrarOrdemDeServicoRequest>>();
         Description(c => c.Accepts<CadastrarOrdemDeServicoRequest>()
                 .Produces<CadastrarOrdemDeServicoResponse>()

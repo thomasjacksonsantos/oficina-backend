@@ -1,8 +1,6 @@
 
-using Oficina.Infrastructure.Core;
-using Oficina.Infrastructure.DataAccess;
+
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Oficina.App.Api.Shared;
 
@@ -12,11 +10,10 @@ public interface IAuthProvider
 }
 
 public sealed class HttpAuthProvider(
-    IHttpContextAccessor httpContextAccessor,
-    IServiceProvider serviceProvider
+    IHttpContextAccessor httpContextAccessor
 ) : IAuthProvider
 {
-    private readonly IServiceProvider serviceProvider = serviceProvider;
+    // private readonly IServiceProvider serviceProvider = serviceProvider;
 
     public TRequest FillAuthRequest<TRequest>(TRequest request)
         where TRequest : AuthRequest
