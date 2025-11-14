@@ -30,12 +30,12 @@ public sealed class UseCase(
         try
         {
             if (input.Senha != input.ConfirmarSenha)
-                return Result.Fail("As senhas não conferem");
+                return Result.Fail(Erro.ValorInvalido("senha"));
 
             var user = await TryGetUserByEmailAsync(input.Email);
 
             if (user != null)
-                return Result.Fail("Usuário já cadastrado");
+                return Result.Fail(Erro.ValorInvalido("Usuário já cadastrado"));
 
             userRecordArgs = await FirebaseAuth.DefaultInstance.CreateUserAsync(new UserRecordArgs
             {
@@ -133,7 +133,7 @@ public sealed class UseCase(
             if (userRecordArgs != null)
                 FirebaseAuth.DefaultInstance.DeleteUserAsync(userRecordArgs.Uid).Wait();
 
-            return Result.Fail($"Erro ao criar o usuário: {ex.Message}");
+            return Result.Fail(Erro.ValorInvalido($"Erro ao criar o usuário: {ex.Message}"));
         }
     }
 

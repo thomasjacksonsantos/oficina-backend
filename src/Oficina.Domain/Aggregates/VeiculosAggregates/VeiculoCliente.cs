@@ -44,7 +44,7 @@ public class VeiculoCliente
             erros.Add("Cliente não pode ser nulo.");
 
         if (erros.Any())
-            return Result.Fail(string.Join(" ", erros));
+            return Result.Fail(Erro.ValorInvalido(string.Join(" ", erros)));
 
         var veiculoCliente = new VeiculoCliente(
             veiculo!,

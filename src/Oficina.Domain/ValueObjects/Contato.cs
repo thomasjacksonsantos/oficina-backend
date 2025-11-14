@@ -62,7 +62,7 @@ public sealed record Contato
             result.WithError(Erro.ValorNaoInformado(nameof(Numero)));
 
         if (!Enum.TryParse<TipoTelefoneEnum>(tipoTelefone, true, out var tipoTelefoneValue))
-            result.WithError(Erro.Error("", $"TipoTelefone nao foi encontrado {tipoTelefone}"));
+            result.WithError(Erro.ValorInvalido($"{nameof(TipoTelefone)}"));
 
         return result;
     }

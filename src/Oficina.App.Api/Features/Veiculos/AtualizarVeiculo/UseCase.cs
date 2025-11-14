@@ -28,7 +28,7 @@ public sealed class UseCase(
         ) ?? null!;
 
         if (veiculo == null)
-            return Result.Fail("Veículo não encontrado.");
+            return Result.Fail(Erro.Validacao(nameof(input.Id), nameof(input.Id), "Veículo não encontrado."));
 
         var clienteResult = veiculo.Atualizar(
             input.Placa,

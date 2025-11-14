@@ -87,7 +87,7 @@ public class Veiculo
             erros.Add("Chassi não pode ser vazio.");
 
         if (erros.Any())
-            return Result.Fail(string.Join(" ", erros));
+            return Result.Fail(Erro.ValorInvalido(string.Join(" ", erros)));
 
         Placa = placa;
         Modelo = modelo;
@@ -144,7 +144,7 @@ public class Veiculo
             erros.Add("Chassi não pode ser vazio.");
 
         if (erros.Any())
-            return Result.Fail(string.Join(" ", erros));
+            return Result.Fail(Erro.ValorInvalido(string.Join(" ", erros)));
 
         var veiculo = new Veiculo(
             placa,

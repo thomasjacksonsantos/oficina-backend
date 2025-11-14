@@ -47,10 +47,10 @@ public class OrdemServicoItem
     {
         // Aqui poderia haver validações de negócio
         if (quantidade <= 0)
-            return Result.Fail("A quantidade deve ser maior que zero.");
+            return Result.Fail(Erro.ValorInvalido("A quantidade deve ser maior que zero."));
 
         if (valorUnitario < 0)
-            return Result.Fail("O valor unitário não pode ser negativo.");
+            return Result.Fail(Erro.ValorInvalido("O valor unitário não pode ser negativo."));
 
         var item = new OrdemServicoItem(
             produtoId,

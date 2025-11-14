@@ -15,3 +15,19 @@ public abstract class ResultBaseEndpoint<TRequest, TResponse>(
             .Execute(req, ct);
     }
 }
+
+public abstract class ResultBaseEndpointWithoutRequest<TRequest, TResponse>(
+    IUseCase<TRequest, TResponse> useCase,
+    IAuthProvider authProvider) 
+    : EndpointWithoutRequest<Result<TResponse>>
+    where TRequest : AuthRequest, new()
+{
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        TRequest request = new();
+        authProvider.FillAuthRequest(request);
+        
+        Response = await useCase
+            .Execute(request, ct);
+    }
+}

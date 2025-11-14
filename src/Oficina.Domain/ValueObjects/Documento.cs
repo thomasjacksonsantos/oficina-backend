@@ -207,18 +207,12 @@ public sealed class Documento
     private static class DocumentoErros
     {
         public static Erro CpfQuantidadeCaracteresInvalido =>
-            Erro.Validacao(
-                "Documento.QuantidadeCaracteresInvalido",
-                "O documento tipo Cpf deve conter 11 caracteres");
+            Erro.ValorInvalido("Documento.QuantidadeCaracteresInvalido");
 
         public static Erro CnpjQuantidadeCaracteresInvalido =>
-            Erro.Validacao(
-                "Documento.QuantidadeCaracteresInvalido",
-                "O documento tipo Cnpj deve conter 16 caracteres");
+            Erro.ValorInvalido("Documento.QuantidadeCaracteresInvalido");
 
         public static Erro ValorInvalido(string numero) =>
-            Erro.Validacao(
-                "Documento.ValorInvalido",
-                $"O {numero} informado esta inválido");
+            Erro.ValorInvalido($"O {numero} informado esta inválido");
     }
 }

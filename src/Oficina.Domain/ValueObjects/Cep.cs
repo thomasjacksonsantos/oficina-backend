@@ -46,7 +46,7 @@ public record Cep
     private static class CepErros
     {
         public static Erro QuantidadeCaracteresInvalido =>
-            Erro.Validacao(
+            Erro.Validacao(nameof(Cep),
                 "Cep.QuantidadeCaracteresInvalido",
                 "O cep informado deve conter 6 caracteres");
     }

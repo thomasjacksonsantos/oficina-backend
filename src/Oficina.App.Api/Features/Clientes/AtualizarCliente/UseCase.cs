@@ -30,7 +30,7 @@ public sealed class UseCase(
             .FindFirstAsync(ct);
 
         if (cliente == null)
-            return Result.Fail("Cliente não encontrado.");
+            return Result.Fail(Erro.Validacao(nameof(input.Id), nameof(input.Id), "Cliente não encontrado."));
 
         var contatos = input.Contatos.Select(c => Contato.Criar(c.DDD, c.Numero, c.TipoTelefone));
         if (contatos.Any(c => c.IsFailed))

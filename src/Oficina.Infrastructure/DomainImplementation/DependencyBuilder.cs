@@ -7,6 +7,8 @@ using Oficina.Domain.Aggregates.UsuarioAggregates;
 using Oficina.Domain.Aggregates.LojaAggregates;
 using Oficina.Infrastructure.DomainImplementation.Aggregates.ClienteAggregates;
 using Oficina.Infrastructure.DomainImplementation.Aggregates.LojaAggregates;
+using Oficina.Infrastructure.DomainImplementation.Aggregates.CepAggregates;
+using Oficina.Domain.Aggregates.CepAggregates;
 
 namespace Oficina.Infrastructure.DomainImplementation;
 
@@ -23,6 +25,7 @@ public static class DependencyBuilder
         services.AddScoped<EfUsuarioRepository, EfUsuarioRepository>();
         services.AddScoped<ILojaRepository, EfLojaRepository>();
         services.AddScoped<IClienteRepository, EfClienteRepository>();
+        services.AddScoped<ICepRepository, AwesomeApi>();
 
         return services;
     }
