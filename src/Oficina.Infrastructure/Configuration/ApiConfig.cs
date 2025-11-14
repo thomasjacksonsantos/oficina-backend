@@ -4,7 +4,7 @@ namespace Oficina.Infrastructure.Configuration;
 public class ApiConfig
 {
     public BlobStorageConfig BlobStorage { get; set; }
-    public  Authentication Authentication { get; set; }
+    public Authentication Authentication { get; set; }
     public Cep Cep { get; set; }
     public Email Email { get; set; }
     public ConviteConfig Convite { get; set; }
@@ -41,7 +41,8 @@ public class BlobStorageConfig
 
 public class Authentication
 {
-    public string TokenUri { get; set; } = string.Empty;
+    public string Host { get; set; } = string.Empty;
+    public string ApiKey { get; set; } = string.Empty;
     public string ServiceName { get; set; } = string.Empty;
 }
 

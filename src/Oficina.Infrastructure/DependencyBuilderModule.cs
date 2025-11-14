@@ -52,7 +52,7 @@ public static class DependencyBuilderModule
         ));
 
         services.AddHttpClient(apiConfig.Authentication.ServiceName, c => c.BaseAddress = new Uri(
-            apiConfig.Authentication.TokenUri
+            apiConfig.Authentication.Host
         ));
 
         return services;

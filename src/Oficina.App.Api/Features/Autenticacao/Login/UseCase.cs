@@ -32,7 +32,7 @@ public sealed class UseCase(
         var client = factory.CreateClient(apiConfig.Authentication.ServiceName);
 
         HttpResponseMessage response = await client.PostAsJsonAsync(
-            apiConfig.Authentication.TokenUri,
+            $"v1/accounts:signInWithPassword?key={apiConfig.Authentication.ApiKey}",
             requestData
         );
 
