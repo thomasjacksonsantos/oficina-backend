@@ -52,6 +52,7 @@ public sealed class UseCase(
 
         var clienteResult = cliente.Atualizar(
             input.Nome,
+            input.RazaoSocial,
             input.Sexo,
             input.Documento,
             input.EmailCliente,

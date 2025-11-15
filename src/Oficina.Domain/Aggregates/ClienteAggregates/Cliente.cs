@@ -8,6 +8,7 @@ public sealed class Cliente
 {
     public int Id { get; private set; }
     public string Nome { get; private set; }
+    public string RazaoSocial { get; private set; }
     public Guid SexoId { get; private set; }
     public Sexo Sexo { get; private set; }
     public Guid TipoDocumentoId { get; private set; }
@@ -26,6 +27,7 @@ public sealed class Cliente
 
     private Cliente(
         string nome,
+        string razaoSocial,
         Sexo sexo,
         TipoDocumento tipoDocumento,
         Documento documento,
@@ -36,6 +38,7 @@ public sealed class Cliente
     )
     {
         Nome = nome;
+        RazaoSocial = razaoSocial;
         SexoId = sexo.Id;
         Sexo = sexo;
         TipoDocumentoId = tipoDocumento.Id;
@@ -51,6 +54,7 @@ public sealed class Cliente
 
     public Result<Cliente> Atualizar(
         string nome,
+        string razaoSocial,
         string sexo,
         string documento,
         string email,
@@ -61,24 +65,27 @@ public sealed class Cliente
     {
         var result = new Result<Cliente>();
 
-        if (string.IsNullOrWhiteSpace(nome))
-            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Nome)}"));
+       if (string.IsNullOrWhiteSpace(nome))
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Nome)}", "Valor informado para o Nome está inválido"));
+
+        if (string.IsNullOrWhiteSpace(razaoSocial))
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(RazaoSocial)}", "Valor informado para a Razão Social está inválido"));
 
         var sexoObj = Sexo.Get(sexo);
         if (sexoObj is null)
-            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Sexo)}"));
-
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Sexo)}", "Valor informado para o Sexo está inválido"));
         var documentoObj = Documento.Criar(documento);
         if (documentoObj.IsFailed)
-            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Documento)}"));
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Documento)}", "Valor informado para o Documento está inválido"));
 
         var emailObj = Email.Criar(email);
         if (emailObj.IsFailed)
-            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Email)}"));
-
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.EmailCliente", "Valor informado para o Email está inválido"));
         var dataNascimentoObj = DataNascimento.Criar(dataNascimento);
         if (dataNascimentoObj.IsFailed)
-            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(DataNascimento)}"));
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(DataNascimento)}", "Valor informado para a Data de Nascimento está inválido"));
+        if (result.IsFailed)
+            return result;
 
         if (result.IsFailed)
             return result;
@@ -103,6 +110,7 @@ public sealed class Cliente
 
     public static Result<Cliente> Criar(
         string nome,
+        string razaoSocial,
         string sexo,
         string documento,
         string email,
@@ -114,27 +122,30 @@ public sealed class Cliente
         var result = new Result<Cliente>();
 
         if (string.IsNullOrWhiteSpace(nome))
-            result.WithError(Erro.ValorInvalido(nameof(Nome)));
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Nome)}", "Valor informado para o Nome está inválido"));
+
+        if (string.IsNullOrWhiteSpace(razaoSocial))
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(RazaoSocial)}", "Valor informado para a Razão Social está inválido"));
 
         var sexoObj = Sexo.Get(sexo);
         if (sexoObj is null)
-            result.WithError(Erro.ValorInvalido(nameof(Sexo)));
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Sexo)}", "Valor informado para o Sexo está inválido"));
         var documentoObj = Documento.Criar(documento);
         if (documentoObj.IsFailed)
-            result.WithError(Erro.ValorInvalido(nameof(Documento)));
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Documento)}", "Valor informado para o Documento está inválido"));
 
         var emailObj = Email.Criar(email);
         if (emailObj.IsFailed)
-            result.WithError(Erro.ValorInvalido(nameof(Email)));
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.EmailCliente", "Valor informado para o Email está inválido"));
         var dataNascimentoObj = DataNascimento.Criar(dataNascimento);
         if (dataNascimentoObj.IsFailed)
-            result.WithError(Erro.ValorInvalido(nameof(DataNascimento)));
-
+            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(DataNascimento)}", "Valor informado para a Data de Nascimento está inválido"));
         if (result.IsFailed)
             return result;
 
         var cliente = new Cliente(
             nome,
+            razaoSocial,
             sexoObj!,
             documentoObj.Value!.TipoDocumento,
             documentoObj.Value!,

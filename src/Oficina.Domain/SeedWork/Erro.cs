@@ -44,10 +44,15 @@ public record Erro
             $"Valor da(o) {campo} não informado(a)");
 
     public static Erro ValorInvalido(string campo) =>
+        ValorInvalido(
+            campo,
+            $"Valor informado para o {campo} está inválido");
+
+    public static Erro ValorInvalido(string campo, string descricao) =>
         Validacao(
             campo,
             $"{campo}.ValorInvalido",
-            $"Valor informado para o {campo} está inválido");
+            descricao);
 
     public static Erro RegistroJaExcluido(string entity) =>
         Validacao(

@@ -29,6 +29,7 @@ public sealed class UseCase(
 
         return new GetClienteByIdResponse(
             cliente.Nome,
+            cliente.RazaoSocial,
             cliente.Sexo.Key,
             cliente.TipoDocumento.Key,
             cliente.Documento.Numero,

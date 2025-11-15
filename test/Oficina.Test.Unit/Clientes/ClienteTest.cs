@@ -18,6 +18,7 @@ public class ClienteTest
 
         var result = Cliente.Criar(
             "João Silva",
+            "Razao Social Exemplo",
             "masculino",
             "31435600886",
             "joao.silva@example.com",
@@ -50,6 +51,7 @@ public class ClienteTest
 
         var result = Cliente.Criar(
             "João Silva",
+            "Razao Social Exemplo",
             "masculino",
             "31435600886",
             "joao.silva@example.com",
@@ -76,6 +78,7 @@ public class ClienteTest
         var result = Cliente.Criar(
             "",
             "",
+            "",
             "31435600880",
             "joao.silva",
             DateTime.Parse("1900-01-01"),
@@ -85,11 +88,11 @@ public class ClienteTest
 
         Assert.False(result.IsSuccess);
 
-        Assert.Contains(result.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Nome").Descricao);
-        Assert.Contains(result.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Sexo").Descricao);
-        Assert.Contains(result.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Documento").Descricao);
-        Assert.Contains(result.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Email").Descricao);
-        Assert.Contains(result.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.DataNascimento").Descricao);
+        Assert.Contains(result.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Nome", "Valor informado para o Nome está inválido").Descricao);
+        Assert.Contains(result.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Sexo", "Valor informado para o Sexo está inválido").Descricao);
+        Assert.Contains(result.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Documento", "Valor informado para o Documento está inválido").Descricao);
+        Assert.Contains(result.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Email", "Valor informado para o Email está inválido").Descricao);
+        Assert.Contains(result.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.DataNascimento", "Valor informado para a Data de Nascimento está inválido").Descricao);
     }
 
     [Fact]
@@ -104,6 +107,7 @@ public class ClienteTest
 
         var clienteResult = Cliente.Criar(
             "João Silva",
+            "Razao Social Exemplo",
             "masculino",
             "31435600886",
             "joao.silva@example.com",
@@ -118,6 +122,7 @@ public class ClienteTest
         var cliente = clienteResult.Value!;
         var updateResult = cliente.Atualizar(
             "João Pereira",
+            "Razao Social Exemplo",
             "masculino",
             "31435600886",
             "joao.pereira@example.com",
@@ -151,6 +156,7 @@ public class ClienteTest
         };
         var clienteResult = Cliente.Criar(
             "João Silva",
+            "Razao Social Exemplo",
             "masculino",
             "31435600886",
             "joao.silva@example.com",
@@ -165,6 +171,7 @@ public class ClienteTest
         var updateResult = cliente.Atualizar(
             "",
             "",
+            "",
             "31435600880",
             "",
             DateTime.Parse("1900-01-01"),
@@ -175,10 +182,11 @@ public class ClienteTest
         // Then
         Assert.False(updateResult.IsSuccess);
         Assert.Equal(0, cliente.Id);
-        Assert.Contains(updateResult.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Nome").Descricao);
-        Assert.Contains(updateResult.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Documento").Descricao);
-        Assert.Contains(updateResult.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Email").Descricao);
-        Assert.Contains(updateResult.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.DataNascimento").Descricao);
+        Assert.Contains(updateResult.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Nome", "Valor informado para o Nome está inválido").Descricao);
+        Assert.Contains(updateResult.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.RazaoSocial", "Valor informado para a Razão Social está inválido").Descricao);
+        Assert.Contains(updateResult.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Documento", "Valor informado para o Documento está inválido").Descricao);
+        Assert.Contains(updateResult.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.Email", "Valor informado para o Email está inválido").Descricao);
+        Assert.Contains(updateResult.Errors!, e => e.Descricao == Erro.ValorInvalido("Cliente.DataNascimento", "Valor informado para a Data de Nascimento está inválido").Descricao);
         Assert.NotNull(cliente.Criado);
         Assert.NotNull(cliente.Atualizado);
     }
@@ -194,6 +202,7 @@ public class ClienteTest
         };
         var clienteResult = Cliente.Criar(
             "João Silva",
+            "Razao Social Exemplo",
             "masculino",
             "31435600886",
             "joao.silva@example.com",
@@ -207,6 +216,7 @@ public class ClienteTest
         var cliente = clienteResult.Value!;
         var updateResult = cliente.Atualizar(
             "Maria das Dores",
+            "Razao Social Exemplo",
             "feminino",
             "81465252000198",
             "mariadasdores@gmail.com",

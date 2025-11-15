@@ -15,6 +15,7 @@ public class EfClienteConfiguration : IEntityTypeConfiguration<Cliente>
     public void Configure(EntityTypeBuilder<Cliente> builder)
     {
         builder.Property(c => c.Nome).HasMaxLength(600);
+        builder.Property(c => c.RazaoSocial).HasMaxLength(600);
 
         builder.ComplexProperty(c => c.Documento, documento =>
         {

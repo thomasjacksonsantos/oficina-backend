@@ -5,6 +5,7 @@ namespace Oficina.App.Api.Features.Clientes.CadastrarCliente;
 
 public sealed record CadastrarClienteRequest(
     string Nome,
+    string RazaoSocial,
     string Sexo,
     string Documento,
     string EmailCliente,

@@ -51,10 +51,10 @@ public sealed record Contato
         var result = new Result();
 
         if (string.IsNullOrWhiteSpace(numero))
-            result.WithError(Erro.ValorNaoInformado(nameof(Numero)));
+            result.WithError(Erro.ValorInvalido($"{nameof(Contato)}.{nameof(Numero)}", "Valor informado é inválido."));
 
         if (!Enum.TryParse<TipoTelefoneEnum>(tipoTelefone, true, out var tipoTelefoneValue))
-            result.WithError(Erro.ValorInvalido($"{nameof(TipoTelefone)}"));
+            result.WithError(Erro.ValorInvalido($"{nameof(Contato)}.{nameof(TipoTelefone)}", "Valor informado é inválido."));
 
         return result;
     }

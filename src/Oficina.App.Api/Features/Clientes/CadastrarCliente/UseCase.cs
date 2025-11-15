@@ -1,6 +1,8 @@
 
 
 
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Oficina.Domain.Aggregates.ClienteAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
@@ -20,9 +22,11 @@ public sealed class UseCase(
         CancellationToken ct = default
     )
     {
+        var result = new Result<CadastrarClienteResponse>();
+
         var contatos = input.Contatos.Select(c => Contato.Criar(c.Numero, c.TipoTelefone));
         if (contatos.Any(c => c.IsFailed))
-            return Result.Fail(contatos.SelectMany(c => c.Errors!).ToList());
+            result.WithErrors(contatos!.SelectMany(c => c.Errors!)!.ToList());
 
         var endereco = Endereco.Criar(
             input.Endereco.Pais,
@@ -36,10 +40,11 @@ public sealed class UseCase(
         );
 
         if (endereco.IsFailed)
-            return Result.Fail(endereco.Errors!);
+            result.WithErrors(endereco.Errors!);
 
         var clienteResult = Cliente.Criar(
             input.Nome,
+            input.RazaoSocial,
             input.Sexo,
             input.Documento,
             input.EmailCliente,
@@ -49,7 +54,10 @@ public sealed class UseCase(
         );
 
         if (clienteResult.IsFailed)
-            return Result.Fail(clienteResult.Errors!);
+            result.WithErrors(clienteResult.Errors!);
+
+        if (result.IsFailed)
+            return result;
 
         await clienteRepository.AddAsync(clienteResult.Value!);
         await unitOfWork.SaveChangesAsync(ct);

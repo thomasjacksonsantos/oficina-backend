@@ -87,6 +87,7 @@ public class OrdemServicoTest
 
         var cliente = Cliente.Criar(
             "João Silva",
+            "Razao Social Exemplo",
             "masculino",
             "31435600886",
             "thomas.j.santos@gmail.com",

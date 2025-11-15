@@ -26,6 +26,7 @@ public class OrdemServicoTest
 
         var cliente = Cliente.Criar(
             "João Silva",
+            "Razao Social Exemplo",
             "masculino",
             "31435600886",
             "email@exemplo.com",
@@ -95,7 +96,8 @@ public class OrdemServicoTest
         ).Value!;
 
         var cliente = Cliente.Criar(
-            "João Silva",
+            "João Silva",            
+            "Razao Social Exemplo",
             "masculino",
             "31435600886",
             "email@exemplo.com",
@@ -140,6 +142,7 @@ public class OrdemServicoTest
         ).Value!;
         var cliente = Cliente.Criar(
             "João Silva",
+            "Razao Social Exemplo",
             "masculino",
             "31435600886",
             "email@exemplo.com",
@@ -179,6 +182,7 @@ public class OrdemServicoTest
 
         var cliente = Cliente.Criar(
             "João Silva",
+            "Razao Social Exemplo",
             "masculino",
             "31435600886",
             "email@exemplo.com",
@@ -215,6 +219,7 @@ public class OrdemServicoTest
         ).Value!;
         var cliente = Cliente.Criar(
             "João Silva",
+            "Razao Social Exemplo",
             "masculino",
             "31435600886",
             "email@exemplo.com",

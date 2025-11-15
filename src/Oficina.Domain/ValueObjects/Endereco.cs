@@ -118,7 +118,7 @@ public sealed class Endereco
         var result = Validar(estado, cidade, logradouro, bairro, numero);
 
         if (string.IsNullOrWhiteSpace(pais))
-            result.WithError(Erro.ValorNaoInformado(nameof(Pais)));
+            result.WithError(Erro.ValorInvalido($"{nameof(Endereco)}.{nameof(Pais)}", "Valor informado para o País está inválido"));
 
         return result;
     }
@@ -135,23 +135,21 @@ public sealed class Endereco
 
         if (string.IsNullOrWhiteSpace(estado))
             result.WithError(
-                Erro.ValorNaoInformado(nameof(Estado)));
+                Erro.ValorInvalido($"{nameof(Endereco)}.{nameof(Estado)}", "Valor informado para o Estado está inválido"));
 
         if (string.IsNullOrWhiteSpace(cidade))
             result.WithError(
-                Erro.ValorNaoInformado(nameof(Cidade)));
-
+                Erro.ValorInvalido($"{nameof(Endereco)}.{nameof(Cidade)}", "Valor informado para a Cidade está inválido"));
         if (string.IsNullOrWhiteSpace(logradouro))
             result.WithError(
-                Erro.ValorNaoInformado(nameof(Logradouro)));
+                Erro.ValorInvalido($"{nameof(Endereco)}.{nameof(Logradouro)}", "Valor informado para o Logradouro está inválido"));
 
         if (string.IsNullOrWhiteSpace(bairro))
             result.WithError(
-                Erro.ValorNaoInformado(nameof(Bairro)));
-
+                Erro.ValorInvalido($"{nameof(Endereco)}.{nameof(Bairro)}", "Valor informado para o Bairro está inválido"));
         if (string.IsNullOrWhiteSpace(numero))
             result.WithError(
-                Erro.ValorNaoInformado(nameof(Numero)));
+                Erro.ValorInvalido($"{nameof(Endereco)}.{nameof(Numero)}", "Valor informado para o Número está inválido"));
 
         return result;
     }

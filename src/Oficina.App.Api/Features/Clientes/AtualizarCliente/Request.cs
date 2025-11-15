@@ -6,6 +6,7 @@ namespace Oficina.App.Api.Features.Clientes.AtualizarCliente;
 public sealed record AtualizarClienteRequest(
     int Id,
     string Nome,
+    string RazaoSocial,
     string Sexo,
     string Documento,
     string EmailCliente,

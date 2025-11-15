@@ -4,6 +4,7 @@ namespace Oficina.App.Api.Features.Clientes.GetClienteById;
 
 public sealed record GetClienteByIdResponse(
     string Nome,
+    string RazaoSocial,
     string Sexo,
     string TipoDocumento,
     string Documento,
