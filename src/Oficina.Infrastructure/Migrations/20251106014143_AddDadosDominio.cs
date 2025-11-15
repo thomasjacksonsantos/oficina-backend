@@ -130,6 +130,20 @@ namespace Oficina.Infrastructure.Migrations
                     insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
                     values('37be3253-ae1c-4650-b0e5-d0047c313e6f', 'Inativo', 'Inativo', 'OrdemServicoStatus')
                 end
+
+                -- PlanoStatus Ativo
+                if (not exists(select top 1 1 from DadoDominio where Id = 'e3b8c6a2-2f4a-4b9d-8e7a-1c2d3e4f5a6b'))
+                begin
+                    insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    values('e3b8c6a2-2f4a-4b9d-8e7a-1c2d3e4f5a6b', 'Ativo', 'Ativo', 'Plano')
+                end
+
+                -- PlanoStatus Inativo
+                if (not exists(select top 1 1 from DadoDominio where Id = 'a7f2d1c3-5b6e-4c8d-9f0a-2b3c4d5e6f7a'))
+                begin
+                    insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    values('a7f2d1c3-5b6e-4c8d-9f0a-2b3c4d5e6f7a', 'Inativo', 'Inativo', 'Plano')
+                end
             ");
         }
 

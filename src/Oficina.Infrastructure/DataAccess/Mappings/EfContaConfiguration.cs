@@ -25,5 +25,10 @@ public sealed class EfContaConfiguration : IEntityTypeConfiguration<Conta>
             .WithMany()
             .HasForeignKey(c => c.ContaStatusId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(c => c.Plano)
+            .WithMany()
+            .HasForeignKey(c => c.PlanoId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

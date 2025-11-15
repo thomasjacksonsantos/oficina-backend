@@ -1,6 +1,8 @@
 
 
+using Oficina.Aggregates.ContaAggregates;
 using Oficina.Domain.Aggregates.LojaAggregates;
+using Oficina.Domain.Aggregates.PlanoAggregates;
 using Oficina.Domain.Aggregates.UsuarioAggregates;
 using Oficina.Domain.ValueObjects;
 
@@ -9,7 +11,7 @@ namespace Oficina.Domain.Aggregates.ContaAggregates;
 public sealed class Conta
 {
     private List<Loja>? _lojas;
-    private List<Usuario> _usuarios = new List<Usuario>(    );
+    private List<Usuario> _usuarios = new List<Usuario>();
 
 #pragma warning disable CS8618
     private Conta() { }
@@ -37,6 +39,11 @@ public sealed class Conta
         _usuarios.AsReadOnly();
     public IReadOnlyCollection<Loja>? Lojas =>
         _lojas?.AsReadOnly();
+    public int PlanoId { get; private set; }
+    public Plano? Plano { get; private set; }
+    private List<PagamentoConta> _pagamentos = new();
+    public IReadOnlyCollection<PagamentoConta> Pagamentos =>
+        _pagamentos.AsReadOnly();
     public DataHora Criado { get; private set; }
     public DataHora Atualizado { get; private set; }
 
@@ -45,6 +52,7 @@ public sealed class Conta
         _usuarios ??= new List<Usuario>();
         _usuarios.Add(usuario);
     }
+
     public void AddLoja(Loja loja)
     {
         _lojas ??= new List<Loja>();
@@ -55,6 +63,16 @@ public sealed class Conta
     {
         _lojas ??= new List<Loja>();
         _lojas.AddRange(lojas);
+    }
+
+    public void RegistrarPagamento(PagamentoConta pagamento)
+    {
+        _pagamentos.Add(pagamento);
+    }
+
+    public bool EstaEmDia(string referencia)
+    {
+        return _pagamentos.Any(p => p.Referencia == referencia && p.Pago);
     }
 
     public static Conta Criar(
