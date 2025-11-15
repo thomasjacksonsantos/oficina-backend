@@ -114,23 +114,21 @@ public sealed class Cliente
         var result = new Result<Cliente>();
 
         if (string.IsNullOrWhiteSpace(nome))
-            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Nome)}"));
+            result.WithError(Erro.ValorInvalido(nameof(Nome)));
 
         var sexoObj = Sexo.Get(sexo);
         if (sexoObj is null)
-            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Sexo)}"));
-
+            result.WithError(Erro.ValorInvalido(nameof(Sexo)));
         var documentoObj = Documento.Criar(documento);
         if (documentoObj.IsFailed)
-            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Documento)}"));
+            result.WithError(Erro.ValorInvalido(nameof(Documento)));
 
         var emailObj = Email.Criar(email);
         if (emailObj.IsFailed)
-            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(Email)}"));
-
+            result.WithError(Erro.ValorInvalido(nameof(Email)));
         var dataNascimentoObj = DataNascimento.Criar(dataNascimento);
         if (dataNascimentoObj.IsFailed)
-            result.WithError(Erro.ValorInvalido($"{nameof(Cliente)}.{nameof(DataNascimento)}"));
+            result.WithError(Erro.ValorInvalido(nameof(DataNascimento)));
 
         if (result.IsFailed)
             return result;

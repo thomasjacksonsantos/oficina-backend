@@ -81,13 +81,13 @@ public class EfClienteConfiguration : IEntityTypeConfiguration<Cliente>
         });
 
         builder.HasOne(c => c.Sexo)
-            .WithOne()
-            .HasForeignKey<Cliente>(c => c.SexoId)
+            .WithMany()
+            .HasForeignKey(c => c.SexoId)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(c => c.TipoDocumento)
-            .WithOne()
-            .HasForeignKey<Cliente>(c => c.TipoDocumentoId)
+            .WithMany()
+            .HasForeignKey(c => c.TipoDocumentoId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

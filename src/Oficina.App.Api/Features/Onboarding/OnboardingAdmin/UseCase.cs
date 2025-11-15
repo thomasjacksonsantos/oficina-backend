@@ -51,7 +51,7 @@ public sealed class UseCase(
                 input.Documento,
                 input.Sexo,
                 input.DataNascimento,
-                new Collection<Contato>(input.Contatos.Select(c => Contato.Criar(c.DDD, c.Numero, c.TipoTelefone).Value).ToList()!)
+                new Collection<Contato>(input.Contatos.Select(c => Contato.Criar(c.Numero, c.TipoTelefone).Value).ToList()!)
             );
 
             if (superAdmin.IsFailed)
@@ -78,7 +78,6 @@ public sealed class UseCase(
             foreach (var item in input.Loja.Contatos)
             {
                 var contato = Contato.Criar(
-                    item.DDD,
                     item.Numero,
                     item.TipoTelefone
                 );

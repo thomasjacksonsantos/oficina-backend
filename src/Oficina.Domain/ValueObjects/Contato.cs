@@ -1,4 +1,5 @@
 
+using System.Text.RegularExpressions;
 using Oficina.Domain.SeedWork;
 
 namespace Oficina.Domain.ValueObjects;
@@ -10,8 +11,6 @@ public sealed record Contato
         Telefone,
         Celular
     }
-
-    public string DDD { get; set; }
     public string Numero { get; set; }
     public TipoTelefoneEnum TipoTelefone { get; set; }
 
@@ -19,23 +18,20 @@ public sealed record Contato
     public Contato() { }
 #pragma warning restore CS8618
 
-    public Contato(
-        string ddd,
+    public Contato(     
         string numero,
         TipoTelefoneEnum tipoTelefone)
     {
-        DDD = ddd;
         Numero = numero;
         TipoTelefone = tipoTelefone;
     }
 
     public static Result<Contato> Criar(
-        string ddd,
         string numero,
         string tipoTelefone)
     {
+        numero = string.Join("", new Regex(@"\d+").Matches(numero));
         var result = Validar(
-            ddd,
             numero,
             tipoTelefone
         );
@@ -45,18 +41,14 @@ public sealed record Contato
 
         Enum.TryParse<TipoTelefoneEnum>(tipoTelefone, true, out var tipoTelefoneValue);
 
-        return new Contato(ddd, numero, tipoTelefoneValue);
+        return new Contato(numero, tipoTelefoneValue);
     }
 
     private static Result Validar(
-        string ddd,
         string numero,
         string tipoTelefone)
     {
         var result = new Result();
-
-        if (string.IsNullOrWhiteSpace(ddd))
-            result.WithError(Erro.ValorNaoInformado(nameof(DDD)));
 
         if (string.IsNullOrWhiteSpace(numero))
             result.WithError(Erro.ValorNaoInformado(nameof(Numero)));

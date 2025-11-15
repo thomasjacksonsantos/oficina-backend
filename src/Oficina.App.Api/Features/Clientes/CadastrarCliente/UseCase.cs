@@ -20,7 +20,7 @@ public sealed class UseCase(
         CancellationToken ct = default
     )
     {
-        var contatos = input.Contatos.Select(c => Contato.Criar(c.DDD, c.Numero, c.TipoTelefone));
+        var contatos = input.Contatos.Select(c => Contato.Criar(c.Numero, c.TipoTelefone));
         if (contatos.Any(c => c.IsFailed))
             return Result.Fail(contatos.SelectMany(c => c.Errors!).ToList());
 

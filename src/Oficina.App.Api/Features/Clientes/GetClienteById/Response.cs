@@ -14,7 +14,6 @@ public sealed record GetClienteByIdResponse(
 );
 
 public sealed record ContatoClienteResponse(
-    string DDD,
     string Numero,
     string TipoTelefone
 );

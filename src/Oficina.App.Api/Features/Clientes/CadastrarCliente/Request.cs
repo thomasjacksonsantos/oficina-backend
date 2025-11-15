@@ -14,7 +14,6 @@ public sealed record CadastrarClienteRequest(
 ) : AuthRequest;
 
 public sealed record ContatoClienteRequest(
-    string DDD,
     string Numero,
     string TipoTelefone
 );

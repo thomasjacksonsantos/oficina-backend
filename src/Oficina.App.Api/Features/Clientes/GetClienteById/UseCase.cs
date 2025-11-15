@@ -35,7 +35,6 @@ public sealed class UseCase(
             cliente.Email.Valor,
             cliente.DataNascimento.Valor,
             cliente.Contatos.Select(c => new ContatoClienteResponse(
-                c.DDD,
                 c.Numero,
                 c.TipoTelefone.ToString()
             )).ToList(),

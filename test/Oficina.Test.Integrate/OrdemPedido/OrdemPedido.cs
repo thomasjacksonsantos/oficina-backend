@@ -27,7 +27,7 @@ public class OrdemServicoTest
             new DateTime(1990, 1, 1),
             new List<Contato>
             {
-                Contato.Criar("19", "999999999", "telefone").Value!
+                Contato.Criar("19999999999", "telefone").Value!
             }
         );
 
@@ -47,7 +47,7 @@ public class OrdemServicoTest
             Endereco.Criar("Rua B", "200", "Bairro C", "Cidade D", "Estado E", "CEP54321", "404").Value!,
             new List<Contato>
             {
-                Contato.Criar("19", "987654321", "telefone").Value!
+                Contato.Criar("19987654321", "telefone").Value!
             }
         ).Value!;
 
@@ -93,7 +93,7 @@ public class OrdemServicoTest
             DateTime.Parse("1990-01-01"),
             new List<Contato>
             {
-                Contato.Criar("19", "123456789", "telefone").Value!
+                Contato.Criar("19123456789", "telefone").Value!
             },
             Endereco.Criar("Rua A", "100", "Bairro B", "Cidade C", "Estado D", "CEP12345", "403").Value!
         ).Value!;

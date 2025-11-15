@@ -13,7 +13,7 @@ public class ClienteTest
 
         var contatos = new List<Contato>
         {
-            Contato.Criar("19", "123456789", "telefone").Value!
+            Contato.Criar("19123456789", "telefone").Value!
         };
 
         var result = Cliente.Criar(
@@ -70,7 +70,7 @@ public class ClienteTest
 
         var contatos = new List<Contato>
         {
-            Contato.Criar("19", "123456789", "telefone").Value!
+            Contato.Criar("19123456789", "telefone").Value!
         };
 
         var result = Cliente.Criar(
@@ -99,7 +99,7 @@ public class ClienteTest
         var endereco = Endereco.Criar("Rua A", "100", "Bairro B", "Cidade C", "Estado D", "CEP12345", "403").Value!;
         var contatos = new List<Contato>
         {
-            Contato.Criar("19", "123456789", "telefone").Value!
+            Contato.Criar("19123456789", "telefone").Value!
         };
 
         var clienteResult = Cliente.Criar(
@@ -147,7 +147,7 @@ public class ClienteTest
         var endereco = Endereco.Criar("Rua A", "100", "Bairro B", "Cidade C", "Estado D", "CEP12345", "403").Value!;
         var contatos = new List<Contato>
         {
-            Contato.Criar("19", "123456789", "telefone").Value!
+            Contato.Criar("19123456789", "telefone").Value!
         };
         var clienteResult = Cliente.Criar(
             "João Silva",
@@ -190,7 +190,7 @@ public class ClienteTest
         var endereco = Endereco.Criar("Rua A", "100", "Bairro B", "Cidade C", "Estado D", "CEP12345", "403").Value!;
         var contatos = new List<Contato>
         {
-            Contato.Criar("19", "123456789", "telefone").Value!
+            Contato.Criar("19123456789", "telefone").Value!
         };
         var clienteResult = Cliente.Criar(
             "João Silva",

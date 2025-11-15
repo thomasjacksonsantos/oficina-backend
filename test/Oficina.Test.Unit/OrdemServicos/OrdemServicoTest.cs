@@ -32,7 +32,7 @@ public class OrdemServicoTest
             DateTime.Parse("1990-01-01"),
             new List<Contato>
             {
-                Contato.Criar("19", "123456789", "telefone").Value!
+                Contato.Criar("19123456789", "telefone").Value!
             },
             Endereco.Criar("Rua A", "100", "Bairro B", "Cidade C", "Estado D", "CEP12345", "403").Value!
         ).Value!;
@@ -102,7 +102,7 @@ public class OrdemServicoTest
             DateTime.Parse("1990-01-01"),
             new List<Contato>
             {
-                Contato.Criar("19", "123456789", "telefone").Value!
+                Contato.Criar("19123456789", "telefone").Value!
             },
             Endereco.Criar("Rua A", "100", "Bairro B", "Cidade C", "Estado D", "CEP12345", "403").Value!
         ).Value!;
@@ -146,7 +146,7 @@ public class OrdemServicoTest
             DateTime.Parse("1990-01-01"),
             new List<Contato>
             {
-                Contato.Criar("19", "123456789", "telefone").Value!
+                Contato.Criar("19123456789", "telefone").Value!
             },
             Endereco.Criar("Rua A", "100", "Bairro B", "Cidade C", "Estado D", "CEP12345", "403").Value!
         ).Value!;
@@ -185,7 +185,7 @@ public class OrdemServicoTest
             DateTime.Parse("1990-01-01"),
             new List<Contato>
             {
-                Contato.Criar("19", "123456789", "telefone").Value!
+                Contato.Criar("19123456789", "telefone").Value!
             },
             Endereco.Criar("Rua A", "100", "Bairro B", "Cidade C", "Estado D", "CEP12345", "403").Value!
         ).Value!;
@@ -221,7 +221,7 @@ public class OrdemServicoTest
             DateTime.Parse("1990-01-01"),
             new List<Contato>
             {
-                Contato.Criar("19", "123456789", "telefone").Value!
+                Contato.Criar("19123456789", "telefone").Value!
             },
             Endereco.Criar("Rua A", "100", "Bairro B", "Cidade C", "Estado D", "CEP12345", "403").Value!
         ).Value!;
