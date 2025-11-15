@@ -15,6 +15,7 @@ namespace Oficina.App.Api.Features.Onboarding.OnboardingAdmin;
 
 public sealed class UseCase(
     IRepository<Conta> contaRepository,
+    IRepository<UsuarioContexto> usuarioContextoRepository,
     IEmailSend emailSend,
     IUnitOfWork unitOfWork
 )
@@ -118,9 +119,16 @@ public sealed class UseCase(
                 throw new Exception(emailResult.Message);
 
             await contaRepository.AddAsync(conta);
-            await unitOfWork.SaveChangesAsync(ct);
+            
+            // Create UsuarioContexto for the super admin
+            var usuarioContext = UsuarioContexto.Criar(
+                superAdmin.Value!.Id,
+                conta.Id,
+                loja.Value!.Id
+            );
 
-            var token = await FirebaseAuth.DefaultInstance.CreateCustomTokenAsync(userRecordArgs.Uid);
+            await usuarioContextoRepository.AddAsync(usuarioContext.Value!);
+            await unitOfWork.SaveChangesAsync(ct);
 
             return Result.Success(new OnboardingAdminResponse(
                 Sucesso: true,
