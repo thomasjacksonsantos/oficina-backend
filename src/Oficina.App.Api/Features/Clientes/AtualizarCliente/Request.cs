@@ -1,10 +1,11 @@
 
+using Microsoft.AspNetCore.Mvc;
 using Oficina.App.Api.Shared;
 
 namespace Oficina.App.Api.Features.Clientes.AtualizarCliente;
 
 public sealed record AtualizarClienteRequest(
-    int Id,
+    [FromRoute] string Id,
     string Nome,
     string RazaoSocial,
     string Sexo,

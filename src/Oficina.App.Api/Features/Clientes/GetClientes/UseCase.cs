@@ -1,6 +1,7 @@
 
 
 
+using Microsoft.EntityFrameworkCore;
 using Oficina.Domain.Aggregates.ClienteAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
@@ -10,7 +11,7 @@ using Oficina.Infrastructure.DataAccess;
 namespace Oficina.App.Api.Features.Clientes.GetClientes;
 
 public sealed class UseCase(
-    IRepository<Cliente> clienteRepository
+    IFluentQuery fluentQuery
 )
     : IUseCase<GetClientesRequest, PagedResult<GetClientesResponse>>
 {
@@ -19,15 +20,36 @@ public sealed class UseCase(
         CancellationToken ct = default
     )
     {
-        return await clienteRepository.FindAllByPredicate(
-            predicate: p => input.Documento == null || p.Documento.Numero.Contains(input.Documento),
-            projection: p => new GetClientesResponse(
-                p.Id,
-                p.Nome,
-                p.Documento.Numero
-            ),
-            pagination: new Pagination(input.Pagina <= 0 ? 1 : input.Pagina, input.TotalPagina <= 0 ? 20 : input.TotalPagina),
-            ct: ct
-        );
+        var clientes = await fluentQuery.For<Cliente>()
+            .WithIncludes(c => c.Include(c => c.Sexo)
+                                 .Include(c => c.TipoDocumento)
+                                 .Include(c => c.ClienteStatus))
+            .FindAllPagedAsync(input.Pagina, input.TotalPagina, ct);
+
+        return clientes.MapTo(c => new GetClientesResponse(
+            c.Id.EncodeWithSqids(),
+            c.Nome,
+            c.RazaoSocial,
+            c.Sexo.Key,
+            c.TipoDocumento.Key,
+            c.Documento.Numero,
+            c.Email.Valor,
+            c.ClienteStatus.Key,
+            c.DataNascimento.Valor,
+            c.Contatos.Select(contact => new ContatoClientesResponse(
+                contact.Numero,
+                contact.TipoTelefone // ou .Nome, se existir
+            )),
+            new EnderecoClientesResponse(
+                c.Endereco.Pais,
+                c.Endereco.Estado,
+                c.Endereco.Cidade,
+                c.Endereco.Logradouro,
+                c.Endereco.Bairro,
+                c.Endereco.Complemento,
+                c.Endereco.Cep.Valor,
+                c.Endereco.Numero
+            )
+        ));
     }
 }

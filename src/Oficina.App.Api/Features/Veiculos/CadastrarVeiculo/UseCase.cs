@@ -22,6 +22,7 @@ public sealed class UseCase(
         var veiculoResult = Veiculo.Criar(
             input.Placa,
             input.Modelo,
+            input.Montadora,
             input.Hodrometro,
             input.Cor,
             input.Ano,

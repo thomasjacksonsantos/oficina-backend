@@ -33,6 +33,7 @@ public sealed class UseCase(
         var clienteResult = veiculo.Atualizar(
             input.Placa,
             input.Modelo,
+            input.Montadora,
             input.Hodrometro,
             input.Cor,
             input.Ano,

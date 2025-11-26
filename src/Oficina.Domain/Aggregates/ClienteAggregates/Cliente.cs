@@ -9,6 +9,8 @@ public sealed class Cliente
     public int Id { get; private set; }
     public string Nome { get; private set; }
     public string RazaoSocial { get; private set; }
+    public Guid ClienteStatusId  { get; set; }
+    public ClienteStatus ClienteStatus { get; private set; }
     public Guid SexoId { get; private set; }
     public Sexo Sexo { get; private set; }
     public Guid TipoDocumentoId { get; private set; }
@@ -48,7 +50,14 @@ public sealed class Cliente
         DataNascimento = dataNascimento;
         Contatos = contatos ?? new List<Contato>();
         Endereco = endereco;
+        ClienteStatus = ClienteStatus.Ativo;
         Criado = DateTime.Now;
+        Atualizado = DateTime.Now;
+    }
+
+    public void Inativar()
+    {
+        ClienteStatus = ClienteStatus.Inativo;
         Atualizado = DateTime.Now;
     }
 

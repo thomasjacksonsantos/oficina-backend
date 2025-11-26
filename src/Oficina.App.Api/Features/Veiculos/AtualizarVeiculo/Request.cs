@@ -7,6 +7,7 @@ public sealed record AtualizarVeiculoRequest(
     int Id,
     string Placa,
     string Modelo,
+    string Montadora,
     int Hodrometro,
     string Cor,
     int Ano,

@@ -90,5 +90,10 @@ public class EfClienteConfiguration : IEntityTypeConfiguration<Cliente>
             .WithMany()
             .HasForeignKey(c => c.TipoDocumentoId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(c => c.ClienteStatus)
+            .WithMany()
+            .HasForeignKey(c => c.ClienteStatusId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

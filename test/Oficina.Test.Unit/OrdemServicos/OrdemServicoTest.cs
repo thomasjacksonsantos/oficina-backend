@@ -15,7 +15,8 @@ public class OrdemServicoTest
         var veiculo = Veiculo.Criar(
            "ABC-1234",
            "Modelo X",
-           10000,
+            "Montadora Y",
+            10000,
            "Preto",
            2025,
            "12323aas2",
@@ -86,6 +87,7 @@ public class OrdemServicoTest
         var veiculo = Veiculo.Criar(
             "ABC-1234",
             "Modelo X",
+            "Montadora Y",
             10000,
             "Preto",
             2025,
@@ -96,7 +98,7 @@ public class OrdemServicoTest
         ).Value!;
 
         var cliente = Cliente.Criar(
-            "João Silva",            
+            "João Silva",
             "Razao Social Exemplo",
             "masculino",
             "31435600886",
@@ -132,6 +134,7 @@ public class OrdemServicoTest
         var veiculo = Veiculo.Criar(
             "ABC-1234",
             "Modelo X",
+            "Montadora Y",
             10000,
             "Preto",
             2025,
@@ -171,6 +174,7 @@ public class OrdemServicoTest
         var veiculo = Veiculo.Criar(
             "ABC-1234",
             "Modelo X",
+            "Motadora Y",
             10000,
             "Preto",
             2025,
@@ -209,6 +213,7 @@ public class OrdemServicoTest
         var veiculo = Veiculo.Criar(
             "ABC-1234",
             "Modelo X",
+            "Montadora Y",
             10000,
             "Preto",
             2025,

@@ -26,10 +26,10 @@ public sealed class UseCase(
             projection: c => new GetVeiculosResponse(
                 c.Placa,
                 c.Modelo,
+                c.Montadora,
                 c.Hodrometro,
                 c.Cor,
                 c.Ano,
-                c.NumeroChassi,
                 c.NumeroSerie,
                 c.Motorizacao,
                 c.Chassi

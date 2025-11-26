@@ -76,6 +76,7 @@ public class OrdemServicoTest
         var veiculo = Veiculo.Criar(
            "ABC-1234",
            "Modelo X",
+           "Montadora Y",
            10000,
            "Preto",
            2025,

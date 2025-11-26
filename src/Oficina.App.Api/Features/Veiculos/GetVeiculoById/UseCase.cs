@@ -27,10 +27,10 @@ public sealed class UseCase(
         return new GetVeiculoByIdResponse(
             veiculo.Placa,
             veiculo.Modelo,
+            veiculo.Montadora,
             veiculo.Hodrometro,
             veiculo.Cor,
             veiculo.Ano,
-            veiculo.NumeroChassi,
             veiculo.NumeroSerie,
             veiculo.Motorizacao,
             veiculo.Chassi

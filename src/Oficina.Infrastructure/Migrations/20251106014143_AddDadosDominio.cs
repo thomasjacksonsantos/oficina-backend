@@ -11,6 +11,20 @@ namespace Oficina.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(@"
+                -- ClienteStatus Ativo
+                if (not exists(select top 1 1 from DadoDominio where Id = 'b8e2a1c4-6f3d-4e2b-9a7c-8d2e4f5b1a6c'))
+                begin
+                    insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    values('b8e2a1c4-6f3d-4e2b-9a7c-8d2e4f5b1a6c', 'Ativo', 'Ativo', 'ClienteStatus')
+                end
+
+                -- ClienteStatus Inativo
+                if (not exists(select top 1 1 from DadoDominio where Id = 'c7a3d2e1-5b6f-4c9d-8f0a-3b2c4d5e7f8a'))
+                begin
+                    insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    values('c7a3d2e1-5b6f-4c9d-8f0a-3b2c4d5e7f8a', 'Inativo', 'Inativo', 'ClienteStatus')
+                end
+                
                 -- ContaStatus
                 if (not exists(select top 1 1 from DadoDominio where Id = '019606a2-1b00-704e-a85d-f33f15a4e992'))
                 begin

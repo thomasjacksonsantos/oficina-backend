@@ -18,7 +18,7 @@ public sealed class Documento
     private Documento(string numero, TipoDocumento tipoDocumento)
     {
         TipoDocumento = tipoDocumento;
-        Numero = numero;
+        Numero = string.Join("", new Regex(@"\d+").Matches(numero));
     }
 
     public static Result<Documento> Criar(string numero)

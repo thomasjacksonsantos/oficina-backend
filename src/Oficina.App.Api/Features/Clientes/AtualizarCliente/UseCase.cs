@@ -23,7 +23,7 @@ public sealed class UseCase(
     {
         var cliente = await fluentQuery
             .For<Cliente>()
-            .WithPredicate(x => x.Id == input.Id)
+            .WithPredicate(x => x.Id == input.Id.DecodeWithSqids())
             .WithIncludes(x => x.Include(c => c.Sexo))
             .WithIncludes(x => x.Include(c => c.TipoDocumento))
             .WithTracking()

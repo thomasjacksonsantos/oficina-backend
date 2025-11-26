@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oficina.Infrastructure.DataAccess;
 
@@ -12,9 +13,11 @@ using Oficina.Infrastructure.DataAccess;
 namespace Oficina.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251115064701_AddPlanoIdNull")]
+    partial class AddPlanoIdNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,9 +80,6 @@ namespace Oficina.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<Guid>("ClienteStatusId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Contatos")
                         .IsRequired()
@@ -158,8 +158,6 @@ namespace Oficina.Infrastructure.Migrations
                         });
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClienteStatusId");
 
                     b.HasIndex("SexoId");
 
@@ -749,41 +747,34 @@ namespace Oficina.Infrastructure.Migrations
 
                     b.Property<string>("Chassi")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Cor")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Hodrometro")
                         .HasColumnType("int");
 
                     b.Property<string>("Modelo")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Montadora")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Motorizacao")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NumeroChassi")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NumeroSerie")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Placa")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.VeiculoAggregates.Veiculo.Atualizado#DataHora", b1 =>
                         {
@@ -895,13 +886,6 @@ namespace Oficina.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("SuperAdmin");
                 });
 
-            modelBuilder.Entity("Oficina.Domain.Aggregates.ClienteAggregates.ClienteStatus", b =>
-                {
-                    b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
-
-                    b.HasDiscriminator().HasValue("ClienteStatus");
-                });
-
             modelBuilder.Entity("Oficina.Domain.Aggregates.ContaAggregates.ContaStatus", b =>
                 {
                     b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
@@ -979,12 +963,6 @@ namespace Oficina.Infrastructure.Migrations
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.ClienteAggregates.Cliente", b =>
                 {
-                    b.HasOne("Oficina.Domain.Aggregates.ClienteAggregates.ClienteStatus", "ClienteStatus")
-                        .WithMany()
-                        .HasForeignKey("ClienteStatusId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.Sexo", "Sexo")
                         .WithMany()
                         .HasForeignKey("SexoId")
@@ -996,8 +974,6 @@ namespace Oficina.Infrastructure.Migrations
                         .HasForeignKey("TipoDocumentoId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("ClienteStatus");
 
                     b.Navigation("Sexo");
 

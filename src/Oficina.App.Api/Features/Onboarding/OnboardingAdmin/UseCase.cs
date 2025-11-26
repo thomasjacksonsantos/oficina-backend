@@ -119,6 +119,7 @@ public sealed class UseCase(
                 throw new Exception(emailResult.Message);
 
             await contaRepository.AddAsync(conta);
+            await unitOfWork.SaveChangesAsync(ct);
             
             // Create UsuarioContexto for the super admin
             var usuarioContext = UsuarioContexto.Criar(

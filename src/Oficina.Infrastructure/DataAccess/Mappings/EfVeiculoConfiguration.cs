@@ -10,6 +10,13 @@ public sealed class EfVeiculoConfiguration : IEntityTypeConfiguration<Veiculo>
     public void Configure(EntityTypeBuilder<Veiculo> builder)
     {
         builder.HasKey(c => c.Id);
+        builder.Property(c => c.Placa).HasMaxLength(10);
+        builder.Property(c => c.Modelo).HasMaxLength(100);
+        builder.Property(c => c.Montadora).HasMaxLength(100);
+        builder.Property(c => c.Cor).HasMaxLength(50);
+        builder.Property(c => c.NumeroSerie).HasMaxLength(50);
+        builder.Property(c => c.Motorizacao).HasMaxLength(50);
+        builder.Property(c => c.Chassi).HasMaxLength(50);
 
         builder.ComplexProperty(c => c.Criado, criado =>
         {

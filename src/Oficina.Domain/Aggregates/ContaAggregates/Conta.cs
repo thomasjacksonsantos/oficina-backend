@@ -39,11 +39,11 @@ public sealed class Conta
         _usuarios.AsReadOnly();
     public IReadOnlyCollection<Loja>? Lojas =>
         _lojas?.AsReadOnly();
-    public int PlanoId { get; private set; }
+    public int? PlanoId { get; private set; }
     public Plano? Plano { get; private set; }
-    private List<PagamentoConta> _pagamentos = new();
-    public IReadOnlyCollection<PagamentoConta> Pagamentos =>
-        _pagamentos.AsReadOnly();
+    private List<PagamentoConta>? _pagamentos = new();
+    public IReadOnlyCollection<PagamentoConta>? Pagamentos =>
+        _pagamentos?.AsReadOnly();
     public DataHora Criado { get; private set; }
     public DataHora Atualizado { get; private set; }
 
@@ -67,12 +67,13 @@ public sealed class Conta
 
     public void RegistrarPagamento(PagamentoConta pagamento)
     {
+        _pagamentos ??= new List<PagamentoConta>();
         _pagamentos.Add(pagamento);
     }
 
     public bool EstaEmDia(string referencia)
     {
-        return _pagamentos.Any(p => p.Referencia == referencia && p.Pago);
+        return _pagamentos != null && _pagamentos.Any(p => p.Referencia == referencia && p.Pago);
     }
 
     public static Conta Criar(
