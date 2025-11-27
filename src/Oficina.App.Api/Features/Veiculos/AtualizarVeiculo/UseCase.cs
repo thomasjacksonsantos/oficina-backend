@@ -1,5 +1,7 @@
 
 
+
+
 using Oficina.Domain.Aggregates.VeiculoAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Infrastructure.Core;
@@ -8,7 +10,7 @@ using Oficina.Infrastructure.DataAccess;
 namespace Oficina.App.Api.Features.Veiculos.AtualizarVeiculo;
 
 public sealed class UseCase(
-    IRepository<Veiculo> veiculoRepository,
+    IFluentQuery fluentQuery,
     IUnitOfWork unitOfWork
 )
     : IUseCase<AtualizarVeiculoRequest, AtualizarVeiculoResponse>
@@ -18,15 +20,15 @@ public sealed class UseCase(
         CancellationToken ct = default
     )
     {
-        var veiculo = await veiculoRepository.FindFirstByPredicate(
-            predicate: c => c.Id == input.Id.DecodeWithSqids(),
-            ct
-        ) ?? null!;
+        var veiculo = await fluentQuery.For<Veiculo>()
+            .WithPredicate(x => x.Id == input.Id.DecodeWithSqids())
+            .WithTracking()
+            .FindFirstAsync(ct);
 
         if (veiculo == null)
-            return Result.Fail(Erro.ValorInvalido($"{nameof(Veiculo)}.{nameof(input.Id)}", "Veículo não encontrado."));        
+            return Result.Fail(Erro.ValorInvalido($"{nameof(Veiculo)}.{nameof(input.Id)}", "Veículo não encontrado."));
 
-        var clienteResult = veiculo.Atualizar(
+        veiculo.Atualizar(
             input.Modelo,
             input.Montadora,
             input.Hodrometro,
@@ -37,13 +39,10 @@ public sealed class UseCase(
             input.Chassi
         );
 
-        if (clienteResult.IsFailed)
-            return Result.Fail(clienteResult.Errors!);
-
         await unitOfWork.SaveChangesAsync(ct);
 
         return new AtualizarVeiculoResponse(
-            Messagem: "Veículo atualizado com sucesso"
+            "Veículo ativado com sucesso."
         );
     }
 }

@@ -4,7 +4,7 @@ using Oficina.App.Api.Shared;
 
 namespace Oficina.App.Api.Features.Veiculos.AtualizarVeiculo;
 
-public record AtualizarVeiculoRequest(
+public sealed record AtualizarVeiculoRequest(
     [FromRoute] string Id,
     string Modelo,
     string Montadora,
