@@ -1,11 +1,11 @@
 
+using Microsoft.AspNetCore.Mvc;
 using Oficina.App.Api.Shared;
 
 namespace Oficina.App.Api.Features.Veiculos.AtualizarVeiculo;
 
-public sealed record AtualizarVeiculoRequest(
-    int Id,
-    string Placa,
+public record AtualizarVeiculoRequest(
+    [FromRoute] string Id,
     string Modelo,
     string Montadora,
     int Hodrometro,

@@ -11,7 +11,7 @@ public class Endpoint(
 {
     public override void Configure()
     {
-        Delete("v1/veiculos/{id}");
+        Delete("v1/veiculos/{id}/desativar");
         PreProcessor<AuthInterceptor<DesativarVeiculoRequest>>();
         Description(c => c.Accepts<DesativarVeiculoRequest>()
                 .Produces<DesativarVeiculoResponse>()

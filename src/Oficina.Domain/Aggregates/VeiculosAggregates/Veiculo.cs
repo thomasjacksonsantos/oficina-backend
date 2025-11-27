@@ -17,6 +17,7 @@ public class Veiculo
     public string Motorizacao { get; private set; }
     public string Chassi { get; private set; }
     public Guid VeiculoStatusId { get; private set; }
+    public VeiculoStatus VeiculoStatus { get; private set; }
     public DataHora Criado { get; private set; }
     public DataHora Atualizado { get; private set; }
 
@@ -45,6 +46,7 @@ public class Veiculo
         Motorizacao = motorizacao;
         Chassi = chassi;
         VeiculoStatusId = VeiculoStatus.Ativo.Id;
+        VeiculoStatus = VeiculoStatus.Ativo;
         Criado = DataHora.Criar().Value!;
         Atualizado = DataHora.Criar().Value!;
     }
@@ -55,8 +57,13 @@ public class Veiculo
         Atualizado = DataHora.Criar().Value!;
     }
 
+    public void Ativar()
+    {
+        VeiculoStatusId = VeiculoStatus.Ativo.Id;
+        Atualizado = DataHora.Criar().Value!;
+    }
+
     public Result<Veiculo> Atualizar(
-        string placa,
         string modelo,
         string montadora,
         int hodrometro,
@@ -67,9 +74,6 @@ public class Veiculo
         string chassi)
     {
         var result = new Result<Veiculo>();
-
-        if (string.IsNullOrWhiteSpace(placa))
-            result.WithError(Erro.ValorInvalido($"{nameof(Veiculo)}.{nameof(Placa)}", "Valor informado para a Placa está inválido"));
 
         if (string.IsNullOrWhiteSpace(modelo))
             result.WithError(Erro.ValorInvalido($"{nameof(Veiculo)}.{nameof(Modelo)}", "Valor informado para o Modelo está inválido"));
@@ -98,7 +102,6 @@ public class Veiculo
         if (result.IsFailed)
             return result;
 
-        Placa = placa;
         Modelo = modelo;
         Montadora = montadora;
         Hodrometro = hodrometro;
@@ -125,7 +128,7 @@ public class Veiculo
     {
         var result = new Result<Veiculo>();
 
-         if (string.IsNullOrWhiteSpace(placa))
+        if (string.IsNullOrWhiteSpace(placa))
             result.WithError(Erro.ValorInvalido($"{nameof(Veiculo)}.{nameof(Placa)}", "Valor informado para a Placa está inválido"));
 
         if (string.IsNullOrWhiteSpace(modelo))

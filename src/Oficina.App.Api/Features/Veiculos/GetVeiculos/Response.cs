@@ -12,5 +12,6 @@ public sealed record GetVeiculosResponse(
     int Ano,    
     string NumeroSerie,
     string Motorizacao,
-    string Chassi
+    string Chassi,
+    string Status
 );

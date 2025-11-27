@@ -1,11 +1,7 @@
 
 
-
-using Microsoft.EntityFrameworkCore;
-using Oficina.Domain.Aggregates.ClienteAggregates;
 using Oficina.Domain.Aggregates.VeiculoAggregates;
 using Oficina.Domain.SeedWork;
-using Oficina.Domain.ValueObjects;
 using Oficina.Infrastructure.Core;
 using Oficina.Infrastructure.DataAccess;
 
@@ -23,15 +19,14 @@ public sealed class UseCase(
     )
     {
         var veiculo = await veiculoRepository.FindFirstByPredicate(
-            predicate: c => c.Id == input.Id,
+            predicate: c => c.Id == input.Id.DecodeWithSqids(),
             ct
         ) ?? null!;
 
         if (veiculo == null)
-            return Result.Fail(Erro.Validacao(nameof(input.Id), nameof(input.Id), "Veículo não encontrado."));
+            return Result.Fail(Erro.ValorInvalido($"{nameof(Veiculo)}.{nameof(input.Id)}", "Veículo não encontrado."));        
 
         var clienteResult = veiculo.Atualizar(
-            input.Placa,
             input.Modelo,
             input.Montadora,
             input.Hodrometro,
@@ -47,6 +42,8 @@ public sealed class UseCase(
 
         await unitOfWork.SaveChangesAsync(ct);
 
-        return new AtualizarVeiculoResponse();
+        return new AtualizarVeiculoResponse(
+            Messagem: "Veículo atualizado com sucesso"
+        );
     }
 }

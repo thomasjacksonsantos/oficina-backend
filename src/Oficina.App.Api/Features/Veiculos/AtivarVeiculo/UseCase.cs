@@ -1,20 +1,22 @@
 
 
+
+
 using Oficina.Domain.Aggregates.VeiculoAggregates;
 using Oficina.Domain.SeedWork;
 using Oficina.Infrastructure.Core;
 using Oficina.Infrastructure.DataAccess;
 
-namespace Oficina.App.Api.Features.Veiculos.DesativarVeiculo;
+namespace Oficina.App.Api.Features.Veiculos.AtivarVeiculo;
 
 public sealed class UseCase(
     IFluentQuery fluentQuery,
     IUnitOfWork unitOfWork
 )
-    : IUseCase<DesativarVeiculoRequest, DesativarVeiculoResponse>
+    : IUseCase<AtivarVeiculoRequest, AtivarVeiculoResponse>
 {
-    public async Task<Result<DesativarVeiculoResponse>> Execute(
-        DesativarVeiculoRequest input,
+    public async Task<Result<AtivarVeiculoResponse>> Execute(
+        AtivarVeiculoRequest input,
         CancellationToken ct = default
     )
     {
@@ -26,12 +28,12 @@ public sealed class UseCase(
         if (veiculo == null)
             return Result.Fail(Erro.ValorInvalido($"{nameof(Veiculo)}.{nameof(input.Id)}", "Veículo não encontrado."));
 
-        veiculo.Desativar();
+        veiculo.Ativar();
 
         await unitOfWork.SaveChangesAsync(ct);
 
-        return new DesativarVeiculoResponse(
-            "Veículo desativado com sucesso."
+        return new AtivarVeiculoResponse(
+            "Veículo ativado com sucesso."
         );
     }
 }

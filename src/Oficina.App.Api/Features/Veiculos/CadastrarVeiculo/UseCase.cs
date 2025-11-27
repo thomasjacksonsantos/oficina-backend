@@ -10,6 +10,7 @@ namespace Oficina.App.Api.Features.Veiculos.CadastrarVeiculo;
 
 public sealed class UseCase(
     IRepository<Veiculo> veiculoRepository,
+    IFluentQuery fluentQuery,
     IUnitOfWork unitOfWork
 )
     : IUseCase<CadastrarVeiculoRequest, CadastrarVeiculoResponse>
@@ -19,6 +20,13 @@ public sealed class UseCase(
         CancellationToken ct = default
     )
     {
+        var veiculoExists = await fluentQuery.For<Veiculo>()
+            .WithPredicate(x => x.Placa == input.Placa)
+            .CountAsync();
+
+        if (veiculoExists > 0)
+            return Result.Fail(Erro.ValorInvalido($"{nameof(Veiculo)}.{nameof(Veiculo.Placa)}", "Valor da placa já cadastrado no sistema."));
+
         var veiculoResult = Veiculo.Criar(
             input.Placa,
             input.Modelo,
@@ -37,6 +45,6 @@ public sealed class UseCase(
         await veiculoRepository.AddAsync(veiculoResult.Value!);
         await unitOfWork.SaveChangesAsync(ct);
 
-        return new CadastrarVeiculoResponse(veiculoResult.Value!.Id);
+        return new CadastrarVeiculoResponse(veiculoResult.Value!.Id.EncodeWithSqids());
     }
 }

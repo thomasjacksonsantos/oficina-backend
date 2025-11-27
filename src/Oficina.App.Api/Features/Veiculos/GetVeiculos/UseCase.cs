@@ -33,7 +33,8 @@ public sealed class UseCase(
                 c.Ano,
                 c.NumeroSerie,
                 c.Motorizacao,
-                c.Chassi
+                c.Chassi,
+                c.VeiculoStatus.Key
             ),
             pagination: new Pagination(input.Pagina <= 0 ? 1 : input.Pagina, input.TotalPagina <= 0 ? 20 : input.TotalPagina),            
             ct: ct

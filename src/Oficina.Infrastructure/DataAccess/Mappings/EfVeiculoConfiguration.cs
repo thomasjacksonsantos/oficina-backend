@@ -27,5 +27,10 @@ public sealed class EfVeiculoConfiguration : IEntityTypeConfiguration<Veiculo>
         {
             atualizado.Property(c => c.Valor).HasColumnName(nameof(Veiculo.Atualizado));
         });
+
+        builder.HasOne(c => c.VeiculoStatus)
+            .WithMany()
+            .HasForeignKey(c => c.VeiculoStatusId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

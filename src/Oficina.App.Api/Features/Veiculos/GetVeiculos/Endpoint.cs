@@ -12,7 +12,7 @@ public class Endpoint(
 {
     public override void Configure()
     {
-        Get("v1/veiculos");
+        Get("v1/veiculos/all");
         PreProcessor<AuthInterceptor<GetVeiculosRequest>>();
         Description(c => c.Accepts<GetVeiculosRequest>()
                 .Produces<GetVeiculosResponse>()

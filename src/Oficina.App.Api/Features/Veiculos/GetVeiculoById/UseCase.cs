@@ -33,7 +33,8 @@ public sealed class UseCase(
             veiculo.Ano,
             veiculo.NumeroSerie,
             veiculo.Motorizacao,
-            veiculo.Chassi
+            veiculo.Chassi,
+            veiculo.VeiculoStatus.Key
         );
     }
 }
