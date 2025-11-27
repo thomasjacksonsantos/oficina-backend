@@ -81,7 +81,6 @@ public class OrdemServicoTest
            "Preto",
            2025,
            "12323aas2",
-           "123213123",
            "2.0",
            "213213123"
        ).Value!;

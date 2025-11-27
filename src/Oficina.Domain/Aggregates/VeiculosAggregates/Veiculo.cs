@@ -29,7 +29,6 @@ public class Veiculo
         int hodrometro,
         string cor,
         int ano,
-        string numeroChassi,
         string numeroSerie,
         string motorizacao,
         string chassi)
@@ -54,7 +53,6 @@ public class Veiculo
         int hodrometro,
         string cor,
         int ano,
-        string numeroChassi,
         string numeroSerie,
         string motorizacao,
         string chassi)
@@ -112,7 +110,6 @@ public class Veiculo
         int hodrometro,
         string cor,
         int ano,
-        string numeroChassi,
         string numeroSerie,
         string motorizacao,
         string chassi)
@@ -153,7 +150,6 @@ public class Veiculo
             hodrometro,
             cor,
             ano,
-            numeroChassi,
             numeroSerie,
             motorizacao,
             chassi

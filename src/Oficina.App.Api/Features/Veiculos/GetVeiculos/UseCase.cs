@@ -24,6 +24,7 @@ public sealed class UseCase(
         return await veiculoRepository.FindAllByPredicate(
             predicate: c => 0 == 0,
             projection: c => new GetVeiculosResponse(
+                c.Id.EncodeWithSqids(),
                 c.Placa,
                 c.Modelo,
                 c.Montadora,

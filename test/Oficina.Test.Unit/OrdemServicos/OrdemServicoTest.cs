@@ -20,7 +20,6 @@ public class OrdemServicoTest
            "Preto",
            2025,
            "12323aas2",
-           "123213123",
            "2.0",
            "213213123"
        ).Value!;
@@ -92,7 +91,6 @@ public class OrdemServicoTest
             "Preto",
             2025,
             "12323aas2",
-            "123213123",
             "2.0",
             "213213123"
         ).Value!;
@@ -139,7 +137,6 @@ public class OrdemServicoTest
             "Preto",
             2025,
             "12323aas2",
-            "123213123",
             "2.0",
             "213213123"
         ).Value!;
@@ -178,7 +175,6 @@ public class OrdemServicoTest
             10000,
             "Preto",
             2025,
-            "12323aas2",
             "123213123",
             "2.0",
             "213213123"
@@ -218,7 +214,6 @@ public class OrdemServicoTest
             "Preto",
             2025,
             "12323aas2",
-            "123213123",
             "2.0",
             "213213123"
         ).Value!;

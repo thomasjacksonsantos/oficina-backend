@@ -37,7 +37,6 @@ public sealed class UseCase(
             input.Hodrometro,
             input.Cor,
             input.Ano,
-            input.NumeroChassi,
             input.NumeroSerie,
             input.Motorizacao,
             input.Chassi

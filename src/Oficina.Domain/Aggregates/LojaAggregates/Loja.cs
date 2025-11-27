@@ -57,6 +57,54 @@ public sealed class Loja : IMultiConta
         Atualizado = DateTime.Now;
     }
 
+    public Result<Loja> Atualizar(
+        string nomeFantasia,
+        string razaoSocial,
+        string inscricaoEstadual,
+        string site,
+        string logoTipo,
+        string documento,
+        Endereco endereco,
+        ICollection<Contato> contatos
+    )
+    {
+        var result = new Result<Loja>();
+
+        var documentoObj = Documento.Criar(documento);
+
+        if (documentoObj.IsFailed) result.WithErrors(documentoObj.Errors!);
+
+        if (string.IsNullOrWhiteSpace(nomeFantasia))
+            result.WithError(Erro.ValorInvalido("Nome Fantasia é obrigatório"));
+
+        if (string.IsNullOrWhiteSpace(razaoSocial))
+            result.WithError(Erro.ValorInvalido("Razão Social é obrigatório"));
+
+        if (string.IsNullOrWhiteSpace(inscricaoEstadual))
+            result.WithError(Erro.ValorInvalido("Inscrição Estadual é obrigatório"));
+
+        if (string.IsNullOrWhiteSpace(site))
+            result.WithError(Erro.ValorInvalido("Site é obrigatório"));
+
+        if (string.IsNullOrWhiteSpace(logoTipo))
+            result.WithError(Erro.ValorInvalido("Logotipo é obrigatório"));
+
+        if (result.IsFailed) return result;
+
+        NomeFantasia = nomeFantasia;
+        RazaoSocial = razaoSocial;
+        InscricaoEstadual = inscricaoEstadual;
+        Site = site;
+        LogoTipo = logoTipo;
+        Documento = documentoObj.Value!;
+        Endereco = endereco;
+        Contatos = contatos;
+        Atualizado = DateTime.Now;
+
+        return this;
+    }
+
+
     public static Result<Loja> Criar(
         string nomeFantasia,
         string razaoSocial,
@@ -72,7 +120,23 @@ public sealed class Loja : IMultiConta
         var result = new Result<Loja>();
 
         var documentoObj = Documento.Criar(documento);
+
         if (documentoObj.IsFailed) result.WithErrors(documentoObj.Errors!);
+
+        if (string.IsNullOrWhiteSpace(nomeFantasia))
+            result.WithError(Erro.ValorInvalido("Nome Fantasia é obrigatório"));
+
+        if (string.IsNullOrWhiteSpace(razaoSocial))
+            result.WithError(Erro.ValorInvalido("Razão Social é obrigatório"));
+
+        if (string.IsNullOrWhiteSpace(inscricaoEstadual))
+            result.WithError(Erro.ValorInvalido("Inscrição Estadual é obrigatório"));
+
+        if (string.IsNullOrWhiteSpace(site))
+            result.WithError(Erro.ValorInvalido("Site é obrigatório"));
+
+        if (string.IsNullOrWhiteSpace(logoTipo))
+            result.WithError(Erro.ValorInvalido("Logotipo é obrigatório"));
 
         if (result.IsFailed) return result;
 
