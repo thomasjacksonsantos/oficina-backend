@@ -37,6 +37,7 @@ public record OnboardingLoja(
     string RazaoSocial,
     string Cnpj,
     string InscricaoEstadual,
+    string InscricaoMunicipal,
     string Site,
     string LogoTipo,
     OnboardingAdminEndereco Endereco,

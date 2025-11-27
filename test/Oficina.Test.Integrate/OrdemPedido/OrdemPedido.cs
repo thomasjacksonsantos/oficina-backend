@@ -38,8 +38,9 @@ public class OrdemServicoTest
 
         var loja = Loja.Criar(
             "Oficina do Zé",
-            "Oficina do Zé Ltda",
-            "12345678000199",
+            "Oficina do Zé Ltda",            
+            "InscricaoEstadual123",
+            "InscricaoMunicipal123",
             "www.oficinadoze.com",
             "logo.png",
             "35931297000193",

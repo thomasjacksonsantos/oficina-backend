@@ -14,12 +14,14 @@ services:
 
   api:
     image: jacksonthomas/oficina-backend:latest
-    pull_policy: always
+    build: .
     container_name: api-oficina-backend
     ports:
       - "5001:5001"
     networks:
       - backend-network
+    depends_on:
+      - sqlserver
 
 networks:
   backend-network:

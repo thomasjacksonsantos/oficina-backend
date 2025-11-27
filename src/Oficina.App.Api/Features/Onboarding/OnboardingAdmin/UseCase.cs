@@ -93,6 +93,7 @@ public sealed class UseCase(
                 input.Loja.NomeFantasia,
                 input.Loja.RazaoSocial,
                 input.Loja.InscricaoEstadual,
+                input.Loja.InscricaoMunicipal,
                 input.Loja.Site,
                 input.Loja.LogoTipo,
                 input.Loja.Cnpj,

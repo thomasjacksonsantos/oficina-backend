@@ -21,6 +21,7 @@ public sealed class UseCase(
     {
         var loja = await fluentQuery.For<Loja>()
             .WithPredicate(x => x.Id == input.Id.DecodeWithSqids())
+            .WithTracking()
             .FindFirstAsync(ct);
         if (loja == null)
             return Result.Fail(Erro.NaoEncontrado("Loja não encontrada"));
@@ -47,10 +48,11 @@ public sealed class UseCase(
         if (endereco.IsFailed)
             return Result.Fail(endereco.Errors);
 
-        loja.Atualizar(
+        var result = loja.Atualizar(
             input.NomeFantasia,
             input.RazaoSocial,
             input.InscricaoEstadual,
+            input.InscricaoMunicipal,
             input.Site,
             input.LogoTipo,
             input.Documento,
@@ -58,9 +60,14 @@ public sealed class UseCase(
             input.Contatos.Select(c => Contato.Criar(c.Numero, c.TipoTelefone).Value!).ToList()
         );
 
+        if (result.IsFailed)
+            return Result.Fail(result.Errors);
+
         await unitOfWork.SaveChangesAsync(ct);
 
-        return Result.Success(new AtualizarLojaResponse());
+        return Result.Success(new AtualizarLojaResponse(
+            "Loja atualizada com sucesso"
+        ));
 
     }
 }

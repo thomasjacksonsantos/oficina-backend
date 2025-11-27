@@ -16,6 +16,7 @@ public class EfLojaConfiguration : IEntityTypeConfiguration<Loja>
         builder.Property(c => c.NomeFantasia).HasMaxLength(600);
         builder.Property(c => c.RazaoSocial).HasMaxLength(600);
         builder.Property(c => c.InscricaoEstadual).HasMaxLength(600);
+        builder.Property(c => c.InscricaoMunicipal).HasMaxLength(600);
         builder.Property(c => c.Site).HasMaxLength(600);
         builder.Property(c => c.LogoTipo).HasColumnType("text");
         

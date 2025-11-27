@@ -21,7 +21,7 @@
                 "uriFormat": "%s/swagger/index.html"
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_ENVIRONMENT": "Local",
                 "ASPNETCORE_URLS": "http://localhost:5001"
             },
             "sourceFileMap": {

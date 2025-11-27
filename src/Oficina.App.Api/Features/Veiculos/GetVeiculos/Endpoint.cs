@@ -17,7 +17,7 @@ public class Endpoint(
         Description(c => c.Accepts<GetVeiculosRequest>()
                 .Produces<GetVeiculosResponse>()
                 .ProducesProblem(400)
-                .WithTags("Veículoss")
+                .WithTags("Veículos")
             , clearDefaults: false);
     }
 }

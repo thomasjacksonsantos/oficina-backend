@@ -96,10 +96,8 @@ WebApplication app = builder.Build();
 if (!app.Environment.IsProduction())
 {
     app.UseDeveloperExceptionPage();
-}
 
-if (app.Environment.IsDevelopment())
-{
+    // execute migrations in dev and local environments
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.Migrate();

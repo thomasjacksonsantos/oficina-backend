@@ -13,6 +13,7 @@ public sealed class Loja : IMultiConta
     public string NomeFantasia { get; private set; }
     public string RazaoSocial { get; private set; }
     public string InscricaoEstadual { get; private set; }
+    public string InscricaoMunicipal { get; private set; }
     public string Site { get; private set; }
     public string LogoTipo { get; private set; }
     public Guid TipoDocumentoId { get; private set; }
@@ -34,6 +35,7 @@ public sealed class Loja : IMultiConta
         string nomeFantasia,
         string razaoSocial,
         string inscricaoEstadual,
+        string inscricaoMunicipal,
         string site,
         string logoTipo,
         TipoDocumento tipoDocumento,
@@ -46,6 +48,7 @@ public sealed class Loja : IMultiConta
         NomeFantasia = nomeFantasia;
         RazaoSocial = razaoSocial;
         InscricaoEstadual = inscricaoEstadual;
+        InscricaoMunicipal = inscricaoMunicipal;
         Site = site;
         LogoTipo = logoTipo;
         TipoDocumento = tipoDocumento;
@@ -61,6 +64,7 @@ public sealed class Loja : IMultiConta
         string nomeFantasia,
         string razaoSocial,
         string inscricaoEstadual,
+        string inscricaoMunicipal,
         string site,
         string logoTipo,
         string documento,
@@ -83,6 +87,9 @@ public sealed class Loja : IMultiConta
         if (string.IsNullOrWhiteSpace(inscricaoEstadual))
             result.WithError(Erro.ValorInvalido("Inscrição Estadual é obrigatório"));
 
+        if (string.IsNullOrWhiteSpace(inscricaoMunicipal))
+            result.WithError(Erro.ValorInvalido("Inscrição Municipal é obrigatório"));
+
         if (string.IsNullOrWhiteSpace(site))
             result.WithError(Erro.ValorInvalido("Site é obrigatório"));
 
@@ -94,6 +101,7 @@ public sealed class Loja : IMultiConta
         NomeFantasia = nomeFantasia;
         RazaoSocial = razaoSocial;
         InscricaoEstadual = inscricaoEstadual;
+        InscricaoMunicipal = inscricaoMunicipal;
         Site = site;
         LogoTipo = logoTipo;
         Documento = documentoObj.Value!;
@@ -109,6 +117,7 @@ public sealed class Loja : IMultiConta
         string nomeFantasia,
         string razaoSocial,
         string inscricaoEstadual,
+        string inscricaoMunicipal,
         string site,
         string logoTipo,
         string documento,
@@ -132,6 +141,9 @@ public sealed class Loja : IMultiConta
         if (string.IsNullOrWhiteSpace(inscricaoEstadual))
             result.WithError(Erro.ValorInvalido("Inscrição Estadual é obrigatório"));
 
+        if (string.IsNullOrWhiteSpace(inscricaoMunicipal))
+            result.WithError(Erro.ValorInvalido("Inscrição Municipal é obrigatório"));
+
         if (string.IsNullOrWhiteSpace(site))
             result.WithError(Erro.ValorInvalido("Site é obrigatório"));
 
@@ -144,6 +156,7 @@ public sealed class Loja : IMultiConta
             nomeFantasia,
             razaoSocial,
             inscricaoEstadual,
+            inscricaoMunicipal,
             site,
             logoTipo,
             documentoObj.Value!.TipoDocumento,

@@ -12,11 +12,11 @@ public class Endpoint(
     public override void Configure()
     {
         Put("v1/lojas/{id}");
-        AllowAnonymous();
+        PreProcessor<AuthInterceptor<AtualizarLojaRequest>>();
         Description(c => c.Accepts<AtualizarLojaRequest>()
                 .Produces<AtualizarLojaResponse>()
                 .ProducesProblem(400)
-                .WithTags("Loja")
+                .WithTags("Lojas")
             , clearDefaults: false);
     }
 }
