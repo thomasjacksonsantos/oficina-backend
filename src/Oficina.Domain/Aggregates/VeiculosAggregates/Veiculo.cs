@@ -1,3 +1,4 @@
+
 using Oficina.Domain.SeedWork;
 using Oficina.Domain.ValueObjects;
 
@@ -15,6 +16,7 @@ public class Veiculo
     public string NumeroSerie { get; private set; }
     public string Motorizacao { get; private set; }
     public string Chassi { get; private set; }
+    public Guid VeiculoStatusId { get; private set; }
     public DataHora Criado { get; private set; }
     public DataHora Atualizado { get; private set; }
 
@@ -42,7 +44,14 @@ public class Veiculo
         NumeroSerie = numeroSerie;
         Motorizacao = motorizacao;
         Chassi = chassi;
+        VeiculoStatusId = VeiculoStatus.Ativo.Id;
         Criado = DataHora.Criar().Value!;
+        Atualizado = DataHora.Criar().Value!;
+    }
+
+    public void Desativar()
+    {
+        VeiculoStatusId = VeiculoStatus.Inativo.Id;
         Atualizado = DataHora.Criar().Value!;
     }
 

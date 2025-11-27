@@ -158,6 +158,20 @@ namespace Oficina.Infrastructure.Migrations
                     insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
                     values('a7f2d1c3-5b6e-4c8d-9f0a-2b3c4d5e6f7a', 'Inativo', 'Inativo', 'Plano')
                 end
+
+                  -- Veiculo Status Ativo
+                if (not exists(select top 1 1 from DadoDominio where Id = '9cc10d5a-0355-496b-a116-537c9aaffbdb'))
+                begin
+                    insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    values('9cc10d5a-0355-496b-a116-537c9aaffbdb', 'Ativo', 'Ativo', 'VeiculoStatus')
+                end
+
+                -- Veiculo Status Inativo
+                if (not exists(select top 1 1 from DadoDominio where Id = '632fa768-d5e4-455c-a0f3-85272af95b39'))
+                begin
+                    insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    values('632fa768-d5e4-455c-a0f3-85272af95b39', 'Inativo', 'Inativo', 'VeiculoStatus')
+                end
             ");
         }
 
