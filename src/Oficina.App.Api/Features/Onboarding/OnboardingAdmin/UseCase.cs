@@ -124,9 +124,9 @@ public sealed class UseCase(
             
             // Create UsuarioContexto for the super admin
             var usuarioContext = UsuarioContexto.Criar(
-                superAdmin.Value!.Id,
-                conta.Id,
-                loja.Value!.Id
+                superAdmin.Value!,
+                conta,
+                loja.Value!
             );
 
             await usuarioContextoRepository.AddAsync(usuarioContext.Value!);

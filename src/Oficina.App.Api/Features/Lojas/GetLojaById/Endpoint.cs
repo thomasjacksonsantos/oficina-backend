@@ -11,7 +11,7 @@ public class Endpoint(
 {
     public override void Configure()
     {
-        Get("v1/lojas/{id}");
+        Get("v1/lojas");
         PreProcessor<AuthInterceptor<GetLojaByIdRequest>>();
         Description(c => c.Accepts<GetLojaByIdRequest>()
                 .Produces<GetLojaByIdResponse>()
