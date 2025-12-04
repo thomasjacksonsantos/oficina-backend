@@ -172,6 +172,35 @@ namespace Oficina.Infrastructure.Migrations
                     insert into dbo.DadoDominio (Id, [Key], Nome, Dominio)
                     values('632fa768-d5e4-455c-a0f3-85272af95b39', 'Inativo', 'Inativo', 'VeiculoStatus')
                 end
+
+                -- TipoConsumidor ConsumidorFinal
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = 'f3d8f4d2-4fb3-4b8a-9d61-9a3f5f77d3c2'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('f3d8f4d2-4fb3-4b8a-9d61-9a3f5f77d3c2', 'ConsumidorFinal', 'Consumidor Final', 'TipoConsumidor')
+                END
+
+                -- TipoConsumidor Revenda
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = '0c6a2bb1-6eac-4e21-bb94-2c0d35363f9c'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('0c6a2bb1-6eac-4e21-bb94-2c0d35363f9c', 'Revenda', 'Revenda', 'TipoConsumidor')
+                END
+
+                -- FornecedorStatus Ativo
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = '7c4b1f2d-1e6b-4971-9c82-4f9d2a7e3b11'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('7c4b1f2d-1e6b-4971-9c82-4f9d2a7e3b11', 'Ativo', 'Ativo', 'FornecedorStatus')
+                END
+
+                -- FornecedorStatus Inativo
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = 'd2f1a8c3-9b55-4fa7-96f4-8e3c1d77a024'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('d2f1a8c3-9b55-4fa7-96f4-8e3c1d77a024', 'Inativo', 'Inativo', 'FornecedorStatus')
+                END
+
             ");
         }
 
