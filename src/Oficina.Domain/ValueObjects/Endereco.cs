@@ -83,6 +83,9 @@ public sealed class Endereco
         string numero
     )
     {
+        if (string.IsNullOrWhiteSpace(pais))
+            pais = "Brasil";
+
         var result = Validar(
             pais,
             estado,

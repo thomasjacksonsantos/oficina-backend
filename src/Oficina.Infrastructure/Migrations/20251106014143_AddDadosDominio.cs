@@ -201,6 +201,75 @@ namespace Oficina.Infrastructure.Migrations
                     VALUES('d2f1a8c3-9b55-4fa7-96f4-8e3c1d77a024', 'Inativo', 'Inativo', 'FornecedorStatus')
                 END
 
+                -- GrupoProdutoStatus Ativo
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = '0865836b-7a45-4f85-9c7e-5a7ac6e65e55'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('0865836b-7a45-4f85-9c7e-5a7ac6e65e55', 'Ativo', 'Ativo', 'GrupoProdutoStatus')
+                END
+
+                -- GrupoProdutoStatus Inativo
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = '9f8b5e8c-6e7d-4ea4-9f2d-3be51f6b9cd2'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('9f8b5e8c-6e7d-4ea4-9f2d-3be51f6b9cd2', 'Inativo', 'Inativo', 'GrupoProdutoStatus')
+                END
+
+                -- AreaProdutoStatus Ativo
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = '7e2b1c3a-4f6d-4e2a-9b1a-2c3d4e5f6a7b'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('7e2b1c3a-4f6d-4e2a-9b1a-2c3d4e5f6a7b', 'Ativo', 'Ativo', 'AreaProdutoStatus')
+                END
+
+                -- AreaProdutoStatus Inativo
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = '1a9c8b7d-2e3f-4c5a-8b6d-7e1f2a3c4b5d'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('1a9c8b7d-2e3f-4c5a-8b6d-7e1f2a3c4b5d', 'Inativo', 'Inativo', 'AreaProdutoStatus')
+                END
+                    
+                -- UnidadeProdutoStatus Ativo
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = '3c7e2a1b-8f4d-4c2a-9b7e-5d6a8c1f2b3a'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('3c7e2a1b-8f4d-4c2a-9b7e-5d6a8c1f2b3a', 'Ativo', 'Ativo', 'UnidadeProdutoStatus')
+                END
+
+                -- UnidadeProdutoStatus Inativo
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = '9a2b6c4d-1e7f-4b3a-8c2d-3f5e7a9b1c6d'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('9a2b6c4d-1e7f-4b3a-8c2d-3f5e7a9b1c6d', 'Inativo', 'Inativo', 'UnidadeProdutoStatus')
+                END                            
+
+                -- MarcaProdutoStatus Ativo
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = '4e7b2c1a-9d3f-4b6a-8c2e-5f1a7b3c6d8e'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('4e7b2c1a-9d3f-4b6a-8c2e-5f1a7b3c6d8e', 'Ativo', 'Ativo', 'MarcaProdutoStatus')
+                END
+
+                -- MarcaProdutoStatus Inativo
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = '8a1c5e2b-3d7f-4c9a-9b2e-6d4f7a1b2c3e'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('8a1c5e2b-3d7f-4c9a-9b2e-6d4f7a1b2c3e', 'Inativo', 'Inativo', 'MarcaProdutoStatus')
+                END
+
+                -- StatusPedidoCompraStatus Ativo
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = '2b8e4c1a-7d3f-4a6b-9c2e-5f1b8a3c6d7e'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('2b8e4c1a-7d3f-4a6b-9c2e-5f1b8a3c6d7e', 'Ativo', 'Ativo', 'StatusPedidoCompraStatus')
+                END
+
+                -- StatusPedidoCompraStatus Inativo
+                IF (NOT EXISTS(SELECT TOP 1 1 FROM DadoDominio WHERE Id = '6a1c3e2b-9d7f-4c8a-8b2e-3d5f7a1b2c4e'))
+                BEGIN
+                    INSERT INTO dbo.DadoDominio (Id, [Key], Nome, Dominio)
+                    VALUES('6a1c3e2b-9d7f-4c8a-8b2e-3d5f7a1b2c4e', 'Inativo', 'Inativo', 'StatusPedidoCompraStatus')
+                END
             ");
         }
 

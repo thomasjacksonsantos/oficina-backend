@@ -135,7 +135,7 @@ public class Fornecedor
         Contatos = contatos;
         Atualizado = DateTime.Now;
 
-        return Result.Success();
+        return Result<Fornecedor>.Success(this);
     }
 
     public static Result<Fornecedor> Criar(

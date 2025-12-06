@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oficina.Infrastructure.DataAccess;
 
@@ -12,9 +13,11 @@ using Oficina.Infrastructure.DataAccess;
 namespace Oficina.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251206052853_AddUnidadeProduto")]
+    partial class AddUnidadeProduto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -532,47 +535,6 @@ namespace Oficina.Infrastructure.Migrations
                     b.ToTable("UsuarioLoja");
                 });
 
-            modelBuilder.Entity("Oficina.Domain.Aggregates.MarcaProdutoAggregates.MarcaProduto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<Guid>("MarcaProdutoStatusId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.MarcaProdutoAggregates.MarcaProduto.Atualizado#DataHora", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<DateTime>("Valor")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("Atualizado");
-                        });
-
-                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.MarcaProdutoAggregates.MarcaProduto.Criado#DataHora", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<DateTime>("Valor")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("Criado");
-                        });
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MarcaProdutoStatusId");
-
-                    b.ToTable("MarcaProduto");
-                });
-
             modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServico", b =>
                 {
                     b.Property<int>("Id")
@@ -862,47 +824,6 @@ namespace Oficina.Infrastructure.Migrations
                     b.HasIndex("CategoriaId");
 
                     b.ToTable("Produto");
-                });
-
-            modelBuilder.Entity("Oficina.Domain.Aggregates.StatusPedidoCompraAggregates.StatusPedidoCompra", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<Guid>("StatusPedidoCompraStatusId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.ComplexProperty<Dictionary<string, object>>("Atualizado", "Oficina.Domain.Aggregates.StatusPedidoCompraAggregates.StatusPedidoCompra.Atualizado#DataHora", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<DateTime>("Valor")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("Atualizado");
-                        });
-
-                    b.ComplexProperty<Dictionary<string, object>>("Criado", "Oficina.Domain.Aggregates.StatusPedidoCompraAggregates.StatusPedidoCompra.Criado#DataHora", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<DateTime>("Valor")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("Criado");
-                        });
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StatusPedidoCompraStatusId");
-
-                    b.ToTable("StatusPedidoCompra");
                 });
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.UnidadeProdutoAggregates.UnidadeProduto", b =>
@@ -1273,13 +1194,6 @@ namespace Oficina.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("GrupoProdutoStatus");
                 });
 
-            modelBuilder.Entity("Oficina.Domain.Aggregates.MarcaProdutoAggregates.MarcaProdutoStatus", b =>
-                {
-                    b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
-
-                    b.HasDiscriminator().HasValue("MarcaProdutoStatus");
-                });
-
             modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServicoStatus", b =>
                 {
                     b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
@@ -1299,13 +1213,6 @@ namespace Oficina.Infrastructure.Migrations
                     b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
 
                     b.HasDiscriminator().HasValue("PlanoStatus");
-                });
-
-            modelBuilder.Entity("Oficina.Domain.Aggregates.StatusPedidoCompraAggregates.StatusPedidoCompraStatus", b =>
-                {
-                    b.HasBaseType("Oficina.Domain.Enumerations.DadoDominio");
-
-                    b.HasDiscriminator().HasValue("StatusPedidoCompraStatus");
                 });
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.UnidadeProdutoAggregates.UnidadeProdutoStatus", b =>
@@ -1519,17 +1426,6 @@ namespace Oficina.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Oficina.Domain.Aggregates.MarcaProdutoAggregates.MarcaProduto", b =>
-                {
-                    b.HasOne("Oficina.Domain.Aggregates.MarcaProdutoAggregates.MarcaProdutoStatus", "MarcaProdutoStatus")
-                        .WithMany()
-                        .HasForeignKey("MarcaProdutoStatusId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("MarcaProdutoStatus");
-                });
-
             modelBuilder.Entity("Oficina.Domain.Aggregates.OrdemServicoAggregates.OrdemServico", b =>
                 {
                     b.HasOne("Oficina.Domain.Aggregates.UsuarioAggregates.Funcionario", "Funcionario")
@@ -1620,17 +1516,6 @@ namespace Oficina.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Categoria");
-                });
-
-            modelBuilder.Entity("Oficina.Domain.Aggregates.StatusPedidoCompraAggregates.StatusPedidoCompra", b =>
-                {
-                    b.HasOne("Oficina.Domain.Aggregates.StatusPedidoCompraAggregates.StatusPedidoCompraStatus", "StatusPedidoCompraStatus")
-                        .WithMany()
-                        .HasForeignKey("StatusPedidoCompraStatusId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("StatusPedidoCompraStatus");
                 });
 
             modelBuilder.Entity("Oficina.Domain.Aggregates.UnidadeProdutoAggregates.UnidadeProduto", b =>
